@@ -8,7 +8,12 @@ class Home extends MY_Controller {
 	
 	public function index()
 	{
-		$this->load->view('Home/home_v');
+		$this->assets->addCss('sample.css');
+
+		$this->assets->addJs('sample.js');
+		$this->template
+				->setPartial('home_v')
+				->frontEndTemplate();
 	}
 
 }
