@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $( document ).ready(function(){
     
 //materialize
@@ -33,3 +34,8 @@ $('.modal-trigger').leanModal();
 
 
 });
+=======
+$(document).ready(function(){
+	//alert("The javascript is working");
+});
+>>>>>>> 80e3fc84f5bb8684f553c3ef91f1cfc75eaea49c

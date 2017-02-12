@@ -14,7 +14,6 @@ body{
 	background: #EEEEEE;
 }
 
-
 .welcome-div h1{
 	position: absolute;
 	float: left;
@@ -25,3 +24,7 @@ body{
 	color: #616161;
 }
 
+.mareka{
+
+	font-size: 50px;
+}
