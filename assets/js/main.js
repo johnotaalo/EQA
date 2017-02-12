@@ -10,9 +10,7 @@ $('.materialboxed').materialbox();
 $('.scrollspy').scrollSpy();
 $('.tooltipped').tooltip({delay: 50});
 $('.modal-trigger').leanModal();
-$('.slider').slider({
-    Height:500
-});
+
 // console.log("reached");
 
 //materialize//

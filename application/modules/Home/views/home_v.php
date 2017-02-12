@@ -48,6 +48,7 @@
 </nav>
 
 	<div class="container-fluid">
+
 	 	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			  <!-- Indicators -->
 			  <ol class="carousel-indicators">
@@ -57,15 +58,22 @@
 			  </ol>
 
 			  <!-- Wrapper for slides -->
-			  <div class="carousel-inner" role="listbox">
+			  <div class="carousel-inner carousel-height" role="listbox">
+			    
 			    <div class="item active">
-			      <img src="..." alt="...">
+			      <img src="<?php echo base_url().'assets/media/images/lab.jpg'?>" alt="...">
 			      <div class="carousel-caption">
 			        ...
 			      </div>
 			    </div>
 			    <div class="item">
-			      <img src="..." alt="...">
+			      <img src="<?php echo base_url().'assets/media/images/stethoscope.jpg'?>" alt="...">
+			      <div class="carousel-caption">
+			        ...
+			      </div>
+			    </div>
+			    <div class="item">
+			      <img src="<?php echo base_url().'assets/media/images/nurse.jpg'?>" alt="...">
 			      <div class="carousel-caption">
 			        ...
 			      </div>
@@ -83,6 +91,12 @@
 			    <span class="sr-only">Next</span>
 			  </a>
 			</div>
+
+
+
+
+
+
 		</div>
 
 

@@ -23,3 +23,7 @@ body{
 			font-size: 80px;
 			color: #616161;
 		}
+
+		.carousel-height{
+			 height:800px;
+		}
