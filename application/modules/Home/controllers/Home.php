@@ -4,16 +4,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Home extends MY_Controller {
 	public function __construct(){
 		parent::__construct();
+
+		$this->load->model('home_m');
 	}
 	
 	public function index()
 	{
-		$this->assets->addCss('sample.css');
-
-		$this->assets->addJs('sample.js');
-		$this->template
-				->setPartial('home_v')
-				->frontEndTemplate();
+		$this->assets->addCss('css/main.css');
+		$this->assets->addJs('js/main.js');
+		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v')->frontEndTemplate();
 	}
 
 }
