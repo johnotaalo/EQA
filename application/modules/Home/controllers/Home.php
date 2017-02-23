@@ -10,8 +10,6 @@ class Home extends MY_Controller {
 	
 	public function index()
 	{
-		$this->assets->addCss('css/main.css');
-		$this->assets->addJs('js/main.js');
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v')->frontEndTemplate();
 	}
 
