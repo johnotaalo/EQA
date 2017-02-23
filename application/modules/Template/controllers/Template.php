@@ -32,6 +32,23 @@ class Template extends MX_Controller {
 		$this->load->view('Template/backend_template_v', $data);
 	}
 
+
+	function authTemplate(){
+		$data['page_css'] = $this->assets->css;
+		$data['page_js'] = $this->assets->js;
+
+
+		$data['javascript_file'] = $this->assets->javascript_file;
+		$data['javascript_data'] = $this->assets->javascript_data;
+		
+		$data['pagetitle'] = $this->pageTitle;
+		$data['pagedescription'] = $this->pageDescription;
+		$data['partial'] = $this->contentView;
+		$data['partialData'] = $this->contentViewData;
+
+		$this->load->view('Template/auth_template_v', $data);
+	}
+
 	function frontEndTemplate(){
 		$data['metadata'] = $this->metaData;
 
