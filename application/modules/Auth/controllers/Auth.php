@@ -41,12 +41,40 @@ class Auth extends MY_Controller {
 		                   'date_registered'   		=> $participant ->date_registered,
 		                   'confirm_token'   		=> $participant ->confirm_token
 		        );
+
+		        $this->set_session($session_data);
 				redirect('Dashboard','refresh');
 			}	
 		}else{
 			echo "User does not exist";die();
 		}
 	}
+
+	private function set_session($session_data){
+       //echo "<pre>";print_r($result);die();
+       //echo $session_data['userid'];die();
+      $setting_session = array(
+                   'id'       => $session_data['id'] , 
+                   'participant_id'       => $session_data['participant_id'] , 
+                   'uuid'    => $session_data['uuid'] ,
+                   'participant_fname'    => $session_data['participant_fname'] ,
+                   'participant_lname'    => $session_data['participant_lname'] ,
+                   'participant_phonenumber'   => $session_data['participant_phonenumber'] ,
+                   'participant_email'       => $session_data['participant_email'] , 
+                   'participant_id'       => $session_data['participant_id'] , 
+                   'participant_password'    => $session_data['participant_password'] ,
+                   'approved'    => $session_data['approved'] ,
+                   'status'    => $session_data['status'] ,
+                   'date_registered'   => $session_data['date_registered'] ,
+                   'confirm_token'   => $session_data['confirm_token'] ,
+                   'logged_in'  => 1
+      ); 
+      // $sess = $this->auth_m->addsession($setting_session);
+      $this->session->set_userdata($setting_session);
+
+      //echo "<pre>";print_r($this->session->all_userdata());die();   
+        
+    }
 
 
 
