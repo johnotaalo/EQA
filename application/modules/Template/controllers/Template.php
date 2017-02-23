@@ -21,7 +21,7 @@ class Template extends MX_Controller {
 
 		$data['javascript_file'] = $this->assets->javascript_file;
 		$data['javascript_data'] = $this->assets->javascript_data;
-		$data['user_details'] = $user_details;
+		//$data['user_details'] = $user_details;
 
 		$data['menu'] = $this->createSideBar();
 		$data['pagetitle'] = $this->pageTitle;
@@ -29,7 +29,7 @@ class Template extends MX_Controller {
 		$data['partial'] = $this->contentView;
 		$data['partialData'] = $this->contentViewData;
 
-		$this->load->view('Template/admin_template_v', $data);
+		$this->load->view('Template/backend_template_v', $data);
 	}
 
 	function frontEndTemplate(){
