@@ -49,8 +49,8 @@
                                 <li><a data-scroll-nav="3" href="#register-now">How To</a></li>
                                 <li><a data-scroll-nav="4" href="#featured-plans">Contact Us</a></li>
                             </ul>
-                            <a class="header-btn scroll-to btn small colorful hover-dark" href="#register-now">Register Now</a>
-                            <a style="margin-right: 10px;" class="header-btn scroll-to btn small colorful hover-dark" href="#register-now">Login</a>
+                            <a class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signup'); ?>">Register Now</a>
+                            <a style="margin-right: 10px;" class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signin'); ?>">Login</a>
                             <div class="mobile-menu-btn hamburger hamburger--slider">
                                 <span class="hamburger-box">
                                     <span class="hamburger-inner"></span>

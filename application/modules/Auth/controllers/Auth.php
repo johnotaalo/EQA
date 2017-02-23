@@ -22,7 +22,7 @@ class Auth extends MY_Controller {
 	}
 
 	public function participantLogin(){
-		$participant = $this->auth_m->check_user_exist();
+		$participant = $this->auth_m->check_participant_exist();
 		$this->load->library('Hash');
 		if($participant){
 			if (password_verify($this->input->post('password'), $participant->password)) {
@@ -46,7 +46,8 @@ class Auth extends MY_Controller {
 				redirect('Dashboard','refresh');
 			}	
 		}else{
-			echo "User does not exist";die();
+			$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
+			redirect('Auth/signin');
 		}
 	}
 

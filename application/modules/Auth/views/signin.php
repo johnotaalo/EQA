@@ -4,17 +4,20 @@
         <div class="box m-a-0">
           <div class="box-row">
 
-            <div class="box-cell col-md-5 bg-primary p-a-4">
+            <div class="box-cell col-md-5 bg-primary p-a-4 leftside">
               <div class="text-xs-center text-md-left">
                 <a class="px-demo-brand px-demo-brand-lg" href="index.html"><span class="px-demo-logo bg-primary m-t-0"><span class="px-demo-logo-1"></span><span class="px-demo-logo-2"></span><span class="px-demo-logo-3"></span><span class="px-demo-logo-4"></span><span class="px-demo-logo-5"></span><span class="px-demo-logo-6"></span><span class="px-demo-logo-7"></span><span class="px-demo-logo-8"></span><span class="px-demo-logo-9"></span></span><span class="font-size-18 line-height-1"><strong>EQA</strong></span></a>
                 <div class="font-size-15 m-t-1 line-height-1">External Quality Assurance</div>
               </div>
-              <ul class="list-group m-t-3 m-b-0 visible-md visible-lg visible-xl">
-                <li class="list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-sitemap text-white"></i> Flexible modular structure</li>
-                <li class="list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-file-text-o text-white"></i> SCSS source files</li>
-                <!-- <li class="list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-outdent text-white"></i> RTL direction support</li> -->
-                <!-- <li class="list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-heart text-white"></i> Crafted with love</li> -->
-              </ul>
+              <?php if($this->session->flashdata('error')){?>
+                <style type="text/css">
+                  .leftside{
+                    background: red !important;
+                  }
+                </style>
+                <p>Notice</p>
+                <p><?= @$this->session->flashdata('error'); ?></p>
+              <?php } ?>
             </div>
 
             <div class="box-cell col-md-7">
@@ -75,8 +78,8 @@
         </div>
       </div>
 
-      <div class="text-xs-center m-t-2 font-weight-bold font-size-14 text-white" id="px-demo-signup-link">
-        Not a member? <a href="pages-signup-v1.html" class="text-white"><u>Sign Up now</u></a>
+      <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signup-link">
+        Not a member? <a href="<?= @base_url('Auth/signup'); ?>" class=""><u>Sign Up now</u></a>
       </div>
     </div>
   </div>
