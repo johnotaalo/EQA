@@ -12,11 +12,14 @@ This library is in _application/libraries_ directory.
 ## Functions in the library
 
 ### 1. addCss
-As the name suggests, it helps in passing css into the view
+As the name suggests, it helps in passing css into the view.
+_usage $this->assets->addCss($stringtoresource, true)_
 It takes two parameters
 	* css_link(string)
-	This is the link where the asset is within the assets folder that you had specified above
+	This is the link where the asset is within the assets folder that you had specified above. It may be internal or extenal.
 	* external(boolean)
+	_default = false_
+	The link may either be within your system or from a CDN. If it is from a cdn ensure you pass true in this 
 
 ### 2. addJs
 As the name suggests, it helps in passing javascript into the view
