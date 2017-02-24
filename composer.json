@@ -15,7 +15,8 @@
 		"Ramsey/UUID": "^3.5",
 		"ircmaxell/password-compat": "^1.0",
 		"phpoffice/phpexcel": "^1.8",
-		"doctrine/orm": "^2.5"
+		"doctrine/orm": "^2.5",
+		"swiftmailer/swiftmailer": "^5.4"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

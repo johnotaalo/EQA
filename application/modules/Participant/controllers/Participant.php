@@ -6,6 +6,7 @@ class Participant extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Participant/M_Participant');
+		$this->load->library('Mailer');
 	}
 	function register(){
 		if ($this->input->server('REQUEST_METHOD') == "POST") {
@@ -17,7 +18,6 @@ class Participant extends MY_Controller {
 			$facility = $this->input->post('facility');
 
 			$token =  $this->hash->hashPassword(bin2hex(openssl_random_pseudo_bytes(16)));
-
 			$participant_insert = [
 				'participant_id'			=>	$participant_id,
 				'participant_lname'			=>	$surname,
@@ -30,11 +30,6 @@ class Participant extends MY_Controller {
 
 			$encoded_token = urlencode($token);
 			$verification_url = $this->config->item('server_url') . 'Auth/verify/' . $emailaddress . '/' . $encoded_token;
-			echo $token . '<br/>';
-			echo $verification_url;
-			echo "<br/>";
-			echo urldecode($encoded_token);
-
 			$this->db->insert('participants', $participant_insert);
 			$id = $this->db->insert_id();
 
@@ -48,6 +43,17 @@ class Participant extends MY_Controller {
 			}
 
 			$this->db->insert_batch('participant_equipment', $equipment_insert);
+
+			$data = [
+				'participant_name'	=>	$surname . " " . $firstname,
+				'url'				=>	$verification_url
+			];
+
+			$body = $this->load->view('Template/email/signup_v', $data, TRUE);
+			$sent = $this->mailer->sendMail($emailaddress, "Registration Complete", $body);
+			if ($sent == FALSE) {
+				log_message('error', "The system could not send an email to {$emailaddress}. Participant Name: $surname $firstname at " . date('Y-m-d H:i:s'));
+			}
 		}else{
 			redirect('Auth/signUp','refresh');
 		}
