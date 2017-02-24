@@ -3,11 +3,11 @@
       <div class="modal-content">
 
         <div class="text-xs-center bg-primary p-y-4">
-          <a class="px-demo-brand px-demo-brand-lg" href="index.html"><span class="px-demo-logo bg-primary m-t-0"><span class="px-demo-logo-1"></span><span class="px-demo-logo-2"></span><span class="px-demo-logo-3"></span><span class="px-demo-logo-4"></span><span class="px-demo-logo-5"></span><span class="px-demo-logo-6"></span><span class="px-demo-logo-7"></span><span class="px-demo-logo-8"></span><span class="px-demo-logo-9"></span></span><span class="font-size-18 line-height-1"><strong>EQA</strong></span></span></a>
-          <div class="font-size-15 m-t-1 line-height-1">External. Quality . Assurance</div>
+          <a class="px-demo-brand px-demo-brand-lg" href="<?= @base_url(); ?>"><span class="px-demo-logo bg-primary m-t-0"><span class="px-demo-logo-1"></span><span class="px-demo-logo-2"></span><span class="px-demo-logo-3"></span><span class="px-demo-logo-4"></span><span class="px-demo-logo-5"></span><span class="px-demo-logo-6"></span><span class="px-demo-logo-7"></span><span class="px-demo-logo-8"></span><span class="px-demo-logo-9"></span></span><span class="font-size-18 line-height-1"><strong>EQA</strong></span></span></a>
+          <div class="font-size-15 m-t-1 line-height-1">External.Quality.Assurance</div>
         </div>
 
-        <form action="<?= @base_url('Auth/participantRegistration'); ?>" class="p-a-4">
+        <form method="POST" action="<?= @base_url('Participant/register'); ?>" class="p-a-4">
           <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Join us Today</h4>
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
@@ -39,8 +39,7 @@
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
             <div class="page-signup-icon text-muted"><i class="ion-wrench"></i></div>
-            <select name = "equipment[]" class="page-signup-form-control form-control">
-              <option value="">Available Equipment</option>
+            <select id = "equipment" name = "equipment[]" class="page-signup-form-control form-control" multiple>
             </select>
           </fieldset>
 

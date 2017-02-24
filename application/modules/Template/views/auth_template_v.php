@@ -75,7 +75,10 @@
 
   <script src="<?php echo $assets_url; ?>dashboard/dist/js/bootstrap.min.js"></script>
   <script src="<?php echo $assets_url; ?>dashboard/dist/js/pixeladmin.min.js"></script>
-
+  <?= @$page_js; ?>
+  <?php if(isset($javascript_file)) { ?>
+    <?php $this->load->view($javascript_file, $javascript_data); ?>
+  <?php } ?>
   <!-- <script type="text/javascript">
     pxInit.unshift(function() {
       $(function() {
@@ -89,5 +92,4 @@
   </script> -->
 </body>
 
-<!-- Mirrored from mighty-ravine-84144.herokuapp.com/html/static/pages-signup-v1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 27 Nov 2016 13:44:08 GMT -->
 </html>

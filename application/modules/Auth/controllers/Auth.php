@@ -12,6 +12,9 @@ class Auth extends MY_Controller {
 	public function signup()
 	{
 		$this->assets->addCss('css/signup.css');
+		$this->assets
+					->addJs('plugin/select2/js/select2.full.min.js');
+		$this->assets->setJavascript('Auth/authjs');
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('signup')->authTemplate();
 	}
 
@@ -19,6 +22,26 @@ class Auth extends MY_Controller {
 	{
 		$this->assets->addCss('css/signin.css');
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('signin')->authTemplate();
+	}
+
+	public function verify($email, $token){
+		$this->load->model('Participant/M_Participant');
+		$token = urldecode($token);
+		$user = $this->M_Participant->findParticipantByIdentifier('participant_email', $email);
+		if($user){
+			if ($token == $user->confirm_token) {
+				$update_data = [
+					'confirm_token'	=>	NULL,
+					'status'		=>	1
+				];
+
+				$this->db->update('participants', $update_data);
+			}else{
+				echo "Invalid Token";
+			}
+		}else{
+			echo "Email not registered";
+		}
 	}
 
 	public function participantLogin(){
@@ -93,12 +116,6 @@ class Auth extends MY_Controller {
 			redirect('Auth/signin/','refresh');
 		}
 	}
-
-
-
-
-
-
 }
 
 /* End of file Home.php */
