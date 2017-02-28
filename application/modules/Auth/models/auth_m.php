@@ -15,6 +15,7 @@ class Auth_m extends CI_Model {
     {
         $username = $this->input->post('username');
 
+        $this->db->where('approved', 1);
         $this->db->where('status', 1);
         $this->db->where('participant_email', $username);
         $query = $this->db->get('participants');
@@ -28,8 +29,6 @@ class Auth_m extends CI_Model {
 
 	    $this->db->where('session_id', $sess_log);
 	    $update = $this->db->update('usersessions', $data);
-
-
 	    
      }
 

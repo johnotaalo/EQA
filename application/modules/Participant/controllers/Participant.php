@@ -16,6 +16,7 @@ class Participant extends MY_Controller {
 			$emailaddress = $this->input->post('participantEmail');
 			$phonenumber = $this->input->post('phonenumber');
 			$facility = $this->input->post('facility');
+			$password = $this->input->post('password');
 
 			$token =  $this->hash->hashPassword(bin2hex(openssl_random_pseudo_bytes(16)));
 			$participant_insert = [
@@ -24,8 +25,9 @@ class Participant extends MY_Controller {
 				'participant_fname'			=>	$firstname,
 				'participant_phonenumber'	=>	$phonenumber,
 				'participant_email'			=>	$emailaddress,
-				'participant_password'		=>	$this->hash->hashPassword('12345'),
-				'confirm_token'				=>	$token
+				'participant_password'		=>	$this->hash->hashPassword($password),
+				'confirm_token'				=>	$token,
+				'participant_facility'		=>	$facility
 			];
 
 			$encoded_token = urlencode($token);
@@ -54,6 +56,8 @@ class Participant extends MY_Controller {
 			if ($sent == FALSE) {
 				log_message('error', "The system could not send an email to {$emailaddress}. Participant Name: $surname $firstname at " . date('Y-m-d H:i:s'));
 			}
+
+			redirect('Auth/completeSignUp/' . $emailaddress);
 		}else{
 			redirect('Auth/signUp','refresh');
 		}

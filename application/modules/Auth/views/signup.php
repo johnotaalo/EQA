@@ -43,11 +43,21 @@
             </select>
           </fieldset>
 
-          <label class="custom-control custom-checkbox">
+          <fieldset class = "page-signup-form-group form-group form-group-lg">
+            <div class="page-signup-icon text-muted"><i class="ion-lock-combination"></i></div>
+            <input class="page-signup-form-control form-control" type="password" placeholder="Choose a Password" name = "password" />
+          </fieldset>
+
+          <fieldset class = "page-signup-form-group form-group form-group-lg">
+            <div class="page-signup-icon text-muted"><i class="ion-lock-combination"></i></div>
+            <input class="page-signup-form-control form-control" type="password" placeholder="Confirm your Password" name = "confirm_password" />
+          </fieldset>
+
+         <!--  <label class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input">
             <span class="custom-control-indicator"></span>
             I agree with the <a href="#" target="_blank">Terms and Conditions</a>
-          </label>
+          </label> -->
 
           <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Sign Up</button>
         </form>
