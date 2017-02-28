@@ -18,11 +18,12 @@ class Template extends MX_Controller {
 		$data['page_css'] = $this->assets->css;
 		$data['page_js'] = $this->assets->js;
 
+		$this->load->model('Auth/auth_m');
+		$user_details = $this->auth_m->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
 		$data['javascript_file'] = $this->assets->javascript_file;
 		$data['javascript_data'] = $this->assets->javascript_data;
-		//$data['user_details'] = $user_details;
-
+		$data['user_details'] = $user_details;
 		$data['menu'] = $this->createSideBar();
 		$data['pagetitle'] = $this->pageTitle;
 		$data['pagedescription'] = $this->pageDescription;
@@ -78,55 +79,31 @@ class Template extends MX_Controller {
 		// 		'link'	=>	'Backend/Orders'
 		// 	]
 		$menus = [
-			'dashboard'	=>	[
-				'icon'	=>	'fa fa-tachometer',
-				'text'	=>	'Dashboard',
-				'link'	=>	'Backend/Dashboard/'
-			],
-			'events' => [
-				'icon'	=>	'fa fa-calendar',
-				'text'	=>	'Events',
-				'link'	=>	'Backend/Events/'
-			],
-			'tickets'	=>	[
-				'icon'	=>	'fa fa-ticket',
-				'text'	=>	'Tickets',
-				'link'	=>	'Backend/Tickets/eventlist'
-			],
-			'complementaryTickets'	=>	[
-				'icon'	=>	'fa fa-thumbs-up',
-				'text'	=>	'Complementary Tickets',
-				'link'	=>	'Backend/Tickets/complementaryTickets'
-			],
-			'ticketrequests'	=>	[
-				'icon'	=>	'fa fa-hand-pointer-o',
-				'text'	=>	'Ticket Requests',
-				'link'	=>	'Backend/TicketRequests'
-			],
-			'contact'	=>	[
-				'icon'	=>	'fa fa-phone',
-				'text'	=>	'Contact Requests',
-				'link'	=>	'Backend/Contact'
+			'participants' => [
+				'icon'	=>	'icon-people',
+				'text'	=>	'Participants',
+				'link'	=>	'Particpants/list',
+				'users'	=>	['participant']
 			],
 			'users'		=>	[
-				'icon'	=>	'fa fa-users',
-				'text'	=>	'Registered Customers',
-				'link'	=>	'Backend/Users'
-			],
-			'logout'	=>	[
-				'icon'	=>	'fa fa-sign-out',
-				'text'	=>	'Log Out',
-				'link'	=>	'Auth/logout'
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'User Accounts',
+				'link'	=>	'Accounts/list',
+				'users'	=>	['participant']
 			]
 		];
 
 		if (count($menus) > 0) {
 			foreach ($menus as $key => $item) {
-				$active = "";
-				if ($key == strtolower($class)) {
-					$active = "class = 'active'";
+				if(in_array($this->session->userdata('type'), $item['users'])){
+					$active = "";
+					if ($key == strtolower($class)) {
+						$active = "active";
+					}
+					$menu_list .= "<li class = 'nav-item'>
+						<a class = 'nav-link' href = '".base_url($item['link'])."'><i class = '{$item['icon']}'></i> {$item['text']}</a>
+					</li>";
 				}
-				$menu_list .= "<li {$active}><a href='".base_url()."{$item['link']}'><i class='{$item['icon']}'></i> <span>{$item['text']}</span></a></li>";
 			}
 		}
 

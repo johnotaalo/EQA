@@ -50,9 +50,8 @@ class Auth extends MY_Controller {
 		$this->load->library('Hash');
 		if($participant){
 			if (password_verify($this->input->post('password'), $participant->participant_password)) {
-
 				$session_data = array(
-		        	'id'	=>	$participant ->id
+		        	'id'	=>	$participant->uuid
 		        );
 
 		        $this->set_session($session_data);
@@ -64,12 +63,27 @@ class Auth extends MY_Controller {
 		}
 	}
 
-	private function set_session($session_data){
-		$setting_session = array(
-			'id'	=>	$session_data['id'], 
-		);
+	public function authenticate(){
+		$user = $this->auth_m->findUser($this->input->post('username'));
+		if ($user) {
+			$this->load->library('Hash');
+			if (password_verify($this->input->post('password'), $user->password)) {
+				$session_data = [
+					'uuid'			=>	$user->uuid,
+					'type'			=>	$user->user_type,
+					'is_logged_in'	=>	true
+				];
 
-		$this->session->set_userdata($setting_session);        
+				$this->set_session($session_data);
+				redirect('Dashboard', 'refresh');
+			}
+		}
+		$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
+		redirect('Auth/signin', 'refresh');
+	}
+
+	private function set_session($session_data){
+		$this->session->set_userdata($session_data);        
     }
 
     public function completeSignUp($email){
@@ -83,15 +97,12 @@ class Auth extends MY_Controller {
 
 	public function logout()
     {
-        $sess_log = $this->session->userdata('session_id');
-        $log = $this->auth_m->logoutparticipant($sess_log);
-
         $this->session->sess_destroy();
-        redirect('/');
+        redirect('Auth/signin');
     }
 
     public function checkLogin(){
-		if($this->session->userdata('userid') == ""){
+		if($this->session->userdata('is_logged_in') != true){
 			redirect('Auth/signin/','refresh');
 		}
 	}
