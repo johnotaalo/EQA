@@ -1,3 +1,8 @@
+<style>
+	.error{
+		color: red;
+	}
+</style>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('select[name="facility"]').select2({
@@ -51,6 +56,32 @@
 				cache: true
 			},
 			placeholder: "Equipment Available in Facility",
+		});
+
+		$('#userCompleteForm').validate({
+			rules: {
+				password: {
+					required: true,
+					minlength: 5
+				},
+				confirm_password: {
+					required: true,
+					minlength: 5,
+					 equalTo: "input[name='password']" 
+				},
+				username: {
+					minlength: 6,
+					remote: {
+						url: "<?= @base_url('API/Users/checkExist'); ?>",
+						type: "POST"
+					}
+				}
+			},
+			messages : {
+				username: {
+					remote: "Username already in use!"
+				}
+			}
 		});
 	});
 </script>

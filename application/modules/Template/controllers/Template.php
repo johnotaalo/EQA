@@ -9,6 +9,9 @@ class Template extends MX_Controller {
 	protected $contentView;
 	protected $contentViewData;
 	protected $metaData;
+	protected $modalView;
+	protected $modalData;
+	protected $modalTitle;
 
 	function __construct(){
 		$this->asset_url = $this->config->item('assets_url');
@@ -20,15 +23,22 @@ class Template extends MX_Controller {
 
 		$this->load->model('Auth/auth_m');
 		$user_details = $this->auth_m->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-
-		$data['javascript_file'] = $this->assets->javascript_file;
-		$data['javascript_data'] = $this->assets->javascript_data;
-		$data['user_details'] = $user_details;
-		$data['menu'] = $this->createSideBar();
-		$data['pagetitle'] = $this->pageTitle;
-		$data['pagedescription'] = $this->pageDescription;
-		$data['partial'] = $this->contentView;
-		$data['partialData'] = $this->contentViewData;
+		if($user_details){
+			$data['javascript_file'] = $this->assets->javascript_file;
+			$data['javascript_data'] = $this->assets->javascript_data;
+			$data['user_details'] = $user_details;
+			$data['menu'] = $this->createSideBar();
+			$data['pagetitle'] = $this->pageTitle;
+			$data['pagedescription'] = $this->pageDescription;
+			$data['modalView'] = $this->modalView;
+			$data['modalData'] = $this->modalData;
+			$data['modalTitle'] = $this->modalTitle;
+			$data['partial'] = $this->contentView;
+			$data['partialData'] = $this->contentViewData;
+		}else{
+			$this->load->module('Auth');
+			$this->auth->logout();
+		}
 
 		$this->load->view('Template/backend_template_v', $data);
 	}
@@ -83,13 +93,13 @@ class Template extends MX_Controller {
 				'icon'	=>	'icon-people',
 				'text'	=>	'Participants',
 				'link'	=>	'Particpants/list',
-				'users'	=>	['participant']
+				'users'	=>	['admin']
 			],
 			'users'		=>	[
 				'icon'	=>	'icon-user-follow',
 				'text'	=>	'User Accounts',
-				'link'	=>	'Accounts/list',
-				'users'	=>	['participant']
+				'link'	=>	'Users/userlist',
+				'users'	=>	['admin']
 			]
 		];
 
@@ -125,6 +135,14 @@ class Template extends MX_Controller {
 	function setPartial($view, $data = []){
 		$this->contentView = $view;
 		$this->contentViewData = $data;
+
+		return $this;
+	}
+
+	function setModal($view, $title ,$data =[]){
+		$this->modalView = $view;
+		$this->modalData = $data;
+		$this->modalTitle = $title;
 
 		return $this;
 	}

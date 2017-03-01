@@ -45,6 +45,58 @@ class Auth extends MY_Controller {
 		}
 	}
 
+	public function firstTime($uuid){
+		$user = $this->auth_m->findUserByIdentifier('uuid', $uuid);
+		if($user){
+			if($user->password == "" && $user->status == 0){
+				$data['uuid'] = $uuid;
+				$this->assets->addCss('css/signup.css');
+				$this->assets->addJs('dashboard/js/libs/jquery.validate.js');
+				$this->assets->setJavascript('Auth/authjs');
+				return $this->template->setPageTitle('External Quality Assurance Programme')->setPartial('firsttime_v', $data)->authTemplate();
+			}elseif($user->password != "" && $user->status == 1){
+				redirect("Auth/signin");
+			}else{
+				echo "There was an error";
+			}
+		}{
+			echo "No user found!";die;
+		}
+	}
+
+	function userComplete($uuid){
+		$user = $this->auth_m->findUserByIdentifier('uuid', $uuid);
+		if($user){
+			if($this->input->post('password') == $this->input->post('confirm_password')){
+				$hashed_password = $this->hash->hashPassword($this->input->post('password'));
+				$username = $this->input->post('username');
+
+				$this->load->module('API/Users');
+				$continue = $this->users->checkExist($username);
+
+				if($continue == true){
+					$insert_data = [
+						'password'	=>	$hashed_password,
+						'username'	=>	$username,
+						'status'	=>	1
+					];
+
+					$this->db->where('uuid', $uuid);
+					$this->db->update('user', $insert_data);
+				}else{
+					$this->session->set_flashdata('error', "The username already exists");
+					redirect('Auth/firstTime/' . $uuid);
+				}
+				redirect('Auth/signin', 'refresh');
+			}else{
+				$this->session->set_flashdata('error', "The passwords you entered do not match");
+				redirect('Auth/firstTime/' . $uuid);
+			}
+		}else{
+			show_404();
+		}
+	}
+
 	public function participantLogin(){
 		$participant = $this->auth_m->check_participant_exist();
 		$this->load->library('Hash');

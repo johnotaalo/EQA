@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="EQA::">
 	<meta name="author" content="Mareka Willy, Chispine Otaalo">
-	<title>EQA::</title>
+	<title>EQA::<?= @$pagetitle; ?></title>
 	<link href="<?= @$assets_url; ?>css/font-awesome.min.css" rel="stylesheet">
 	<link href="<?= @$assets_url; ?>css/simple-line-icons.css" rel="stylesheet">
 	<link href="<?= @$assets_url; ?>css/glyphicons.css" rel="stylesheet">
@@ -30,7 +30,7 @@
 			<ul class="nav navbar-nav pull-right hidden-md-down">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						<img src="<?= @$assets_url; ?>img/avatars/6.jpg" class="img-avatar" alt="<?= @$user_details->email_address; ?>">
+						<img style = "width: 30px;height:30px;" src="<?php if($user_details->avatar){ echo $user_details->avatar; }else{ echo 'https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png'; }?>" class="img-avatar" alt="<?= @$user_details->email_address; ?>">
 						<span class="hidden-md-down"><?= @ucwords(strtolower($user_details->firstname . " " . $user_details->lastname)); ?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -40,6 +40,9 @@
 						<a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
 						<a class="dropdown-item" href="<?= @base_url('Auth/logout'); ?>"><i class="fa fa-lock"></i> Logout</a>
 					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">☰</a>
 				</li>
 			</ul>
 		</div>
@@ -61,7 +64,7 @@
 					My Account
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="<?= @base_url('Dashboard'); ?>"><i class="icon-user"></i> Profile</a>
+					<a class="nav-link" href="<?= @base_url('Users/Account'); ?>"><i class="icon-user"></i> Profile</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="<?= @base_url('Auth/logout'); ?>"><i class="icon-power"></i> Logout</a>
@@ -82,7 +85,28 @@
 		</div>
 	</main>
 
-	<footer class="footer">
+	<?php if(isset($modalView)){ ?>
+		<div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel"><?= @$modalTitle; ?></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<?= @$this->load->view($modalView, $modalData); ?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id = "save-changes">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+	<footer class="footer" style = "background: #2c3e50;">
 		<span class="text-left">
 			<a href="#">External Quality Assurance</a> © <?= @date("Y"); ?>
 		</span>
