@@ -37,7 +37,7 @@
 						<div class="dropdown-header text-xs-center">
 							<strong>Account</strong>
 						</div>
-						<a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+						<a class="dropdown-item" href="<?= @base_url('Users/Account'); ?>"><i class="fa fa-user"></i> Profile</a>
 						<a class="dropdown-item" href="<?= @base_url('Auth/logout'); ?>"><i class="fa fa-lock"></i> Logout</a>
 					</div>
 				</li>

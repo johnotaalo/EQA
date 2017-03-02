@@ -92,7 +92,7 @@ class Template extends MX_Controller {
 			'participants' => [
 				'icon'	=>	'icon-people',
 				'text'	=>	'Participants',
-				'link'	=>	'Particpants/list',
+				'link'	=>	'Users/Participants/list',
 				'users'	=>	['admin']
 			],
 			'users'		=>	[

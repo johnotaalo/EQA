@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function(){
         $('table').dataTable();
+        
         $("#role-select").select2({
             ajax: {
                 url: "<?= @base_url('API/Users/getUserTypes'); ?>",
