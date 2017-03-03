@@ -82,12 +82,6 @@ class Template extends MX_Controller {
 		$class = $this->router->class;
 		$menus = [];
 		$menu_list = "";
-		// ,
-		// 	'orders'	=>	[
-		// 		'icon'	=>	'fa fa-shopping-cart',
-		// 		'text'	=>	'Orders',
-		// 		'link'	=>	'Backend/Orders'
-		// 	]
 		$menus = [
 			'participants' => [
 				'icon'	=>	'icon-people',
