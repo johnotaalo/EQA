@@ -89,6 +89,23 @@ class Template extends MX_Controller {
 				'link'	=>	'Users/Participants/list',
 				'users'	=>	['admin']
 			],
+			'facilities' => [
+				'icon' => 'fa fa-hospital-o',
+				'text' => 'Facilities',
+				'sublist' => [
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'Facilities/list/',
+						'text' => 'All Facilities'
+					],
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'Facilities/list/',
+						'text' => 'CD4 Sites'
+					]
+				],
+				'users' => ['admin']
+			],
 			'users'		=>	[
 				'icon'	=>	'icon-user-follow',
 				'text'	=>	'User Accounts',
@@ -104,9 +121,27 @@ class Template extends MX_Controller {
 					if ($key == strtolower($class)) {
 						$active = "active";
 					}
+
+					if(isset($item['sublist']) && is_array($item['sublist'])){
+						$menu_list .= "<li class = 'nav-item nav-dropdown'>
+							<a class = 'nav-link nav-dropdown-toggle' href = '#'>
+								<i class = '{$item['icon']}'></i> {$item['text']}
+							</a>
+							<ul class = 'nav-dropdown-items'>";
+						foreach($item['sublist'] as $sub_item){
+							$menu_list .= "
+								<li class = 'nav-item'>
+									<a class = 'nav-link' href = '".base_url($sub_item['link'])."'><i class = '{$sub_item['icon']}'></i> {$sub_item['text']}</a>
+								</li>
+							";
+						}
+						$menu_list .= "</ul></li>";
+					}
+					else{
 					$menu_list .= "<li class = 'nav-item'>
 						<a class = 'nav-link' href = '".base_url($item['link'])."'><i class = '{$item['icon']}'></i> {$item['text']}</a>
 					</li>";
+					}
 				}
 			}
 		}
