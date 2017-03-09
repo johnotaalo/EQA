@@ -21,7 +21,6 @@
 											</div>
 											<a class="btn colorful large hover-transparent-colorful" href="#">Explore More</a>
 										</div><!-- .banner-center-box end -->
-
 									</div><!-- .col-md-10 end -->
 								</div><!-- .row end -->
 							</div><!-- .container end -->
@@ -58,4 +57,3 @@
 		</div>
 	</div>
 </section>
-
