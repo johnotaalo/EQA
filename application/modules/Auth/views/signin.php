@@ -23,8 +23,8 @@
             <div class="box-cell col-md-7">
 
               <!-- Sign In form -->
-            <!-- <?= @form_open('Auth/participantLogin'); ?> -->
-              <form method = "post" action="<?php base_url();?> Auth/participantLogin" class="p-a-4" id="page-signin-form">
+            <!-- <?= @form_open('Auth/authenticate'); ?> -->
+              <form method = "post" action="<?php echo base_url('Auth/authenticate');?>" class="p-a-4" id="page-signin-form">
                 <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Sign In to your Account</h4>
 
                 <fieldset class="page-signin-form-group form-group form-group-lg">
