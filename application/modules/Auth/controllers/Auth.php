@@ -126,7 +126,7 @@ class Auth extends MY_Controller {
 				];
 
 				$this->set_session($session_data);
-				//print_r($this->session->all_userdata());
+				//print_r($this->session->all_userdata());die();
 				redirect('Dashboard', 'refresh');
 			}
 		}
@@ -156,10 +156,10 @@ class Auth extends MY_Controller {
     }
 
     public function checkLogin(){
-    	//print_r($this->session->all_userdata());die();
+    	print_r($this->session->all_userdata());die();
 		if($this->session->userdata('is_logged_in') != true){
-			
-			redirect('Auth/signin/','refresh');
+			//should be uncommented but there is an issue, session not picking information
+			//redirect('Auth/signin/','refresh');
 		}
 	}
 }
