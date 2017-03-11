@@ -49,7 +49,7 @@
                                 <li><a data-scroll-nav="3" href="#register-now">How To</a></li>
                                 <li><a data-scroll-nav="4" href="#featured-plans">Contact Us</a></li>
                             </ul>
-                            <a class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signup'); ?>">Register Now</a>
+                            <a class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signup'); ?>">Register</a>
                             <a style="margin-right: 10px;" class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signin'); ?>">Login</a>
                             <div class="mobile-menu-btn hamburger hamburger--slider">
                                 <span class="hamburger-box">

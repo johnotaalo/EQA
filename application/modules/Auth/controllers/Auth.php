@@ -12,8 +12,7 @@ class Auth extends MY_Controller {
 	public function signup()
 	{
 		$this->assets->addCss('css/signup.css');
-		$this->assets
-					->addJs('plugin/select2/js/select2.full.min.js');
+		$this->assets->addJs('plugin/select2/js/select2.full.min.js');
 		$this->assets->setJavascript('Auth/authjs');
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('signup')->authTemplate();
 	}
