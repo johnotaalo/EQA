@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_Participant extends CI_Model {
+
 	function getMaxParticipant(){
 		$this->db->select_max('id', 'highest');
 		$query = $this->db->get('participants');

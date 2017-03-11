@@ -8,6 +8,20 @@ class Participant extends MY_Controller {
 		$this->load->model('Participant/M_Participant');
 		$this->load->library('Mailer');
 	}
+
+	private function generateParticipantID(){
+		$prefix = "NHRL-EQA/CD4/";
+		$max_id = $this->M_Participant->getMaxParticipant()->highest;
+		//echo"<pre>";echo $max_id;echo"</pre>";die();
+		if (!$max_id) {
+			$max_id = 0;
+		}
+
+		$next = $max_id + 1;
+		return $prefix.str_pad($next, 3, "0", STR_PAD_LEFT);
+	}
+
+
 	function register(){
 		if ($this->input->server('REQUEST_METHOD') == "POST") {
 			$participant_id = $this->generateParticipantID();
@@ -63,16 +77,7 @@ class Participant extends MY_Controller {
 		}
 	}
 
-	private function generateParticipantID(){
-		$prefix = "NHRL-EQA/CD4/";
-		$max_id = $this->M_Participant->getMaxParticipant()->highest;
-		if (!$max_id) {
-			$max_id = 0;
-		}
-
-		$next = $max_id + 1;
-		return $prefix.str_pad($next, 3, "0", STR_PAD_LEFT);
-	}
+	
 }
 
 /* End of file Participant.php */

@@ -126,11 +126,14 @@ class Auth extends MY_Controller {
 				];
 
 				$this->set_session($session_data);
+				//print_r($this->session->all_userdata());
 				redirect('Dashboard', 'refresh');
 			}
 		}
-		$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
-		redirect('Auth/signin', 'refresh');
+			$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
+			redirect('Auth/signin', 'refresh');
+		
+		
 	}
 
 	private function set_session($session_data){
@@ -153,7 +156,9 @@ class Auth extends MY_Controller {
     }
 
     public function checkLogin(){
+    	//print_r($this->session->all_userdata());die();
 		if($this->session->userdata('is_logged_in') != true){
+			
 			redirect('Auth/signin/','refresh');
 		}
 	}
