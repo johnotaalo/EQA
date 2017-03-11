@@ -9,6 +9,9 @@ class Template extends MX_Controller {
 	protected $contentView;
 	protected $contentViewData;
 	protected $metaData;
+	protected $modalView;
+	protected $modalData;
+	protected $modalTitle;
 
 	function __construct(){
 		$this->asset_url = $this->config->item('assets_url');
@@ -18,16 +21,24 @@ class Template extends MX_Controller {
 		$data['page_css'] = $this->assets->css;
 		$data['page_js'] = $this->assets->js;
 
-
-		$data['javascript_file'] = $this->assets->javascript_file;
-		$data['javascript_data'] = $this->assets->javascript_data;
-		//$data['user_details'] = $user_details;
-
-		$data['menu'] = $this->createSideBar();
-		$data['pagetitle'] = $this->pageTitle;
-		$data['pagedescription'] = $this->pageDescription;
-		$data['partial'] = $this->contentView;
-		$data['partialData'] = $this->contentViewData;
+		$this->load->model('Auth/auth_m');
+		$user_details = $this->auth_m->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+		if($user_details){
+			$data['javascript_file'] = $this->assets->javascript_file;
+			$data['javascript_data'] = $this->assets->javascript_data;
+			$data['user_details'] = $user_details;
+			$data['menu'] = $this->createSideBar();
+			$data['pagetitle'] = $this->pageTitle;
+			$data['pagedescription'] = $this->pageDescription;
+			$data['modalView'] = $this->modalView;
+			$data['modalData'] = $this->modalData;
+			$data['modalTitle'] = $this->modalTitle;
+			$data['partial'] = $this->contentView;
+			$data['partialData'] = $this->contentViewData;
+		}else{
+			$this->load->module('Auth');
+			$this->auth->logout();
+		}
 
 		$this->load->view('Template/backend_template_v', $data);
 	}
@@ -71,62 +82,67 @@ class Template extends MX_Controller {
 		$class = $this->router->class;
 		$menus = [];
 		$menu_list = "";
-		// ,
-		// 	'orders'	=>	[
-		// 		'icon'	=>	'fa fa-shopping-cart',
-		// 		'text'	=>	'Orders',
-		// 		'link'	=>	'Backend/Orders'
-		// 	]
 		$menus = [
-			'dashboard'	=>	[
-				'icon'	=>	'fa fa-tachometer',
-				'text'	=>	'Dashboard',
-				'link'	=>	'Backend/Dashboard/'
+			'participants' => [
+				'icon'	=>	'icon-people',
+				'text'	=>	'Participants',
+				'link'	=>	'Users/Participants/list',
+				'users'	=>	['admin']
 			],
-			'events' => [
-				'icon'	=>	'fa fa-calendar',
-				'text'	=>	'Events',
-				'link'	=>	'Backend/Events/'
-			],
-			'tickets'	=>	[
-				'icon'	=>	'fa fa-ticket',
-				'text'	=>	'Tickets',
-				'link'	=>	'Backend/Tickets/eventlist'
-			],
-			'complementaryTickets'	=>	[
-				'icon'	=>	'fa fa-thumbs-up',
-				'text'	=>	'Complementary Tickets',
-				'link'	=>	'Backend/Tickets/complementaryTickets'
-			],
-			'ticketrequests'	=>	[
-				'icon'	=>	'fa fa-hand-pointer-o',
-				'text'	=>	'Ticket Requests',
-				'link'	=>	'Backend/TicketRequests'
-			],
-			'contact'	=>	[
-				'icon'	=>	'fa fa-phone',
-				'text'	=>	'Contact Requests',
-				'link'	=>	'Backend/Contact'
+			'facilities' => [
+				'icon' => 'fa fa-hospital-o',
+				'text' => 'Facilities',
+				'sublist' => [
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'Facilities/list/',
+						'text' => 'All Facilities'
+					],
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'Facilities/list/',
+						'text' => 'CD4 Sites'
+					]
+				],
+				'users' => ['admin']
 			],
 			'users'		=>	[
-				'icon'	=>	'fa fa-users',
-				'text'	=>	'Registered Customers',
-				'link'	=>	'Backend/Users'
-			],
-			'logout'	=>	[
-				'icon'	=>	'fa fa-sign-out',
-				'text'	=>	'Log Out',
-				'link'	=>	'Auth/logout'
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'User Accounts',
+				'link'	=>	'Users/userlist',
+				'users'	=>	['admin']
 			]
 		];
 
 		if (count($menus) > 0) {
 			foreach ($menus as $key => $item) {
-				$active = "";
-				if ($key == strtolower($class)) {
-					$active = "class = 'active'";
+				if(in_array($this->session->userdata('type'), $item['users'])){
+					$active = "";
+					if ($key == strtolower($class)) {
+						$active = "active";
+					}
+
+					if(isset($item['sublist']) && is_array($item['sublist'])){
+						$menu_list .= "<li class = 'nav-item nav-dropdown'>
+							<a class = 'nav-link nav-dropdown-toggle' href = '#'>
+								<i class = '{$item['icon']}'></i> {$item['text']}
+							</a>
+							<ul class = 'nav-dropdown-items'>";
+						foreach($item['sublist'] as $sub_item){
+							$menu_list .= "
+								<li class = 'nav-item'>
+									<a class = 'nav-link' href = '".base_url($sub_item['link'])."'><i class = '{$sub_item['icon']}'></i> {$sub_item['text']}</a>
+								</li>
+							";
+						}
+						$menu_list .= "</ul></li>";
+					}
+					else{
+					$menu_list .= "<li class = 'nav-item'>
+						<a class = 'nav-link' href = '".base_url($item['link'])."'><i class = '{$item['icon']}'></i> {$item['text']}</a>
+					</li>";
+					}
 				}
-				$menu_list .= "<li {$active}><a href='".base_url()."{$item['link']}'><i class='{$item['icon']}'></i> <span>{$item['text']}</span></a></li>";
 			}
 		}
 
@@ -148,6 +164,14 @@ class Template extends MX_Controller {
 	function setPartial($view, $data = []){
 		$this->contentView = $view;
 		$this->contentViewData = $data;
+
+		return $this;
+	}
+
+	function setModal($view, $title ,$data =[]){
+		$this->modalView = $view;
+		$this->modalData = $data;
+		$this->modalTitle = $title;
 
 		return $this;
 	}

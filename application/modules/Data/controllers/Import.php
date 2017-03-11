@@ -16,6 +16,7 @@ class Import extends MY_Controller {
 				$dbColumns = $this->getDbColumnNames($item);
 
 				$cleaned_headers = array_replace($headers, $dbColumns);
+				
 				$insertData = [];
 				for ($i=1; $i < count($itemData); $i++) { 
 					if ($itemData[$i][0] != "" && is_numeric($itemData[$i][0])) {
@@ -23,6 +24,7 @@ class Import extends MY_Controller {
 						array_push($insertData, $rowData);
 					}
 				}
+				
 				if (count($insertData)) {
 					if ($item == "Facilities") {
 						$this->db->insert_batch('facility', $insertData);

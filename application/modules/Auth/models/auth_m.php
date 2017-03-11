@@ -23,15 +23,17 @@ class Auth_m extends CI_Model {
         return $query->row();
     }
 
+    public function findUser($username){
+        $this->db->where('email_address', $username);
+        $this->db->or_where('username', $username);
+        $query = $this->db->get('users_v', 1);
 
-    public function logoutuser($sess_log){
-    	$data['logged_in'] = 0;
+        return $query->row();
+    }
+    public function findUserByIdentifier($identifier, $value){
+        $this->db->where($identifier, $value);
+        $query = $this->db->get('users_v', 1);
 
-	    $this->db->where('session_id', $sess_log);
-	    $update = $this->db->update('usersessions', $data);
-	    
-     }
-
-
-
+        return $query->row();
+    }
 }
