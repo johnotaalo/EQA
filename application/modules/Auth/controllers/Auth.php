@@ -159,7 +159,7 @@ class Auth extends MY_Controller {
     }
 
     public function checkLogin(){
-    	print_r($this->session->userdata('is_logged_in'));die();
+    	//print_r($this->session->userdata('is_logged_in'));die();
 		if($this->session->userdata('is_logged_in') != 1){
 			//should be uncommented but there is an issue, session not picking information
 			redirect('Auth/signin/','refresh');
