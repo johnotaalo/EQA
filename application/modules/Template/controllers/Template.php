@@ -111,7 +111,13 @@ class Template extends MX_Controller {
 				'text'	=>	'User Accounts',
 				'link'	=>	'Users/userlist',
 				'users'	=>	['admin']
-			]
+			],
+			'equipments'		=>	[
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'Equipments',
+				'link'	=>	'Equipments/equipmentlist',
+				'equipments'	=>	['admin']
+			],
 		];
 
 		if (count($menus) > 0) {
