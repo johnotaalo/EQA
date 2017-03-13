@@ -4,13 +4,12 @@
             <div class="card-header col-4">
                 <i class = "icon-user"></i>
                 &nbsp;
-                User Accounts
-                <div class = "pull-right">
-                    <button class = "btn btn-primary btn-sm" id = "btn-create-user"><i class = "icon-plus"></i> Create User</button>
-                </div>
+                <?= @$pagetitle; ?>
             </div>
             <div class = "card-block">
-                <?= @$users_table; ?>
+                <div class = "table-responsive">
+                    
+                </div>
             </div>
         </div>
     </div>
