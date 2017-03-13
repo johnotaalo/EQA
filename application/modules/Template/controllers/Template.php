@@ -86,7 +86,7 @@ class Template extends MX_Controller {
 			'participants' => [
 				'icon'	=>	'icon-people',
 				'text'	=>	'Participants',
-				'link'	=>	'Users/Participants/list',
+				'link'	=>	'Users/Participants/listing',
 				'users'	=>	['admin']
 			],
 			'facilities' => [
@@ -95,12 +95,12 @@ class Template extends MX_Controller {
 				'sublist' => [
 					[
 						'icon' => 'fa fa-table',
-						'link' => 'Facilities/list/',
+						'link' => 'Facilities/listing/',
 						'text' => 'All Facilities'
 					],
 					[
 						'icon' => 'fa fa-table',
-						'link' => 'Facilities/list/',
+						'link' => 'Facilities/listing/CD4',
 						'text' => 'CD4 Sites'
 					]
 				],
@@ -116,7 +116,7 @@ class Template extends MX_Controller {
 				'icon'	=>	'icon-user-follow',
 				'text'	=>	'Equipments',
 				'link'	=>	'Equipments/equipmentlist',
-				'equipments'	=>	['admin']
+				'users'	=>	['admin']
 			],
 		];
 

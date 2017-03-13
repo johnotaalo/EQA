@@ -8,7 +8,7 @@ class Participants extends DashboardController{
             'API/M_Facilities'
         ]);
     }
-    function list(){
+    function listing(){
         $this->assets
                 ->addCss("plugin/sweetalert/sweetalert.css");
         $this->assets
