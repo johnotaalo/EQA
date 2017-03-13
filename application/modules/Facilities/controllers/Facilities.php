@@ -6,7 +6,7 @@ class Facilities extends DashboardController{
         $this->load->model('Facilities/M_Facilities');
     }
 
-    function list($type = NULL){
+    function listing($type = NULL){
         $title = "$type Sites";
         if($type == NULL){
             $title = "All Facilities";
