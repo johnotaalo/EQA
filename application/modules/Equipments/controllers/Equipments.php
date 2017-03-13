@@ -76,12 +76,14 @@ class Equipments extends DashboardController{
             $counter = 0;
             foreach($equipments as $equipment){
                 $counter ++;
+                $id = $equipment->id;
                 if($equipment->equipment_status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = "<a href = " . base_url('Equipments/changeState/deactivate/$equipment->id') . " class = 'btn btn-warning btn-sm'><i class = 'icon-refresh'></i>&nbsp;Deactivate Equipment</a>";
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate Equipment</a>';
+                    
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
-                    $change_state = "<a href = " . base_url('Equipments/changeState/activate/$equipment->id') . " class = 'btn btn-warning btn-sm'><i class = 'icon-refresh'></i>&nbsp;Activate Equipment</a>";
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate Equipment</a>';
                 }
                 
                 $tabledata[] = [
@@ -101,13 +103,20 @@ class Equipments extends DashboardController{
     function changeState($type, $id){
         switch($type){
             case 'activate':
-printr("Activation");die();
+                $this->db->set('equipment_status', 1);
+
             break;
 
             case 'deactivate':
-printr("Deactivation");die();
+                $this->db->set('equipment_status', 0);
+                
             break;
         }
+
+        $this->db->where('id', $id);
+        $this->db->update('equipment');
+
+        redirect('Equipments/equipmentlist', 'refresh');
 
     }
 
