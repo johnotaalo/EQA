@@ -79,7 +79,7 @@
       </div>
 
       <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signup-link">
-        Not a member? <a href="<?= @base_url('Auth/signup'); ?>" class=""><u>Sign Up now</u></a>
+        Not a member? <a href="<?= @base_url('Auth/signup'); ?>" class=""><u>Register now</u></a>
       </div>
     </div>
   </div>

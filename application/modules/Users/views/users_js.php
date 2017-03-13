@@ -31,6 +31,7 @@
         $('#save-changes').click(function(){
             $('#createUser').submit();
         });
+        
         $('#createUser').validate({
             rules: {
                 firstname: "required",

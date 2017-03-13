@@ -1,54 +1,17 @@
 <script>
     $(document).ready(function(){
         $('table').dataTable();
-        
-        $("#role-select").select2({
-            ajax: {
-                url: "<?= @base_url('API/Users/getUserTypes'); ?>",
-                dataType: 'json',
-                delay: 250,
-				data: function(params){
-					return{
-						q:params.term,
-						page: params.page
-					};
-				},
-				processResults: function(data, params){
-					console.log(data);
-					params.page = params.page || 1;
-					return {
-						results: data.items,
-						pagination: {
-							more: (params.page * 30) < data.total_count
-						}
-					};
-				},
-				cache: true
-			},
-			placeholder: "Pick A Role"
-        });
 
         $('#save-changes').click(function(){
-            $('#createUser').submit();
+            $('#createEquipment').submit();
         });
-        $('#createUser').validate({
+
+        $('#createEquipment').validate({
             rules: {
-                firstname: "required",
-                lastname: "required",
-                email_address: {
-                    required: true,
-                    email: true
-                },
-                role: "required"
+                equipmentname: "required"
             },
             messages: {
-                firstname: "First Name cannot be empty",
-                lastname: "Last Name cannot be empty",
-                email_address: {
-                    required: "Email Address cannot be empty",
-                    email: "This is not an email"
-                },
-                role: "Please select a role"
+                equipmentname: "Equipment name must be entered"
             },
             errorElement: 'em',
             errorPlacement: function ( error, element ) {
@@ -71,7 +34,7 @@
         });
     });
 
-    $('#btn-create-user').click(function(){
+    $('#btn-create-equipment').click(function(){
         // load modal
         $('#pageModal').modal();
     });
