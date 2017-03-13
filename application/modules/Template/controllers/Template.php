@@ -89,6 +89,12 @@ class Template extends MX_Controller {
 				'link'	=>	'Users/Participants/listing',
 				'users'	=>	['admin']
 			],
+			'ptrounds'	=>	[
+				'icon'	=>	'icon-chemistry',
+				'text'	=>	'PT Rounds',
+				'link'	=>	'PTRounds',
+				'users'	=>	['admin']
+			],
 			'facilities' => [
 				'icon' => 'fa fa-hospital-o',
 				'text' => 'Facilities',
