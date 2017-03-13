@@ -50,7 +50,7 @@ class Equipments extends DashboardController{
             $this->db->where('id', $equipment_id);
             $equipment = $this->db->get('equipment')->row();
 
-            $message = "Equipment Name : " . $equipment->equipment_name . " is registered successfully";
+            $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
@@ -79,12 +79,14 @@ class Equipments extends DashboardController{
                 $id = $equipment->id;
                 if($equipment->equipment_status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate Equipment</a>';
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
                     
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
-                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate Equipment</a>';
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate </a>';
                 }
+
+                $change_state .= ' <a href = ' . base_url("Equipments/equipmentEdit/$id") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Edit</a>';
                 
                 $tabledata[] = [
                     $counter,
@@ -118,6 +120,38 @@ class Equipments extends DashboardController{
 
         redirect('Equipments/equipmentlist', 'refresh');
 
+    }
+
+    function equipmentEdit($equipmentid){
+        $this->db->where('id', $equipmentid);
+        $equipment = $this->db->get('equipment')->row();
+
+        $data = [
+            'equipment_id'  =>  $equipment->id,
+            'equipment_name'  =>  $equipment->equipment_name
+        ];
+        $this->assets
+                ->addJs('dashboard/js/libs/jquery.validate.js');
+        $this->assets->setJavascript('Equipments/equipment_update_js');
+        $this->template
+                ->setPartial('Equipments/equipment_edit_v', $data)
+                ->setPageTitle('Equipment Edit')
+                ->adminTemplate();
+    }
+
+    function editEquipment(){
+        if($this->input->post()){
+            $equipmentid = $this->input->post('equipmentid');
+            $equipmentname = $this->input->post('equipmentname');
+
+            $this->db->set('equipment_name', $equipmentname);
+            $this->db->where('id', $equipmentid);
+            $this->db->update('equipment');
+            
+            $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+
+            redirect('Equipments/equipmentlist', 'refresh');
+        }
     }
 
 
