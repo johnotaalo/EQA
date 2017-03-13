@@ -86,7 +86,7 @@ class Template extends MX_Controller {
 			'participants' => [
 				'icon'	=>	'icon-people',
 				'text'	=>	'Participants',
-				'link'	=>	'Users/Participants/list',
+				'link'	=>	'Users/Participants/listing',
 				'users'	=>	['admin']
 			],
 			'ptrounds'	=>	[
@@ -101,12 +101,12 @@ class Template extends MX_Controller {
 				'sublist' => [
 					[
 						'icon' => 'fa fa-table',
-						'link' => 'Facilities/list/',
+						'link' => 'Facilities/listing/',
 						'text' => 'All Facilities'
 					],
 					[
 						'icon' => 'fa fa-table',
-						'link' => 'Facilities/list/CD4',
+						'link' => 'Facilities/listing/CD4',
 						'text' => 'CD4 Sites'
 					]
 				],
@@ -117,7 +117,13 @@ class Template extends MX_Controller {
 				'text'	=>	'User Accounts',
 				'link'	=>	'Users/userlist',
 				'users'	=>	['admin']
-			]
+			],
+			'equipments'		=>	[
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'Equipments',
+				'link'	=>	'Equipments/equipmentlist',
+				'users'	=>	['admin']
+			],
 		];
 
 		if (count($menus) > 0) {
