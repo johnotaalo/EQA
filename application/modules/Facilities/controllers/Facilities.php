@@ -15,7 +15,7 @@ class Facilities extends DashboardController{
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                    ->setJavascript('Facilities/facilities_js');
+                ->setJavascript('Facilities/facilities_js');
         $this->template
                     ->setPartial('Facilities/facilities_list_v')
                     ->setPageTitle($title)
