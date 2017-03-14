@@ -5,6 +5,8 @@ class PTRounds extends DashboardController{
     function __construct(){
         parent::__construct();
         $this->load->helper('form');
+        $this->load->library('table');
+        $this->load->config('table');
         $this->menu = [
             'information'   =>  [
                 'icon'  =>  'fa fa-info-circle',
@@ -28,8 +30,13 @@ class PTRounds extends DashboardController{
 
     function create($step = NULL, $id = NULL){
         $data = $pagedata = [];
+        $pt_details = new StdClass;
         if($step == NULL){
             $step = "information";
+        }
+
+        if($id != NULL){
+            $pt_details = $this->db->get_where('pt_round', ['uuid'  => $id])->row();
         }
 
         if(($step != NULL && $step != "information") && $id == NULL){
@@ -48,9 +55,9 @@ class PTRounds extends DashboardController{
                 break;
             case 'variables':
                 $view = "pt_variables_v";
+                $pagedata['accordion'] = $this->createVariablesAccordion($pt_details->id);
                 break;
             default:
-                # code...
                 break;
         }
 
@@ -167,6 +174,81 @@ class PTRounds extends DashboardController{
         }
     }
 
+    function createVariablesAccordion($round_id){
+        $accordion = "";
+        $template = $this->config->item('default');
+
+        $where = ['pt_round_id' =>  $round_id];
+        $samples = $this->db->get_where('pt_samples', $where)->result();
+        $testers = $this->db->get_where('pt_testers', $where)->result();
+        $labs = $this->db->get_where('pt_labs', $where)->result();
+        $equipments = $this->db->get('equipment')->result();
+
+        $table_headers = $testers_arr = $labs_arr = [];
+
+        $table_headers[] = "Sample ID";
+        foreach($testers as $tester){
+            $testers_arr[] = $tester->tester_name;
+        }
+        $testers_arr[] = "Mean";
+        $testers_arr[] = "SD";
+        $testers_arr[] = "2SD";
+        $testers_arr[] = "Upper Limit";
+        $testers_arr[] = "Lower Limit";
+        $testers_arr[] = "CV";
+        $testers_arr[] = "Outcome";
+        foreach($labs as $lab){
+            $testers_arr[] = $lab->lab_name;
+            $testers_arr[] = "Field Stability";
+        }
+        $testers_arr[] = "Outcome";
+        $table_headers = array_merge($table_headers, $testers_arr);
+
+        foreach($equipments as $equipment){
+            $table_body = [];
+            $accordion .= "<div class = 'card'>";
+            $accordion .= "<div class = 'card-header' role='tab' id = 'heading-{$equipment->id}'>
+                <h5 class = 'mb-0'>
+                    <a data-toggle = 'collapse' data-parent = '#accordion' href = '#collapse{$equipment->id}' aria-expanded = 'true' aria-controls = 'collapse{$equipment->id}'>
+                        {$equipment->equipment_name}
+                    </a>
+                </h5>
+            </div>
+            <div id = 'collapse{$equipment->id}' class = 'collapse' role = 'tabpanel' aria-labelledby= 'heading-{$equipment->id}'>
+                <div class = 'card-block'>";
+                $table_data = [];
+                foreach($samples as $sample){
+                    $table_body = [];
+                    $table_body[] = $sample->sample_name;
+                    foreach($testers as $tester){
+                        $table_body[] = "<input type = 'number' class = 'form-control' name = '{$equipment->id}//{$tester->uuid}[]'/>";
+                    }
+
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    $table_body[] = "";
+                    foreach($labs as $lab){
+                        $table_body[] = "<input type = 'number' name = '{$equipment->id}//{$lab->uuid}[]'/>";
+                        $table_body[] = "";
+                    }
+                    $table_body[] = "";
+
+                    array_push($table_data, $table_body);
+                }
+
+                $this->table->set_template($template);
+                $this->table->set_heading($table_headers);
+            $accordion .= "<div class = 'table-responsive'>" . $this->table->generate($table_data) . "</div>";
+            $accordion .= "</div>
+            </div>";
+            $accordion .= "</div>";
+        }
+        return $accordion;
+    }
     function nextpage($current){
         reset($this->menu);
         while(key($this->menu) !== $current){

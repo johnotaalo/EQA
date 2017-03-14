@@ -50,6 +50,9 @@
                     $( element ).parents( '.form-group' ).addClass( 'has-success' ).removeClass( 'has-danger' );
                 }
             });
+        <?php }elseif($step == "variables"){ ?>
+            $('.layout-toggler').trigger('click');
+            $('.accordion div:first div.card-header h5 a').trigger('click');
         <?php } ?>
     });
 
