@@ -16,6 +16,28 @@
 
 	<?= @$page_css; ?>
 	<link href="<?= @$assets_url; ?>css/style.css" rel="stylesheet">
+	<style>
+		.nav-list li a{
+			display: block;
+			text-decoration: none;
+			padding: .5em 1em;
+		}
+
+		.nav-list li.active, .nav-list li:hover{
+			background-color: #0088cc;
+		}
+
+		.nav-list li:hover a{
+			color: #ffffff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+			text-decoration: none;
+		}
+		.nav-list>.active>a, .nav-list>.active>a:hover, .nav-list>.active>a:focus {
+			color: #ffffff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+			text-decoration: none;
+		}
+	</style>
 </head>
 <body class="navbar-fixed sidebar-nav fixed-nav">
 	<header class="navbar">
