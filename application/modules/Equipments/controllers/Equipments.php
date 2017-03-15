@@ -12,9 +12,14 @@ class Equipments extends DashboardController{
     function equipmentlist(){
         $data = [];
 
+        $equipment_count = $this->db->count_all('equipment');
+
         $data = [
-            'equipments_table'   =>  $this->createEquipmentTable()
+            'equipments_table'   =>  $this->createEquipmentTable(),
+            'new_id_entry' => $equipment_count + 1
         ];
+
+
 
         // $this->assets
         //         ->addCss("plugin/select2/css/select2.min.css");
@@ -32,40 +37,22 @@ class Equipments extends DashboardController{
 
     function create(){
         if($this->input->post()){
-            $firstname = $this->input->post('firstname');
-            $lastname = $this->input->post('lastname');
-            $email = $this->input->post('email_address');
-            $role = $this->input->post('role');
+            $equipmentname = $this->input->post('equipmentname');
 
             $insertdata = [
-                'user_firstname'    =>  $firstname,
-                'user_lastname'     =>  $lastname,
-                'email_address'     =>  $email,
-                'user_type'         =>  $role,
-                'status'            =>  0
+                'equipment_name'    =>  $equipmentname
             ];
 
-            $this->db->insert('user', $insertdata);
+            $this->db->insert('equipment', $insertdata);
 
-            $user_id = $this->db->insert_id();
+            $equipment_id = $this->db->insert_id();
 
-            $this->db->where('id', $user_id);
-            $user = $this->db->get('user')->row();
+            $this->db->where('id', $equipment_id);
+            $equipment = $this->db->get('equipment')->row();
 
-            if($user){
-                $data = [
-                    'username'  =>  $firstname ." " . $lastname,
-                    'url'       =>  $this->config->item('server_url') . "Auth/firstTime/" . $user->uuid
-                ];
+            $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
 
-                $body = $this->load->view('Template/email/user_created_v', $data, TRUE);
-                $this->load->library('Mailer');
-                $sent = $this->mailer->sendMail($email, "Account Created", $body);
-                if ($sent == FALSE) {
-                    log_message('error', "The system could not send an email to {$email}. Username: $lastname $firstname at " . date('Y-m-d H:i:s'));
-                }
-            }
-            redirect('Users/userlist', 'refresh');
+            redirect('Equipments/equipmentlist', 'refresh');
         }
     }
 
@@ -76,30 +63,36 @@ class Equipments extends DashboardController{
         $template = $this->config->item('default');
 
         $heading = [
-            "Name",
-            "Email Address",
-            "Role",
+            "No.",
+            "Equipment Name",
             "Status",
             "Actions"
         ];
         $tabledata = [];
 
-        $this->db->where('user_type !=', "admin");
-        $this->db->where('uuid != ', $this->session->userdata('uuid'));
-        $users = $this->db->get('user')->result();
+        $equipments = $this->db->get('equipment')->result();
 
-        if($users){
-            foreach($users as $user){
-                $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
-                if($user->status == 1){
+        if($equipments){
+            $counter = 0;
+            foreach($equipments as $equipment){
+                $counter ++;
+                $id = $equipment->id;
+                if($equipment->equipment_status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
+                    
+                }else{
+                    $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate </a>';
                 }
+
+                $change_state .= ' <a href = ' . base_url("Equipments/equipmentEdit/$id") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Edit</a>';
+                
                 $tabledata[] = [
-                    $user->user_firstname ." " . $user->user_lastname,
-                    $user->email_address,
-                    strtoupper($user->user_type),
+                    $counter,
+                    $equipment->equipment_name,
                     $status,
-                    "<a href = '#' class = 'btn btn-warning btn-sm'><i class = 'icon-refresh'></i>&nbsp;Reset Password</a>"
+                    $change_state
                 ];
             }
         }
@@ -108,4 +101,58 @@ class Equipments extends DashboardController{
 
         return $this->table->generate($tabledata);
     }
+
+    function changeState($type, $id){
+        switch($type){
+            case 'activate':
+                $this->db->set('equipment_status', 1);
+
+            break;
+
+            case 'deactivate':
+                $this->db->set('equipment_status', 0);
+                
+            break;
+        }
+
+        $this->db->where('id', $id);
+        $this->db->update('equipment');
+
+        redirect('Equipments/equipmentlist', 'refresh');
+
+    }
+
+    function equipmentEdit($equipmentid){
+        $this->db->where('id', $equipmentid);
+        $equipment = $this->db->get('equipment')->row();
+
+        $data = [
+            'equipment_id'  =>  $equipment->id,
+            'equipment_name'  =>  $equipment->equipment_name
+        ];
+        $this->assets
+                ->addJs('dashboard/js/libs/jquery.validate.js');
+        $this->assets->setJavascript('Equipments/equipment_update_js');
+        $this->template
+                ->setPartial('Equipments/equipment_edit_v', $data)
+                ->setPageTitle('Equipment Edit')
+                ->adminTemplate();
+    }
+
+    function editEquipment(){
+        if($this->input->post()){
+            $equipmentid = $this->input->post('equipmentid');
+            $equipmentname = $this->input->post('equipmentname');
+
+            $this->db->set('equipment_name', $equipmentname);
+            $this->db->where('id', $equipmentid);
+            $this->db->update('equipment');
+            
+            $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+
+            redirect('Equipments/equipmentlist', 'refresh');
+        }
+    }
+
+
 }

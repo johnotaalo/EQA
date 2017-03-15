@@ -119,7 +119,7 @@ class Template extends MX_Controller {
 				'users'	=>	['admin']
 			],
 			'equipments'		=>	[
-				'icon'	=>	'icon-user-follow',
+				'icon'	=>	'icon-wrench',
 				'text'	=>	'Equipments',
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']

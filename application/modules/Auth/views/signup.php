@@ -8,7 +8,7 @@
         </div>
 
         <form method="POST" action="<?= @base_url('Participant/register'); ?>" class="p-a-4">
-          <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Join us Today</h4>
+          <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Participant Registration</h4>
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
             <div class="page-signup-icon text-muted"><i class="ion-information-circled"></i></div>
@@ -41,6 +41,7 @@
             <div class="page-signup-icon text-muted"><i class="ion-wrench"></i></div>
             <select id = "equipment" name = "equipment[]" class="page-signup-form-control form-control" multiple>
             </select>
+            <span class="help-block">* Select multiple equipments if more </span>
           </fieldset>
 
           <fieldset class = "page-signup-form-group form-group form-group-lg">
@@ -59,7 +60,7 @@
             I agree with the <a href="#" target="_blank">Terms and Conditions</a>
           </label> -->
 
-          <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Sign Up</button>
+          <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Register</button>
         </form>
       </div>
 

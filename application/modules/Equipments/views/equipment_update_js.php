@@ -1,17 +1,15 @@
 <script>
     $(document).ready(function(){
-        $('table').dataTable();
 
-        $('#save-changes').click(function(){
-            $('#createEquipment').submit();
-        });
 
-        $('#createEquipment').validate({
+        $('#equipmentEditForm').validate({
             rules: {
+                equipmentid: "required",
                 equipmentname: "required"
             },
             messages: {
-                equipmentname: "Equipment name must be entered"
+                equipmentid: "Could not get the equipment data",
+                equipmentname: "Equipment Name cannot be empty"
             },
             errorElement: 'em',
             errorPlacement: function ( error, element ) {
@@ -33,11 +31,7 @@
             }
         });
 
-        $('#btn-create-equipment').click(function(){
-        // load modal
-            $('#pageModal').modal();
-        });
 
         
-});    
+    });
 </script>
