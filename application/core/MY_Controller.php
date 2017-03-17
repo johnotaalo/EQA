@@ -8,7 +8,8 @@ class MY_Controller extends MX_Controller {
 		$this->usertypes = [
 			'participant',
 			'admin',
-			'testers'
+			'testers',
+			'QA Reviewer'
 		];
 		$this->load->module('Template');
 	}

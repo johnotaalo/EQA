@@ -32,6 +32,13 @@
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
             <div class="page-signup-icon text-muted"><i class="fa fa-hospital-o"></i></div>
+            <select name = "usertype" class="page-signup-form-control form-control">
+              <option value="">Select user type</option>
+            </select>
+          </fieldset>
+
+          <fieldset class="page-signup-form-group form-group form-group-lg">
+            <div class="page-signup-icon text-muted"><i class="fa fa-hospital-o"></i></div>
             <select name = "facility" class="page-signup-form-control form-control">
               <option value="">Pick your facility</option>
             </select>

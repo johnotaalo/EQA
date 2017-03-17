@@ -3,7 +3,7 @@
 class Equipments extends DashboardController{
     function __construct(){
         parent::__construct();
-        $this->load->model('Auth/auth_m');
+        //$this->load->model('Equipments/M_Equipments');
     }
 
     function index(){
@@ -11,7 +11,7 @@ class Equipments extends DashboardController{
 
     function equipmentlist(){
         $data = [];
-
+        $title = "Equipments";
         $equipment_count = $this->db->count_all('equipment');
 
         $data = [
@@ -31,6 +31,7 @@ class Equipments extends DashboardController{
         $this->assets->setJavascript('Equipments/equipments_js');
         $this->template
                 ->setModal("Equipments/new_equipment_v", "Create New Equipment")
+                ->setPageTitle($title)
                 ->setPartial('Equipments/equipment_list_v', $data)
                 ->adminTemplate();
     }
@@ -66,11 +67,14 @@ class Equipments extends DashboardController{
             "No.",
             "Equipment Name",
             "Status",
+            "No. of Facilities Equipped",
             "Actions"
         ];
         $tabledata = [];
 
-        $equipments = $this->db->get('equipment')->result();
+        //$equipments = $this->M_Facilities->getequipments();
+        $equipments = $this->db->get('equipments_v')->result();
+
 
         if($equipments){
             $counter = 0;
@@ -92,6 +96,7 @@ class Equipments extends DashboardController{
                     $counter,
                     $equipment->equipment_name,
                     $status,
+                    '<a href = ' . base_url("Equipments/facilities/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
                 ];
             }
@@ -152,6 +157,19 @@ class Equipments extends DashboardController{
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
+    }
+
+    function facilities($equipmentId){
+
+        $this->db->join('facility_equipment_mapping', 'facility_equipment_mapping.facility_code = facility_v.facility_code');
+
+        $this->db->where('facility_equipment_mapping.equipment_id', $equipmentId);
+        $efacilities = $this->db->get('facility_v')->result();
+
+        echo '<pre>';print_r($efacilities);echo'</pre>';die();
+
+         
+
     }
 
 

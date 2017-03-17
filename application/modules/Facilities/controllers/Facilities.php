@@ -6,7 +6,7 @@ class Facilities extends DashboardController{
         $this->load->model('Facilities/M_Facilities');
     }
 
-    function listing($type = NULL){
+    function listing($type = NULL, $data = NULL){
         $title = "$type Sites";
         if($type == NULL){
             $title = "All Facilities";
@@ -22,7 +22,7 @@ class Facilities extends DashboardController{
                     ->adminTemplate();
     }
 
-    function getTable(){
+    function getTable($eFacilities = NULL){
         $columns = [];
         $limit = $offset = $search_value = NULL;
 
@@ -42,17 +42,19 @@ class Facilities extends DashboardController{
          $facilities = $this->M_Facilities->search($search_value, $limit, $offset);
          $data = [];
 
-         if($facilities){
-             foreach($facilities as $facility){
-                 $data[] = [
-                     $facility->facility_code,
-                     $facility->facility_name,
-                     $facility->county_name,
-                     $facility->sub_county_name,
-                     ""
-                 ];
+        if($eFacilities == NULL){
+             if($facilities){
+                 foreach($facilities as $facility){
+                     $data[] = [
+                         $facility->facility_code,
+                         $facility->facility_name,
+                         $facility->county_name,
+                         $facility->sub_county_name,
+                         ""
+                     ];
+                 }
              }
-         }
+        }
 
          if($this->input->is_ajax_request()){
             $allfacilities = $this->M_Facilities->search();
@@ -60,7 +62,7 @@ class Facilities extends DashboardController{
             $data_total = count($facilities);
 
             $json_data = [
-                 "draw"				=>	intval( $_REQUEST['draw']),
+                "draw"				=>	intval( $_REQUEST['draw']),
 				"recordsTotal"		=>	intval($total_data),
 				"recordsFiltered"	=>	intval(count($this->M_Facilities->search($search_value))),
 				'data'				=>	$data

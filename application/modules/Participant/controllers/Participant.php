@@ -16,6 +16,7 @@ class Participant extends MY_Controller {
 			$emailaddress = $this->input->post('participantEmail');
 			$phonenumber = $this->input->post('phonenumber');
 			$facility = $this->input->post('facility');
+			$usertype = $this->input->post('usertype');
 			$password = $this->input->post('password');
 
 			$token =  $this->hash->hashPassword(bin2hex(openssl_random_pseudo_bytes(16)));
@@ -27,6 +28,7 @@ class Participant extends MY_Controller {
 				'participant_email'			=>	$emailaddress,
 				'participant_password'		=>	$this->hash->hashPassword($password),
 				'confirm_token'				=>	$token,
+				'user_type'				=>	$usertype,
 				'participant_facility'		=>	$facility
 			];
 
