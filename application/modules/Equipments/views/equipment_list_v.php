@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class = "card-block">
-                <?= @$equipments_table; ?>
+                <?= @$table_view; ?>
             </div>
         </div>
     </div>
