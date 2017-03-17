@@ -6,7 +6,7 @@ class Facilities extends DashboardController{
         $this->load->model('Facilities/M_Facilities');
     }
 
-    function listing($type = NULL, $data = NULL){
+    function listing($type = NULL){
         $title = "$type Sites";
         if($type == NULL){
             $title = "All Facilities";
@@ -22,7 +22,7 @@ class Facilities extends DashboardController{
                     ->adminTemplate();
     }
 
-    function getTable($eFacilities = NULL){
+    function getTable(){
         $columns = [];
         $limit = $offset = $search_value = NULL;
 
@@ -42,7 +42,7 @@ class Facilities extends DashboardController{
          $facilities = $this->M_Facilities->search($search_value, $limit, $offset);
          $data = [];
 
-        if($eFacilities == NULL){
+    
              if($facilities){
                  foreach($facilities as $facility){
                      $data[] = [
@@ -54,7 +54,7 @@ class Facilities extends DashboardController{
                      ];
                  }
              }
-        }
+        
 
          if($this->input->is_ajax_request()){
             $allfacilities = $this->M_Facilities->search();
