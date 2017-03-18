@@ -3,21 +3,33 @@
 class Equipments extends DashboardController{
     function __construct(){
         parent::__construct();
-        $this->load->model('Auth/auth_m');
+        $this->load->library('table');
+        $this->load->config('table');
+
+        //$this->load->model('Equipments/M_Equipments');
     }
 
     function index(){
     }
 
-    function equipmentlist(){
+    function equipmentlist($eFacilities = NULL){
         $data = [];
-
+        $title = "Equipments";
         $equipment_count = $this->db->count_all('equipment');
 
-        $data = [
-            'equipments_table'   =>  $this->createEquipmentTable(),
-            'new_id_entry' => $equipment_count + 1
-        ];
+        if($eFacilities == NULL){
+
+            $data = [
+                'table_view'   =>  $this->createEquipmentTable(),
+                'new_id_entry' => $equipment_count + 1
+            ];
+
+        }else{
+            $data = [
+                'table_view'   =>  $this->facilities($eFacilities),
+                'new_id_entry' => ''
+            ];
+        }
 
 
 
@@ -31,6 +43,7 @@ class Equipments extends DashboardController{
         $this->assets->setJavascript('Equipments/equipments_js');
         $this->template
                 ->setModal("Equipments/new_equipment_v", "Create New Equipment")
+                ->setPageTitle($title)
                 ->setPartial('Equipments/equipment_list_v', $data)
                 ->adminTemplate();
     }
@@ -57,8 +70,8 @@ class Equipments extends DashboardController{
     }
 
     function createEquipmentTable(){
-        $this->load->library('table');
-        $this->load->config('table');
+
+
 
         $template = $this->config->item('default');
 
@@ -66,17 +79,20 @@ class Equipments extends DashboardController{
             "No.",
             "Equipment Name",
             "Status",
+            "No. of Facilities Equipped",
             "Actions"
         ];
         $tabledata = [];
 
-        $equipments = $this->db->get('equipment')->result();
+        //$equipments = $this->M_Facilities->getequipments();
+        $equipments = $this->db->get('equipments_v')->result();
+
 
         if($equipments){
             $counter = 0;
             foreach($equipments as $equipment){
                 $counter ++;
-                $id = $equipment->id;
+                $id = $equipment->uuid;
                 if($equipment->equipment_status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
                     $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
@@ -92,6 +108,7 @@ class Equipments extends DashboardController{
                     $counter,
                     $equipment->equipment_name,
                     $status,
+                    '<a href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
                 ];
             }
@@ -115,7 +132,7 @@ class Equipments extends DashboardController{
             break;
         }
 
-        $this->db->where('id', $id);
+        $this->db->where('uuid', $id);
         $this->db->update('equipment');
 
         redirect('Equipments/equipmentlist', 'refresh');
@@ -152,6 +169,49 @@ class Equipments extends DashboardController{
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
+    }
+
+    function facilities($equipmentId){
+
+        $template = $this->config->item('default');
+
+        $facilityheading = [
+            "No.",
+            "MFL. Code",
+            "Facility Name",
+            "County",
+            "Sub County",
+            "Actions"
+        ];
+        $facilitytabledata = [];
+
+        // $this->db->get('facility');
+        // $this->db->join('facility_equipment_mapping', 'facility_equipment_mapping.facility_code = facility.facility_code');
+        // $this->db->join('equipment', 'facility_equipment_mapping.equipment_id = equipment.id');
+
+        $this->db->where('e_uuid', $equipmentId);
+        $efacilities = $this->db->get('equipment_facilities_v')->result();
+
+        if($efacilities){
+            $counter = 0;
+            foreach($efacilities as $facility){
+                $counter ++;
+ 
+                $facilitytabledata[] = [
+                    $counter,
+                    $facility->facility_code,
+                    $facility->facility_name,
+                    $facility->county_name,
+                    $facility->sub_county_name,
+                    ""
+                ];
+            }
+        }
+
+        $this->table->set_heading($facilityheading);
+        $this->table->set_template($template);
+
+        return $this->table->generate($facilitytabledata);
     }
 
 

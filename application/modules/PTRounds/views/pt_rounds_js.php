@@ -1,10 +1,21 @@
 <script>
     $(document).ready(function(){
-        var rowCount = numberofrows();
+
+    function numberofrows(){
+        var rowCount = $('#sample_table tbody tr').length;
+        return rowCount;
+    }
+
+    function customizeRow(number){
+        return "<tr><td>"+number+"</td><td>Sample <span class = 'sample-no'>"+number+"</span></td><td><input type = 'text' name = 'samples[]' class = 'form-control'/></td><td><center><a class = 'remove-sample'><i class = 'fa fa-times'></i></a></center></td></tr>";
+    }
+
+
+    var rowCount = numberofrows();
         // alert(rowCount);
-        if(rowCount == 0){
-            $('#sample_table tbody').append(customizeRow(1));
-        }
+    if(rowCount == 0){
+        $('#sample_table tbody').append(customizeRow(1));
+    }
         <?php if($step == "information"){?>
             $('#rounds-form').validate({
                 rules: {
@@ -78,12 +89,5 @@
         }
     });
 
-    function numberofrows(){
-        var rowCount = $('#sample_table tbody tr').length;
-        return rowCount;
-    }
-
-    function customizeRow(number){
-        return "<tr><td>"+number+"</td><td>Sample <span class = 'sample-no'>"+number+"</span></td><td><input type = 'text' name = 'samples[]' class = 'form-control'/></td><td><center><a class = 'remove-sample'><i class = 'fa fa-times'></i></a></center></td></tr>";
-    }
+    
 </script>
