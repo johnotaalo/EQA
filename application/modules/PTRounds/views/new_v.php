@@ -22,7 +22,7 @@
     </nav>
 
     <main id = "page-holder">
-        <?= @form_open('PTRounds/add/' . $step, ['id'   =>  'rounds-form']); ?>
+        <?= @form_open('PTRounds/add/' . $step . '/' . $uuid, ['id'   =>  'rounds-form']); ?>
             <div style = "width: 100%; height: 500px;overflow-y:auto;">
                 <?= @$this->load->view($page, $pageData); ?>
             </div>

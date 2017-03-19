@@ -7,6 +7,7 @@ class PTRounds extends DashboardController{
         $this->load->helper('form');
         $this->load->library('table');
         $this->load->config('table');
+        $this->load->model('PTRounds/M_PTRounds');
         $this->menu = [
             'information'   =>  [
                 'icon'  =>  'fa fa-info-circle',
@@ -15,6 +16,14 @@ class PTRounds extends DashboardController{
             'variables'     =>  [
                 'icon'  =>  'fa fa-table',
                 'text'  =>  'Variables'
+            ],
+            'calendar'      =>  [
+                'icon'  =>  'fa fa-calendar',
+                'text'  =>  'Calendar'
+            ],
+            'facilities'      =>  [
+                'icon'  =>  'fa fa-hospital-o',
+                'text'  =>  'Facilities'
             ]
         ];
 
@@ -37,6 +46,7 @@ class PTRounds extends DashboardController{
 
         if($id != NULL){
             $pt_details = $this->db->get_where('pt_round', ['uuid'  => $id])->row();
+            $pagedata['pt_details'] = $pt_details;
         }
 
         if(($step != NULL && $step != "information") && $id == NULL){
@@ -46,29 +56,53 @@ class PTRounds extends DashboardController{
         }
 
         $view = "";
+        $js_data = [
+            'step'  =>  $step
+        ];
 
         switch ($step) {
             case 'information':
                 $view = "pt_info_v";
-                $pagedata['round_no'] = $this->generateRoundNumber();
+                $pagedata['round_no'] = (!$id) ? $this->generateRoundNumber() : $pt_details->pt_round_no;
                 $pagedata['lab_prefix'] = $this->lab_id_prefix;
+                if($id){
+                    $pagedata['lab_id'] = str_replace('-', '', substr($pt_details->blood_lab_unit_id, strpos($pt_details->blood_lab_unit_id, '-', strpos($pt_details->blood_lab_unit_id, '-')+1)));
+                    $pagedata['no_labs'] = $this->db->get_where('pt_labs', ['pt_round_id' => $pt_details->id])->num_rows();
+                    $pagedata['no_testers'] = $this->db->get_where('pt_testers', ['pt_round_id' => $pt_details->id])->num_rows();
+                    $pagedata['samples_table'] = $this->createSamplesTable($pt_details->id);
+                    $pagedata['round_duration'] = date('m/d/Y', strtotime($pt_details->from)) .' - ' . date('m/d/Y', strtotime($pt_details->to));
+                }
+                $this->assets
+                        ->addJs('dashboard/js/libs/moment.min.js')
+                        ->addJs('dashboard/js/libs/daterangepicker.js');
                 break;
             case 'variables':
                 $view = "pt_variables_v";
                 $pagedata['accordion'] = $this->createVariablesAccordion($pt_details->id);
+                break;
+            case 'calendar':
+                $view = "pt_calendar_v";
+                $pagedata['calendar_form'] = $this->createCalendarForm($pt_details->id);
+                $js_data['duration_from'] = $pt_details->from;
+                $js_data['duration_to'] = $pt_details->to;
+
+                $this->assets
+                        ->addJs('dashboard/js/libs/moment.min.js')
+                        ->addJs('dashboard/js/libs/daterangepicker.js');
+                break;
+            case 'facilities':
+                $view = "pt_facilities_v";
                 break;
             default:
                 break;
         }
 
         $data['step'] = $step;
+        $data['uuid'] = $id;
         $data['page'] = $view;
         $data['pageData'] = $pagedata;
         $data['submenu'] = $this->createSubMenu($step, $id);
 
-        $js_data = [
-            'step'  =>  $step
-        ];
         $this->assets
                     ->addJs('dashboard/js/libs/jquery.validate.js')
                     ->setJavascript('PTRounds/pt_rounds_js', $js_data);
@@ -104,69 +138,137 @@ class PTRounds extends DashboardController{
 
     function add($step, $id = NULL){
         // echo "<pre>";print_r($this->input->post());die;
-
         $nextpage = $this->nextpage($step);
+         $round_id = $this->db->get_where('pt_round', ['uuid' => $id])->row()->id;
         if($step != NULL){
             if(($id != NULL && $step == "information") || ($step != "information" && $id != NULL) || ($step == "information" && $id == NULL)){
                 switch ($step) {
                     case 'information':
-                        $pt_data = [
-                            'pt_round_no'       =>  $this->generateRoundNumber(),
-                            'blood_lab_unit_id' =>  $this->lab_id_prefix . $this->input->post('blood_unit_lab_id')
-                        ];
-
-                        $this->db->insert('pt_round', $pt_data);
-                        $round_id = $this->db->insert_id();
-
-                        $no_testers = $this->input->post('no_testers');
-                        $no_labs = $this->input->post('no_labs');
-                        if($no_testers > 0 && $no_labs > 0){
-                            $testers_data = [];
-                            $labs_data = [];
-                            for ($i=0; $i < $no_testers; $i++) { 
-                                $number = $i + 1;
-                                $tester_name = 'Tester ' . $number;
-                                $testers_data[] = [
-                                    'tester_name'   =>  $tester_name,
-                                    'pt_round_id'   =>  $round_id
-                                ];
-                            }
-
-                            for ($i=0; $i < $no_labs; $i++) { 
-                                $number = $i + 1;
-                                $lab_name = 'Lab' . $number;
-                                $labs_data[] = [
-                                    'lab_name'      =>  $lab_name,
-                                    'pt_round_id'   =>  $round_id
-                                ];
-                            }
-
-                            $this->db->insert_batch('pt_testers', $testers_data);
-                            $this->db->insert_batch('pt_labs', $labs_data);
-                        }
-
-                        $samples = $this->input->post('samples');
-                        $sample_data = [];
-                        foreach ($samples as $sample) {
-                            $sample_data[] = [
-                                'sample_name'   =>  $sample,
-                                'pt_round_id'   =>  $round_id
+                        $round_duration_frags = explode('-', preg_replace('/\s+/', '', $this->input->post('round_duration')));
+                        $from_date = date('Y-m-d', strtotime($round_duration_frags[0]));
+                        $to_date = date('Y-m-d', strtotime($round_duration_frags[1]));
+                        if(!$id){
+                            $pt_data = [
+                                'pt_round_no'       =>  $this->generateRoundNumber(),
+                                'blood_lab_unit_id' =>  $this->lab_id_prefix . $this->input->post('blood_unit_lab_id'),
+                                'from'              =>  $from_date,
+                                'to'                =>  $to_date
                             ];
+
+                            $this->db->insert('pt_round', $pt_data);
+                            $round_id = $this->db->insert_id();
+
+                            $no_testers = $this->input->post('no_testers');
+                            $no_labs = $this->input->post('no_labs');
+                            if($no_testers > 0 && $no_labs > 0){
+                                $testers_data = [];
+                                $labs_data = [];
+                                for ($i=0; $i < $no_testers; $i++) { 
+                                    $number = $i + 1;
+                                    $tester_name = 'Tester ' . $number;
+                                    $testers_data[] = [
+                                        'tester_name'   =>  $tester_name,
+                                        'pt_round_id'   =>  $round_id
+                                    ];
+                                }
+
+                                for ($i=0; $i < $no_labs; $i++) { 
+                                    $number = $i + 1;
+                                    $lab_name = 'Lab' . $number;
+                                    $labs_data[] = [
+                                        'lab_name'      =>  $lab_name,
+                                        'pt_round_id'   =>  $round_id
+                                    ];
+                                }
+
+                                $this->db->insert_batch('pt_testers', $testers_data);
+                                $this->db->insert_batch('pt_labs', $labs_data);
+                            }
+
+                            $samples = $this->input->post('samples');
+                            $sample_data = [];
+                            foreach ($samples as $sample) {
+                                $sample_data[] = [
+                                    'sample_name'   =>  $sample,
+                                    'pt_round_id'   =>  $round_id
+                                ];
+                            }
+
+                            $this->db->insert_batch('pt_samples', $sample_data);
+
+                            $this->db->select('uuid');
+                            $this->db->where('id', $round_id);
+                            $id = $this->db->get('pt_round')->row()->uuid;
+                        }else{
+                            $update_data = [
+                                'blood_lab_unit_id' =>  $this->lab_id_prefix . $this->input->post('blood_unit_lab_id'),
+                                'from'  =>  $from_date,
+                                'to'    =>  $to_date
+                            ];
+
+                            $this->db->where('id', $round_id);
+                            $this->db->update('pt_round', $update_data);
                         }
-
-                        $this->db->insert_batch('pt_samples', $sample_data);
-
-                        $this->db->select('uuid');
-                        $this->db->where('id', $round_id);
-                        $id = $this->db->get('pt_round')->row()->uuid;
                         break;
-                    
+                    case 'variables':
+                        $filtered_input = array_filter($this->input->post());
+                        $sorted_input = [];
+                        foreach ($filtered_input as $key => $value) {
+                            $key_frags = explode('_', $key);
+                            if (is_array($key_frags) && count($key_frags) == 2) {
+                                $section = $key_frags[0];
+                                $ids_frag = explode('//', $key_frags[1]);
+                                $sorted_input[$section][] = [
+                                    'pt_round_uuid'     =>  $id,
+                                    'equipment_uuid'    =>  $ids_frag[0],
+                                    'sample_uuid'       =>  $ids_frag[1],
+                                    $section . '_uuid'  =>  $ids_frag[2],
+                                    'result'            =>  $value
+                                ];
+                            }
+                        }
+                        if ($sorted_input['tester']) {
+                            foreach ($sorted_input['tester'] as $data_array) {
+                                $equipment_id = $this->db->get_where('equipment', ['uuid' => $data_array['equipment_uuid']])->row()->id;
+                                $sample_id = $this->db->get_where('pt_samples', ['uuid' =>  $data_array['sample_uuid']])->row()->id;
+                                $tester_id = $this->db->get_where('pt_testers', ['uuid' =>  $data_array['tester_uuid']])->row()->id;
+                                $result = $data_array['result'];
+
+                                $sql = "CALL proc_pt_testers_result($equipment_id, $sample_id, $tester_id, $round_id, $result)";
+                                $this->db->query($sql);
+                            }
+                        }
+                        if ($sorted_input['lab']) {
+                            foreach ($sorted_input['lab'] as $data_array) {
+                                $equipment_id = $this->db->get_where('equipment', ['uuid' => $data_array['equipment_uuid']])->row()->id;
+                                $sample_id = $this->db->get_where('pt_samples', ['uuid' =>  $data_array['sample_uuid']])->row()->id;
+                                $lab_id = $this->db->get_where('pt_labs', ['uuid' =>  $data_array['lab_uuid']])->row()->id;
+                                $result = $data_array['result'];
+
+                                $sql = "CALL proc_pt_labs_results($equipment_id, $sample_id, $lab_id, $round_id, $result)";
+                                $this->db->query($sql);
+                            }
+                        }
+                        break;
+                    case 'calendar':
+                        foreach ($this->input->post() as $calendar_item_uuid => $dates) {
+                           $item_id = $this->db->get_where('calendar_items', ['uuid'    =>  $calendar_item_uuid])->row()->id;
+                           $dates_frags = explode('-', preg_replace('/\s+/', '', $dates));
+                           $date_from = date('Y-m-d', strtotime($dates_frags[0]));
+                           $date_to = date('Y-m-d', strtotime($dates_frags[1]));
+
+                           $sql = "CALL proc_pt_calendar($item_id, $round_id, '$date_from', '$date_to')";
+                           $this->db->query($sql);
+                        }
+                        break;
                     default:
-                        # code...
+                        $this->session->set_flashdata('error', 'Sorry. An error was encountered while proessing your request. Please try again');
+                        redirect('PTRounds/create/' . $step);
                         break;
-                }                
+                }              
                 redirect('PTRounds/create/' . $nextpage . '/' . $id,'refresh');               
             }else{
+                echo $step;die;
                 $step = "information";
                 $this->session->set_flashdata('error', 'Sorry. An error was encountered while proessing your request. Please try again');
                 redirect('PTRounds/create/' . $step);
@@ -221,19 +323,39 @@ class PTRounds extends DashboardController{
                     $table_body = [];
                     $table_body[] = $sample->sample_name;
                     foreach($testers as $tester){
-                        $table_body[] = "<input type = 'number' class = 'form-control' name = '{$equipment->id}//{$tester->uuid}[]'/>";
+                        $where_array = [
+                            'pt_round_id'   => $round_id,
+                            'equipment_id'  =>  $equipment->id,
+                            'pt_tester_id'  =>  $tester->id,
+                            'pt_sample_id'  =>  $sample->id
+                        ];
+                        $tester_val = $this->db->get_where('pt_testers_result', $where_array)->row();
+                        $testers_value = ($tester_val) ? $tester_val->result : "";
+                        $table_body[] = "<input type = 'number' name = 'tester_{$equipment->uuid}//{$sample->uuid}//{$tester->uuid}' value = '{$testers_value}'/>";
                     }
 
-                    $table_body[] = "";
-                    $table_body[] = "";
-                    $table_body[] = "";
-                    $table_body[] = "";
-                    $table_body[] = "";
-                    $table_body[] = "";
-                    $table_body[] = "";
+                    $calculated_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' =>  $round_id, 'equipment_id'   =>  $equipment->id, 'pt_sample_id'  =>  $sample->id])->row(); 
+
+                    $table_body[] = ($calculated_values) ? $calculated_values->mean : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->sd : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->doublesd : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->upper_limit : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->lower_limit : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->cv : 0;
+                    $table_body[] = ($calculated_values) ? $calculated_values->outcome : 0;
                     foreach($labs as $lab){
-                        $table_body[] = "<input type = 'number' name = '{$equipment->id}//{$lab->uuid}[]'/>";
-                        $table_body[] = "";
+                        $where_array = [
+                            'pt_round_id'   => $round_id,
+                            'equipment_id'  =>  $equipment->id,
+                            'pt_lab_id'     =>  $lab->id,
+                            'pt_sample_id'  =>  $sample->id
+                        ];
+                        $lab_val = $this->db->get_where('pt_labs_results', $where_array)->row();
+                        $lab_value = ($lab_val) ? $lab_val->result : "";
+                        $table_body[] = "<input type = 'number' name = 'lab_{$equipment->uuid}//{$sample->uuid}//{$lab->uuid}' value = '{$lab_value}'/>";
+                        $stability_val = $this->db->get_where('pt_labs_calculated_v', $where_array)->row();
+                        $stability_value = ($stability_val) ? $stability_val->stability : "N/A";
+                        $table_body[] = $stability_value;
                     }
                     $table_body[] = "";
 
@@ -249,6 +371,49 @@ class PTRounds extends DashboardController{
         }
         return $accordion;
     }
+
+    function createCalendarForm($round_id){
+        $calendar_form = "";
+
+        $form_data = $this->M_PTRounds->findCalendarDetailsByRound($round_id);
+
+        foreach($form_data as $calendar_data){
+            $dates = "";
+            if($calendar_data->date_from != "" && $calendar_data->date_to != ""){
+                $dates = "{$calendar_data->date_from} - {$calendar_data->date_to}";
+            }
+            $calendar_form .= "<div class = 'form-group'>
+                <label class = 'control-label'>{$calendar_data->calendar_item}</label>
+                <input class = 'form-control daterange' type = 'text' name = '{$calendar_data->calendar_item_id}' value = '$dates'/>
+            </div>";
+        }
+
+        return $calendar_form;
+    }
+
+    function createSamplesTable($round_id){
+        $this->db->where('pt_round_id', $round_id);
+        $query = $this->db->get('pt_samples');
+        $samples = $query->result();
+
+        $samples_table = "";
+        if($samples){
+            $counter = 1;
+            foreach ($samples as $sample) {
+               $samples_table .= "<tr>";
+               $samples_table .= "<td>{$counter}</td>";
+               $samples_table .= "<td>Sample <span class = 'sample-no'>{$counter}</span></td>";
+               $samples_table .= "<td><input type = 'text' class = 'form-control' value = '{$sample->sample_name}' disabled/></td>";
+               $samples_table .= "<td><center>N/A</center></td>";
+               $samples_table .= "</tr>";
+
+               $counter++;
+            }
+        }
+
+        return $samples_table;
+    }
+
     function nextpage($current){
         reset($this->menu);
         while(key($this->menu) !== $current){
@@ -256,7 +421,7 @@ class PTRounds extends DashboardController{
         }
 
         $next_array = next($this->menu);
-        $next_key = key($this->menu);
+        $next_key = (key($this->menu)) ? key($this->menu) : "information";
         
         return $next_key;
     }
@@ -271,9 +436,9 @@ class PTRounds extends DashboardController{
         $data = $query->row();
         $number = 1;
         if($data){
-            if($data->pt_round_no){
+            if($data->pt_round_no != ""){
                 $data_frags = explode("-", $data->pt_round_no);
-                $number = $data_frags[1];
+                $number = $data_frags[1] + 1;
             }
         }
 

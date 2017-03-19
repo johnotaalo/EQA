@@ -1,25 +1,16 @@
 <script>
     $(document).ready(function(){
-
-    function numberofrows(){
-        var rowCount = $('#sample_table tbody tr').length;
-        return rowCount;
-    }
-
-    function customizeRow(number){
-        return "<tr><td>"+number+"</td><td>Sample <span class = 'sample-no'>"+number+"</span></td><td><input type = 'text' name = 'samples[]' class = 'form-control'/></td><td><center><a class = 'remove-sample'><i class = 'fa fa-times'></i></a></center></td></tr>";
-    }
-
-
-    var rowCount = numberofrows();
+        var rowCount = numberofrows();
         // alert(rowCount);
-    if(rowCount == 0){
-        $('#sample_table tbody').append(customizeRow(1));
-    }
+        if(rowCount == 0){
+            $('#sample_table tbody').append(customizeRow(1));
+        }
         <?php if($step == "information"){?>
+            $('input[name="round_duration"]').daterangepicker();
             $('#rounds-form').validate({
                 rules: {
                     "samples[]": "required",
+                    round_duration : "required",
                     blood_unit_lab_id: "required",
                     no_testers: {
                         required : true,
@@ -33,6 +24,7 @@
                 messages: {
                     "samples[]" : "You must enter the sample name",
                     blood_unit_lab_id: "The blood unit lab id is required",
+                    round_duration: "You have to pick the round duration",
                     no_testers: {
                         required: "Enter the number of testers",
                         number: "The value has to be a number"
@@ -64,6 +56,11 @@
         <?php }elseif($step == "variables"){ ?>
             $('.layout-toggler').trigger('click');
             $('.accordion div:first div.card-header h5 a').trigger('click');
+        <?php }elseif($step == "calendar"){ ?>
+            $('input.daterange').daterangepicker({
+                "minDate"   : '<?= @date('m/d/Y', strtotime($duration_from));  ?>',
+                "maxDate"   : '<?= @date('m/d/Y', strtotime($duration_to));  ?>'
+            });
         <?php } ?>
     });
 
@@ -88,6 +85,19 @@
             alert("You must have at least one sample");
         }
     });
+
+    function numberofrows(){
+        var rowCount = $('#sample_table tbody tr').length;
+        return rowCount;
+    }
+
+    function customizeRow(number){
+        return "<tr><td>"+number+"</td><td>Sample <span class = 'sample-no'>"+number+"</span></td><td><input type = 'text' name = 'samples[]' class = 'form-control'/></td><td><center><a class = 'remove-sample'><i class = 'fa fa-times'></i></a></center></td></tr>";
+    }
+
+    function calculateMean(){
+        
+    }
 
     
 </script>

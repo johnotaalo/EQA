@@ -104,6 +104,24 @@ class Import extends MY_Controller {
 
 		return $dbColumns;
 	}
+
+	function importEquipmentMapping(){
+		$file_path = './uploads/data/EquipmentMapping.xlsx';
+		$data = $this->excel->readExcel($file_path);
+
+		$insertData = [];
+		foreach ($data as $equipment_id => $itemData) {
+			$headers = $itemData[0];
+			for ($i=1; $i < count($itemData); $i++) { 
+				$insertData[] = [
+					'equipment_id'	=>	$equipment_id,
+					'facility_code'	=>	$itemData[$i][0]
+				];
+			}
+		}
+
+		// $this->db->insert_batch('facility_equipment_mapping', $insertData);
+	}
 }
 
 /* End of file Import.php */
