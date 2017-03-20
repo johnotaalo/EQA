@@ -25,7 +25,7 @@
             }, function(){
                 $.get(url, function(data){
                     if(data.status == true){
-                        window.location = "<?= @base_url('Users/Participants/list'); ?>";
+                        window.location = "<?= @base_url('Users/Participants/listing'); ?>";
                     }else{
                         sweetAlert("Oops...", data.message, "error");
                     }

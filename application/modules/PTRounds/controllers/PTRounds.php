@@ -38,6 +38,21 @@ class PTRounds extends DashboardController{
                     ->adminTemplate();
     }
 
+    function calendar($pt_round){
+        $this->assets
+                ->addJs('dashboard/js/libs/moment.min.js')
+                ->addJs('dashboard/js/libs/fullcalendar.min.js')
+                ->addJs('dashboard/js/libs/gcal.js');
+
+        $data = [
+            'pt_details'    =>  $this->db->get_where('pt_round', ['uuid' => $pt_round])->row(),
+            'legend'        =>  $this->createCalendarColorLegend()
+        ];
+        $this->assets->setJavascript('PTRounds/calendar_js');
+        $this->template
+                ->setPartial('PTRounds/view_pt_calendar', $data)
+                ->adminTemplate();
+    }
     function create($step = NULL, $id = NULL){
         $data = $pagedata = [];
         $pt_details = new StdClass;
@@ -285,7 +300,7 @@ class PTRounds extends DashboardController{
         $samples = $this->db->get_where('pt_samples', $where)->result();
         $testers = $this->db->get_where('pt_testers', $where)->result();
         $labs = $this->db->get_where('pt_labs', $where)->result();
-        $equipments = $this->db->get('equipment')->result();
+        $equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
 
         $table_headers = $testers_arr = $labs_arr = [];
 
@@ -481,6 +496,64 @@ class PTRounds extends DashboardController{
         $round_number = $prefix . $year . '-' . $number;
         
         return $round_number;
+    } 
+
+    function createDateRangeArray($start, $end){
+        $aryRange=array();
+
+        $iDateFrom=mktime(1,0,0,substr($start,5,2), substr($start,8,2),substr($start,0,4));
+        $iDateTo=mktime(1,0,0,substr($end,5,2), substr($end,8,2),substr($end,0,4));
+
+        if ($iDateTo>=$iDateFrom)
+        {
+            array_push($aryRange,date('Y-m{d}',$iDateFrom)); // first entry
+            while ($iDateFrom<$iDateTo)
+            {
+                $iDateFrom+=86400; // add 24 hours
+                array_push($aryRange,date('Y-m{d}',$iDateFrom));
+            }
+        }
+        return $aryRange;
+    } 
+
+    function getCalendarData(){
+        if ($this->input->is_ajax_request()) {
+            $uuid = $this->input->post('round_uuid');
+            $pt_round = $this->db->get_where('pt_round', ['uuid'   =>  $uuid])->row();
+
+            $this->db->select('ci.item_name, ci.colors, pt.date_from, pt.date_to');
+            $this->db->from('pt_calendar pt');
+            $this->db->join('calendar_items ci', 'ci.id = pt.calendar_item_id');
+            $result = $this->db->get()->result();
+            $event_data = [];
+            if($result){
+                foreach ($result as $cal_data) {
+                    $event_data[] = [
+                        'title' =>  $cal_data->item_name,
+                        'start' =>  $cal_data->date_from,
+                        'end'   =>  date('Y-m-d', strtotime($cal_data->date_to. "+1 days")),
+                        'backgroundColor' =>  $cal_data->colors,
+                        'rendering' => 'background'
+
+                    ];
+                }
+            }
+
+            return $this->output->set_content_type('application/json')->set_output(json_encode($event_data));
+        }
     }
-    
+
+    function createCalendarColorLegend(){
+        $calendar_items_span = "&nbsp;";
+        $calendaritems = $this->db->get('calendar_items')->result();
+        if ($calendaritems) {
+            foreach ($calendaritems as $item) {
+                $calendar_items_span .= "
+                    <a class='dropdown-item'><span class = 'circle' style = 'color: {$item->colors}'></span>&nbsp;{$item->item_name}</a>
+                ";
+            }
+        }
+
+        return $calendar_items_span;
+    }
 }

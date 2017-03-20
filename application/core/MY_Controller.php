@@ -13,6 +13,15 @@ class MY_Controller extends MX_Controller {
 		];
 		$this->load->module('Template');
 	}
+
+	public function get_string_between($string, $start, $end){
+		$string = ' ' . $string;
+		$ini = strpos($string, $start);
+		if ($ini == 0) return '';
+		$ini += strlen($start);
+		$len = strpos($string, $end, $ini) - $ini;
+		return substr($string, $ini, $len);
+	}
 }
 
 /* End of file MY_Controller.php */
