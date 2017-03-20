@@ -6,7 +6,7 @@
 <div class = "row">
     <div class="col-md-12">
         <div class = "card">
-            <div class="card-header col-4">
+        <div class="card-header col-4">
                 <i class = "icon-user"></i>
                 &nbsp;
                 Equipment Edit
@@ -19,7 +19,7 @@
                                 <div class = "form-group row">
                                     <label class = "col-md-3 form-control-label">Equipment ID :<strong> <?= @$equipment_id; ?> </strong></label>
                                     <div class = "col-md-9">
-                                        <input  type = "hidden" name = "equipmentid" class = "form-control" value = "<?= @$equipment_id; ?>" required/>
+                                        <input  type = "hidden" name = "equipmentuuid" class = "form-control" value = "<?= @$equipment_uuid; ?>" required/>
                                     </div>
                                 </div>
 

@@ -6,11 +6,7 @@ class Auth extends MY_Controller {
 	public function __construct(){
 		parent::__construct();
 
-		$this->userregistertypes = [
-			'participant',
-			'qareviewer'
-		];
-
+		
 		$this->load->model('auth_m');
 	}
 	
@@ -163,19 +159,7 @@ class Auth extends MY_Controller {
 		}
 	}
 
-	function getUserTypes(){
-        $roleData = [];
-        if($this->input->is_ajax_request()){
-            foreach($this->userregistertypes as $type){
-                    $roleData['items'][] = [
-                        'id'    =>  $type,
-                        'text'  =>  strtolower($type)
-                    ];
-            }
-
-            return $this->output->set_content_type('application/json')->set_output(json_encode($roleData));
-        }
-    }
+	
 }
 
 /* End of file Home.php */

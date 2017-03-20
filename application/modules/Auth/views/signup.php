@@ -34,6 +34,8 @@
             <div class="page-signup-icon text-muted"><i class="fa fa-hospital-o"></i></div>
             <select name = "usertype" class="page-signup-form-control form-control">
               <option value="">Select user type</option>
+              <option value="participant">Participant</option>
+              <option value="qareviewer">QA Reviewer</option>
             </select>
           </fieldset>
 
@@ -72,7 +74,7 @@
       </div>
 
       <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signin-link">
-        Already have an account? <a href="<?= @base_url('Auth/signIn'); ?>"><u>Sign In</u></a>
+        Already have an account? <a href="<?= @base_url('Auth/signIn'); ?>"><u>Log In</u></a>
       </div>
     </div>
   </div>

@@ -11,5 +11,22 @@ class Dashboard_m extends CI_Model {
     }
 
 
+    public function pendingParticipants(){
+    	$this->db->from('participants');
+        $this->db->where('approved', 0);
+    	$result = $this->db->count_all_results();
+
+    	return $result;
+    }
+
+    public function newEquipments(){
+        $this->db->select('equipment_id')->from('participant_equipment')->where('`equipment_id` NOT IN (SELECT id FROM equipment)', NULL, FALSE);
+
+    	$result = $this->db->count_all_results();
+    	
+    	return $result;
+    }
+
+
 
 }
