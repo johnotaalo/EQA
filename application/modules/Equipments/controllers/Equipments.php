@@ -20,21 +20,19 @@ class Equipments extends DashboardController{
         if($eFacilities == NULL){
 
             $data = [
-                'table_view'   =>  $this->createEquipmentTable(),
-                'new_id_entry' => $equipment_count + 1
+                'table_view'    =>  $this->createEquipmentTable(),
+                'new_id_entry'  => $equipment_count + 1,
+                'equipmentview' => 1
             ];
 
         }else{
             $data = [
                 'table_view'   =>  $this->facilities($eFacilities),
-                'new_id_entry' => ''
+                'new_id_entry' => '',
+                'equipmentview' => 0
             ];
         }
 
-
-
-        // $this->assets
-        //         ->addCss("plugin/select2/css/select2.min.css");
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
@@ -42,7 +40,7 @@ class Equipments extends DashboardController{
                 ->addJs('dashboard/js/libs/select2.min.js');
         $this->assets->setJavascript('Equipments/equipments_js');
         $this->template
-                ->setModal("Equipments/new_equipment_v", "Create New Equipment")
+                ->setModal("Equipments/new_equipment_v", "Add New Equipment")
                 ->setPageTitle($title)
                 ->setPartial('Equipments/equipment_list_v', $data)
                 ->adminTemplate();
@@ -139,12 +137,13 @@ class Equipments extends DashboardController{
 
     }
 
-    function equipmentEdit($equipmentid){
-        $this->db->where('uuid', $equipmentid);
+    function equipmentEdit($id){
+        $this->db->where('uuid', $id);
         $equipment = $this->db->get('equipment')->row();
 
         $data = [
             'equipment_id'  =>  $equipment->id,
+            'equipment_uuid'  =>  $equipment->uuid,
             'equipment_name'  =>  $equipment->equipment_name
         ];
         $this->assets
@@ -158,11 +157,11 @@ class Equipments extends DashboardController{
 
     function editEquipment(){
         if($this->input->post()){
-            $equipmentid = $this->input->post('equipmentid');
+            $equipmentuuid = $this->input->post('equipmentuuid');
             $equipmentname = $this->input->post('equipmentname');
 
             $this->db->set('equipment_name', $equipmentname);
-            $this->db->where('id', $equipmentid);
+            $this->db->where('uuid', $equipmentuuid);
             $this->db->update('equipment');
             
             $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
