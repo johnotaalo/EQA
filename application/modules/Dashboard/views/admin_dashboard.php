@@ -1,8 +1,14 @@
+<div class="card">
+    <div class="card-header">
+        <strong>Notifications</strong>
+    </div>
+
+
 <div class="row">
     <div class="col-sm-6 col-lg-4">
         <div class="card">
             <div class="card-block">
-                <div class="h4 m-0">9</div>
+                <div class="h4 m-0"><?= @$pending_participants; ?></div>
                 <div class="pb-1">Users Pending Approval</div>
                 <progress class="progress progress-xs progress-warning" value="100" max="100"></progress>
                 <!-- <small class="text-muted">Users Pending Approval</small> -->
@@ -13,7 +19,7 @@
     <div class="col-sm-6 col-lg-4">
         <div class="card">
             <div class="card-block">
-                <div class="h4 m-0">12</div>
+                <div class="h4 m-0"><?= @$new_equipments; ?></div>
                 <div class="pb-1">New Equipmets registered by Users</div>
                 <progress class="progress progress-xs progress-primary" value="100" max="100"></progress>
                 <!-- <small class="text-muted">New Equipmets registered by Users</small> -->
@@ -105,5 +111,7 @@
             </div>
         </div>
     </div>
+
+</div>
 
 </div>
