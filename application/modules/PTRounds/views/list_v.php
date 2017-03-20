@@ -26,9 +26,13 @@
                             <th>Actions</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan = "<?= @$colspan; ?>"><center>There are no ongoing rounds</center></td>
-                            </tr>
+                            <?php if($pt_rounds['ongoing']) { ?>
+                                <?= @$pt_rounds['ongoing']; ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan = "<?= @$colspan; ?>"><center>There are no ongoing rounds</center></td>
+                                </tr>
+                            <?php } ?>
                         </tbody>
                         <thead class = "thead-default">
                             <th colspan = "<?= @$colspan; ?>"><center>Previous and Future Rounds</center></th>
@@ -40,9 +44,13 @@
                             <th>Actions</th>
                         </thead>
                         <tbody>
+                            <?php if($pt_rounds['prevfut']) { ?>
+                                <?= @$pt_rounds['prevfut']; ?>
+                            <?php } else { ?>
                             <tr>
                                 <td colspan = "<?= @$colspan; ?>"><center>There are no previous or future rounds</center></td>
                             </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

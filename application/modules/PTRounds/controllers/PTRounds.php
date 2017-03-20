@@ -31,9 +31,10 @@ class PTRounds extends DashboardController{
     }
 
     function index(){
+        $data['pt_rounds'] = $this->createPTRoundTable();
         $this->template
                     ->setPageTitle('PT Rounds')
-                    ->setPartial('PTRounds/list_v')
+                    ->setPartial('PTRounds/list_v', $data)
                     ->adminTemplate();
     }
 
@@ -412,6 +413,41 @@ class PTRounds extends DashboardController{
         }
 
         return $samples_table;
+    }
+
+    function createPTRoundTable(){
+        $rounds = $this->db->get('pt_round_v')->result();
+        $ongoing = $prevfut = '';
+        $round_array = [];
+        if ($rounds) {
+            foreach ($rounds as $round) {
+                $created = date('dS F, Y', strtotime($round->date_of_entry));
+                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('PTRounds/create/information/' . $round->uuid)."'>View</a>";
+                $status = ($round->status == "active") ? '<span class = "tag tag-success">Active</span>' : '<span class = "tag tag-danger">Inactive</span>';
+                if ($round->type == "ongoing") {
+                    $ongoing .= "<tr>
+                    <td>{$round->pt_round_no}</td>
+                    <td>{$created}</td>
+                    <td>{$status}</td>
+                    <td>{$view}</td>
+                    </tr>";
+                }else{
+                    $prevfut .= "<tr>
+                    <td>{$round->pt_round_no}</td>
+                    <td>{$created}</td>
+                    <td>{$status}</td>
+                    <td>{$view}</td>
+                    </tr>";
+                }
+            }
+        }
+
+        $round_array = [
+            'ongoing'   =>  $ongoing,
+            'prevfut'   =>  $prevfut
+        ];
+
+        return $round_array;
     }
 
     function nextpage($current){
