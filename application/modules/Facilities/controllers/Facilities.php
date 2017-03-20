@@ -12,17 +12,20 @@ class Facilities extends DashboardController{
             $title = "All Facilities";
         }
 
+        $js_data = [
+            'type'  =>  $type
+        ];
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                ->setJavascript('Facilities/facilities_js');
+                ->setJavascript('Facilities/facilities_js', $js_data);
         $this->template
                     ->setPartial('Facilities/facilities_list_v')
                     ->setPageTitle($title)
                     ->adminTemplate();
     }
 
-    function getTable(){
+    function getTable($type = NULL){
         $columns = [];
         $limit = $offset = $search_value = NULL;
 
@@ -39,7 +42,7 @@ class Facilities extends DashboardController{
              $search_value = $_REQUEST['search']['value'];
          }
 
-         $facilities = $this->M_Facilities->search($search_value, $limit, $offset);
+         $facilities = $this->M_Facilities->search($type, $search_value, $limit, $offset);
          $data = [];
 
     
@@ -57,14 +60,14 @@ class Facilities extends DashboardController{
         
 
          if($this->input->is_ajax_request()){
-            $allfacilities = $this->M_Facilities->search();
+            $allfacilities = $this->M_Facilities->search($type);
             $total_data = count($allfacilities);
             $data_total = count($facilities);
 
             $json_data = [
                 "draw"				=>	intval( $_REQUEST['draw']),
 				"recordsTotal"		=>	intval($total_data),
-				"recordsFiltered"	=>	intval(count($this->M_Facilities->search($search_value))),
+				"recordsFiltered"	=>	intval(count($this->M_Facilities->search($type, $search_value))),
 				'data'				=>	$data
              ];
 

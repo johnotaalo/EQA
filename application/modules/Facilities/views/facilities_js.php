@@ -4,7 +4,7 @@
             serverSide: true,
             processing: true,
             ajax: {
-                url: "<?= @base_url('Facilities/getTable'); ?>",
+                url: "<?= @base_url('Facilities/getTable/' . $type); ?>",
                 type: "POST",
                 error: function(){
                     alert("No data found in server");
