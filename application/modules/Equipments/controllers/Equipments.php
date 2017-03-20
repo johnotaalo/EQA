@@ -140,7 +140,7 @@ class Equipments extends DashboardController{
     }
 
     function equipmentEdit($equipmentid){
-        $this->db->where('id', $equipmentid);
+        $this->db->where('uuid', $equipmentid);
         $equipment = $this->db->get('equipment')->row();
 
         $data = [
