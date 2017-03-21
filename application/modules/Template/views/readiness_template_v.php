@@ -59,7 +59,7 @@
 					</div>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">☰</a>
+					<a class="nav-link" href="#"> </a>
 				</li>
 			</ul>
 		</div>

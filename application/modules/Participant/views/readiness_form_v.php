@@ -61,45 +61,13 @@
 	            <strong>Questionnaire</strong>
 	        </div>
 	        <div class="card-block">
-	            <div class="form-group">
-	                <label for="company">Participant Code</label>
-	                <input type="text" class="form-control" id="company" placeholder="Enter your company name">
-	            </div>
+	          <form method = "post" action="<?php echo base_url('Participant/Readiness/submitReadiness');?>" class="p-a-4" id="page-signin-form">
 
-	            <div class="form-group">
-	                <label for="vat">Name</label>
-	                <input type="text" class="form-control" id="vat" placeholder="PL1234567890">
-	            </div>
+                <?= @$questionnair; ?>
 
-	            <div class="form-group">
-	                <label for="street">Telephone</label>
-	                <input type="text" class="form-control" id="street" placeholder="Enter street name">
-	            </div>
-
-	            <div class="row">
-
-	                <div class="form-group col-sm-4">
-	                    <label for="city">MFL Code</label>
-	                    <input type="text" class="form-control" id="city" placeholder="Enter your city">
-	                </div>
-
-	                <div class="form-group col-sm-8">
-	                    <label for="postal-code">Site Name</label>
-	                    <input type="text" class="form-control" id="postal-code" placeholder="Postal Code">
-	                </div>
-
-	            </div>
-	            <!--/row-->
-
-	            <div class="form-group">
-	                <label for="country">Email Address</label>
-	                <input type="text" class="form-control" id="country" placeholder="Country name">
-	            </div>
-
-	            <div class="form-group">
-	                <label for="country">Site Telephone</label>
-	                <input type="text" class="form-control" id="country" placeholder="Country name">
-	            </div>
+                <button id="submit-readiness" type="submit" class="btn btn-block btn-primary">Submit PT Readiness Checklist</button>
+          	</form>
+	            
 	        </div>
 	    </div>
 	</div>

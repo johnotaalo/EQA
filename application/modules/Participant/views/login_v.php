@@ -7,6 +7,7 @@
 
 				<!-- <form method = "post" action="<?php echo base_url('Participant/Readiness/authentication');?>" class="p-a-4" id="readiness-login-form"> -->
 				<form method = "post" action="./" class="p-a-4" id="readiness-login-form">
+				<h3 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Readiness Checklist</h3>
 						<h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Log in to verify your information</h4>
 
 						<fieldset class="page-signin-form-group form-group form-group-lg">
