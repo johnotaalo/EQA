@@ -109,7 +109,7 @@ class Readiness extends MY_Controller {
 			
 
 		 	if($questions->question_no == '4'){
-				$question_view .= 	'<div id="checkNoAnswers row">
+				$question_view .= 	'<div id="checkNoAnswers" class="form-group">
 	                				<div class="form-group row">
 		                			<div class="form-group col-md-12">
 		                			<label>';
@@ -126,14 +126,15 @@ class Readiness extends MY_Controller {
 				$counter --;
 
 				$question_view .= 	'<div class="form-group row">
-					                				<div class="form-group">
-					                        		<label class="col-md-6 form-control-label" for="textarea-input">';
+					                <div class="form-group">
+					                <label class="col-md-6 form-control-label" for="textarea-input">';
 
-				    $question_view .= 	'  &nbsp (a). ' .$questions->question;
+				    $question_view .= 	' &nbsp (a). ' .$questions->question;
+				    $questions->question_no = str_replace('.','_',$questions->question_no);
 
 				    $question_view .=   '</label>
 				                		<div class="col-md-6">
-				                    	<textarea id="textarea-input" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection here..."></textarea>
+				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection here..."></textarea>
 				                		</div>
 				            			</div>
 				        				</div>';
@@ -143,19 +144,26 @@ class Readiness extends MY_Controller {
 				$question_view .= 	'<div class="form-group row">
 	                    			<label class="col-md-6 form-control-label">';
 
-		        $question_view .= 	'  &nbsp (b). ' .$questions->question;
+		        $question_view .= 	' &nbsp (b). ' .$questions->question;
+
+		        $questions->question_no = str_replace('.','_',$questions->question_no);
+
+            //echo "<pre>";print_r($questions->question_no);echo "</pre>";die();
 
 		        $question_view .=   '</label>
 	                    			<div class="col-md-6">
-	                        		<label class="radio-inline" for="inline-radio1">
-	                            	<input type="radio" id="inline-radio1" name="question_'.$questions->question_no.'" value="1">Yes
-	                        		</label>
-	                        		<label class="radio-inline" for="inline-radio2">
-	                            	<input type="radio" id="inline-radio2" name="question_'.$questions->question_no.'" value="0">No
-	                        		</label>
-	                    			</div>
-	                				</div>
-	                				</div>';
+	                        		<label class="radio-inline" for="inline-radio1">';
+            	$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
+
+				$question_view .= 	'</label>
+	    							<label class="radio-inline" for="inline-radio2">';
+
+				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
+
+				$question_view .= 	'</label>
+								    </div>
+									</div>
+									</div>';
     				
 
 		 	}else{
@@ -168,12 +176,12 @@ class Readiness extends MY_Controller {
 	    							<div class="col-md-6">
 	        						<label class="radio-inline" for="inline-radio1">';
 
-				$question_view .= 	'<input type="radio" id="inline-radio1" name="question_'.$questions->question_no.'" value="1">Yes';
+				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
 
 				$question_view .= 	'</label>
 	    							<label class="radio-inline" for="inline-radio2">';
 
-				$question_view .= 	'<input type="radio" id="inline-radio1" name="question_'.$questions->question_no.'" value="0">No';
+				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
 
 				$question_view .= 	'</label>
 								    </div>
@@ -189,21 +197,17 @@ class Readiness extends MY_Controller {
 	}
 
 	public function submitReadiness(){
-
 		if($this->input->post()){
             $question1 = $this->input->post('question_1');
             $question2 = $this->input->post('question_2');
             $question3 = $this->input->post('question_3');
-            $question4_1 = $this->input->post('question_4.1');
-            $question4_2 = $this->input->post('question_4.2');
+            $question4_1 = $this->input->post('question_4_1');
+            $question4_2 = $this->input->post('question_4_2');
             $question5 = $this->input->post('question_5');
             $participantuuid  =   $this->session->userdata('uuid');
             $firstname  =   $this->session->userdata('uuid');
             $lastname  =   $this->session->userdata('uuid');
             $ptuuid = '';
-
-            
-            // echo "<pre>";print_r($question5);echo "</pre>";die();
 
             $insertdata = [
             	'pt_uuid'			=>	$ptuuid,
