@@ -76,14 +76,14 @@
 
 
 	function activatequestion(){
-		$('#checkNoAnswers').show();  
+		$('#checkNoAnswers').slideDown();  
         question_4_1.disabled = false;
 		question_4_2_0.disabled = false;
 		question_4_2_1.disabled = false;  
 	}
 
 	function deactivatequestion(){
-		$('#checkNoAnswers').hide();
+		$('#checkNoAnswers').slideUp();
 		question_4_1.disabled = true;
 		question_4_2_0.disabled = true;
 		question_4_2_1.disabled = true;
