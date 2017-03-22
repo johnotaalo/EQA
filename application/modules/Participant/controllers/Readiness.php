@@ -179,13 +179,13 @@ class Readiness extends MY_Controller {
             $question4_1 = $this->input->post('question_4_1');
             $question4_2 = $this->input->post('question_4_2');
             $question5 = $this->input->post('question_5');
-            $participantuuid  =   $this->session->userdata('uuid');
+            $username  =   $this->session->userdata('username');
             $facilityid  =   $this->session->userdata('facilityid');
-            $ptuuid = '';
+            $pt_round_no = '';
 
             $insertdata = [
-            	'pt_uuid'			=>	$ptuuid,
-            	'participant_uuid'	=>	$participantuuid,
+            	'pt_round_no'			=>	$pt_round_no,
+            	'participant_id'	=>	$username,
             	'facility_id'		=>	$facilityid,
                 'question1'    	  	=>  $question1,
                 'question2'    		=>  $question2,
