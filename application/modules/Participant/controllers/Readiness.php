@@ -35,7 +35,7 @@ class Readiness extends MY_Controller {
 						'lastname'			=>	$user->lastname,
 						'phone'				=>	$user->phone,
 						'emailaddress'		=>	$user->email_address,
-						'facilitycode'		=>	$user->facility_code,
+						'facilityid'		=>	$user->facility_code,
 						'facilityname'		=>	$user->facility_name,
 						'facilityphone'		=>	$user->telephone,
 						'facilityaltphone'	=>	$user->alt_telephone,
@@ -105,33 +105,25 @@ class Readiness extends MY_Controller {
 
 		foreach ($results as $key => $questions) {
 			$counter ++;
-			//echo "<pre>";print_r($questions);echo "</pre>";die();
 			
-
 		 	if($questions->question_no == '4'){
 				$question_view .= 	'<div id="checkNoAnswers" class="form-group">
 	                				<div class="form-group row">
 		                			<div class="form-group col-md-12">
 		                			<label>';
-
 		        $question_view .= 	$counter . '. ' .$questions->question;
-
 		        $question_view .=   '</label>
 		                			</div>
 									</div>';
-
 				
-
 			}else if($questions->question_no == '4.1'){
 				$counter --;
 
 				$question_view .= 	'<div class="form-group row">
 					                <div class="form-group">
 					                <label class="col-md-6 form-control-label" for="textarea-input">';
-
 				    $question_view .= 	' &nbsp (a). ' .$questions->question;
 				    $questions->question_no = str_replace('.','_',$questions->question_no);
-
 				    $question_view .=   '</label>
 				                		<div class="col-md-6">
 				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection here..."></textarea>
@@ -141,57 +133,40 @@ class Readiness extends MY_Controller {
 
 			}else if($questions->question_no == '4.2'){
 				$counter --;
+
 				$question_view .= 	'<div class="form-group row">
 	                    			<label class="col-md-6 form-control-label">';
-
 		        $question_view .= 	' &nbsp (b). ' .$questions->question;
-
 		        $questions->question_no = str_replace('.','_',$questions->question_no);
-
-            //echo "<pre>";print_r($questions->question_no);echo "</pre>";die();
-
 		        $question_view .=   '</label>
 	                    			<div class="col-md-6">
 	                        		<label class="radio-inline" for="inline-radio1">';
             	$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
-
 				$question_view .= 	'</label>
 	    							<label class="radio-inline" for="inline-radio2">';
-
 				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
-
 				$question_view .= 	'</label>
 								    </div>
 									</div>
-									</div>';
-    				
+									</div>';    				
 
 		 	}else{
 		 		$question_view .= 	'<div class="form-group row">
 							 		<label class="col-md-6 form-control-label">';
-
 		 		$question_view .= 	$counter . '. ' .$questions->question;
-
 	 			$question_view .= 	'</label>
 	    							<div class="col-md-6">
 	        						<label class="radio-inline" for="inline-radio1">';
-
 				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
-
 				$question_view .= 	'</label>
 	    							<label class="radio-inline" for="inline-radio2">';
-
 				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
-
 				$question_view .= 	'</label>
 								    </div>
 									</div>';
 		 	}
 
 		 }
-
-		 	
-		
 
 		return $question_view;
 	}
@@ -205,13 +180,13 @@ class Readiness extends MY_Controller {
             $question4_2 = $this->input->post('question_4_2');
             $question5 = $this->input->post('question_5');
             $participantuuid  =   $this->session->userdata('uuid');
-            $firstname  =   $this->session->userdata('uuid');
-            $lastname  =   $this->session->userdata('uuid');
+            $facilityid  =   $this->session->userdata('facilityid');
             $ptuuid = '';
 
             $insertdata = [
             	'pt_uuid'			=>	$ptuuid,
             	'participant_uuid'	=>	$participantuuid,
+            	'facility_id'		=>	$facilityid,
                 'question1'    	  	=>  $question1,
                 'question2'    		=>  $question2,
                 'question3'    		=>  $question3,
@@ -231,6 +206,11 @@ class Readiness extends MY_Controller {
 
             redirect('/', 'refresh');
         }
+	}
+
+
+	public function assessmentForm(){
+
 	}
 
 	
