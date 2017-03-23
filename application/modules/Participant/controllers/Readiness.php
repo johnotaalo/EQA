@@ -126,7 +126,7 @@ class Readiness extends MY_Controller {
 				    $questions->question_no = str_replace('.','_',$questions->question_no);
 				    $question_view .=   '</label>
 				                		<div class="col-md-6">
-				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection here..."></textarea>
+				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection..."></textarea>
 				                		</div>
 				            			</div>
 				        				</div>';
@@ -172,6 +172,7 @@ class Readiness extends MY_Controller {
 	}
 
 	public function submitReadiness(){
+		$response_array = [];
 		if($this->input->post()){
             $question1 = $this->input->post('question_1');
             $question2 = $this->input->post('question_2');
@@ -183,26 +184,45 @@ class Readiness extends MY_Controller {
             $facilityid  =   $this->session->userdata('facilityid');
             $pt_round_no = '';
 
-            $insertdata = [
-            	'pt_round_no'			=>	$pt_round_no,
-            	'participant_id'	=>	$username,
-            	'facility_id'		=>	$facilityid,
-                'question1'    	  	=>  $question1,
-                'question2'    		=>  $question2,
-                'question3'    		=>  $question3,
-                'question4_1'   	=>  $question4_1,
-                'question4_2'   	=>  $question4_2,
-                'question5'    		=>  $question5
+            $response_array[] = [
+            	'1'		=>	$question1,
+            	'2'		=>	$question2,
+            	'3'		=>	$question3,
+                '5'     =>  $question4_1,
+                '6'    	=>  $question4_2,
+                '7'    	=>  $question5
             ];
 
-            $this->db->insert('participant_readiness', $insertdata);
+            
+
+
+            $insertrounddata = [
+            	'participant_id'	=>	$username,
+            	'pt_round_no'		=>	$pt_round_no,
+            	'status'			=>	0,
+                'verdict'    	  	=>  0,
+                'comment'    		=>  'No comment made'
+            ];
+
+            $this->db->insert('participant_readiness', $insertrounddata);
 
             $readiness_id = $this->db->insert_id();
 
-            $this->db->where('pr_id', $readiness_id);
-            $readiness = $this->db->get('participant_readiness')->row();
+            foreach ($response_array as $key => $values) {
+            	foreach ($values as $question_id => $response) {
+	            	//echo "<pre>";print_r($value);echo "</pre>";die();
 
-            $message = "Thank you ".$lastname." ".$firstname.", your PT Readiness Checklist for PT Round: ".$readiness->pt_uuid." has been submitted successfully";
+	            	$insertresponsedata = [
+		            	'readiness_id'	=>	$readiness_id,
+		            	'questionnaire_id'		=>	$question_id,
+		            	'response'			=>	$response
+	            	];
+
+	            	$this->db->insert('participant_readiness_responses', $insertresponsedata);
+            	}	
+            }
+
+            
 
             redirect('/', 'refresh');
         }
