@@ -61,6 +61,8 @@
                 "minDate"   : '<?= @date('m/d/Y', strtotime($duration_from));  ?>',
                 "maxDate"   : '<?= @date('m/d/Y', strtotime($duration_to));  ?>'
             });
+        <?php }elseif($step == "facilities"){ ?>
+                $('#facilities').dataTable();
         <?php } ?>
     });
 
