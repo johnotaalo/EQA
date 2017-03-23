@@ -30,6 +30,8 @@ class Auth_m extends CI_Model {
 
         return $query->row();
     }
+
+    
     public function findUserByIdentifier($identifier, $value){
         $this->db->where($identifier, $value);
         $query = $this->db->get('users_v', 1);

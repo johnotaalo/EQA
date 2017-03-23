@@ -36,6 +36,8 @@
   <script>_pxDemo_loadStylesheet('<?php echo $assets_url; ?>dashboard/dist/demo/demo.css');</script>
   <script src="<?php echo $assets_url; ?>dashboard/dist/demo/demo.js"></script>
   <?= @$page_css;?>
+
+  
   <!-- / Demo assets -->
 </head>
 <body>

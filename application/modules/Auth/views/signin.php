@@ -46,7 +46,7 @@
                   <a href="#" class="font-size-12 text-muted pull-xs-right" id="page-signin-forgot-link">Forgot your password?</a>
                 </div>
 
-                <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Sign In</button>
+                <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Log In</button>
               </form>
 
               <!-- <div class="p-y-3 p-x-4 b-t-1 bg-white darken" id="page-signin-social">
