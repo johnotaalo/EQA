@@ -13,6 +13,14 @@ class PTRounds extends DashboardController{
                 'icon'  =>  'fa fa-info-circle',
                 'text'  =>  'PT Details'
             ],
+            'facilities'      =>  [
+                'icon'  =>  'fa fa-hospital-o',
+                'text'  =>  'Facilities'
+            ],
+            'samples_labs'      => [
+                'icon'  =>  'fa fa-flask',
+                'text'  =>  'Samples & Testers'
+            ],
             'variables'     =>  [
                 'icon'  =>  'fa fa-table',
                 'text'  =>  'Variables'
@@ -21,10 +29,7 @@ class PTRounds extends DashboardController{
                 'icon'  =>  'fa fa-calendar',
                 'text'  =>  'Calendar'
             ],
-            'facilities'      =>  [
-                'icon'  =>  'fa fa-hospital-o',
-                'text'  =>  'Facilities'
-            ]
+            
         ];
 
         $this->lab_id_prefix = "CD4-PT-";
@@ -108,6 +113,13 @@ class PTRounds extends DashboardController{
                 break;
             case 'facilities':
                 $view = "pt_facilities_v";
+                $pagedata['statistics'] = $this->getFacilityStatistics($id);
+                $js_data = [
+                    'pt_details'    =>  $pt_details
+                ];
+                $this->assets
+                            ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                            ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
                 break;
             default:
                 break;
@@ -155,7 +167,7 @@ class PTRounds extends DashboardController{
     function add($step, $id = NULL){
         // echo "<pre>";print_r($this->input->post());die;
         $nextpage = $this->nextpage($step);
-         $round_id = $this->db->get_where('pt_round', ['uuid' => $id])->row()->id;
+        $round_id = ($id != NULL) ? $this->db->get_where('pt_round', ['uuid' => $id])->row()->id : 0;
         if($step != NULL){
             if(($id != NULL && $step == "information") || ($step != "information" && $id != NULL) || ($step == "information" && $id == NULL)){
                 switch ($step) {
@@ -164,8 +176,10 @@ class PTRounds extends DashboardController{
                         $from_date = date('Y-m-d', strtotime($round_duration_frags[0]));
                         $to_date = date('Y-m-d', strtotime($round_duration_frags[1]));
                         if(!$id){
+                            $pt_round_no = $this->generateRoundNumber();
                             $pt_data = [
-                                'pt_round_no'       =>  $this->generateRoundNumber(),
+                                'pt_round_no'       =>  $pt_round_no,
+                                'tag'               =>  substr($pt_round_no, strpos($pt_round_no, "-") + 1),
                                 'blood_lab_unit_id' =>  $this->lab_id_prefix . $this->input->post('blood_unit_lab_id'),
                                 'from'              =>  $from_date,
                                 'to'                =>  $to_date
@@ -173,44 +187,6 @@ class PTRounds extends DashboardController{
 
                             $this->db->insert('pt_round', $pt_data);
                             $round_id = $this->db->insert_id();
-
-                            $no_testers = $this->input->post('no_testers');
-                            $no_labs = $this->input->post('no_labs');
-                            if($no_testers > 0 && $no_labs > 0){
-                                $testers_data = [];
-                                $labs_data = [];
-                                for ($i=0; $i < $no_testers; $i++) { 
-                                    $number = $i + 1;
-                                    $tester_name = 'Tester ' . $number;
-                                    $testers_data[] = [
-                                        'tester_name'   =>  $tester_name,
-                                        'pt_round_id'   =>  $round_id
-                                    ];
-                                }
-
-                                for ($i=0; $i < $no_labs; $i++) { 
-                                    $number = $i + 1;
-                                    $lab_name = 'Lab' . $number;
-                                    $labs_data[] = [
-                                        'lab_name'      =>  $lab_name,
-                                        'pt_round_id'   =>  $round_id
-                                    ];
-                                }
-
-                                $this->db->insert_batch('pt_testers', $testers_data);
-                                $this->db->insert_batch('pt_labs', $labs_data);
-                            }
-
-                            $samples = $this->input->post('samples');
-                            $sample_data = [];
-                            foreach ($samples as $sample) {
-                                $sample_data[] = [
-                                    'sample_name'   =>  $sample,
-                                    'pt_round_id'   =>  $round_id
-                                ];
-                            }
-
-                            $this->db->insert_batch('pt_samples', $sample_data);
 
                             $this->db->select('uuid');
                             $this->db->where('id', $round_id);
@@ -265,6 +241,45 @@ class PTRounds extends DashboardController{
                                 $this->db->query($sql);
                             }
                         }
+                        break;
+                    case 'samples_labs':
+                        $no_testers = $this->input->post('no_testers');
+                        $no_labs = $this->input->post('no_labs');
+                        if($no_testers > 0 && $no_labs > 0){
+                            $testers_data = [];
+                            $labs_data = [];
+                            for ($i=0; $i < $no_testers; $i++) { 
+                                $number = $i + 1;
+                                $tester_name = 'Tester ' . $number;
+                                $testers_data[] = [
+                                    'tester_name'   =>  $tester_name,
+                                    'pt_round_id'   =>  $round_id
+                                ];
+                            }
+
+                            for ($i=0; $i < $no_labs; $i++) { 
+                                $number = $i + 1;
+                                $lab_name = 'Lab' . $number;
+                                $labs_data[] = [
+                                    'lab_name'      =>  $lab_name,
+                                    'pt_round_id'   =>  $round_id
+                                ];
+                            }
+
+                            $this->db->insert_batch('pt_testers', $testers_data);
+                            $this->db->insert_batch('pt_labs', $labs_data);
+                        }
+
+                        $samples = $this->input->post('samples');
+                        $sample_data = [];
+                        foreach ($samples as $sample) {
+                            $sample_data[] = [
+                                'sample_name'   =>  $sample,
+                                'pt_round_id'   =>  $round_id
+                            ];
+                        }
+
+                        $this->db->insert_batch('pt_samples', $sample_data);
                         break;
                     case 'calendar':
                         foreach ($this->input->post() as $calendar_item_uuid => $dates) {
@@ -480,16 +495,14 @@ class PTRounds extends DashboardController{
     function generateRoundNumber(){
         $prefix = "NHRL/CD4/";
         $year = date("Y");
-        $this->db->like('pt_round_no', $year);
-        $this->db->select_max("pt_round_no");
+        $this->db->select_max("tag");
         $query = $this->db->get('pt_round');
         
         $data = $query->row();
-        $number = 1;
+        $number = 17;
         if($data){
-            if($data->pt_round_no != ""){
-                $data_frags = explode("-", $data->pt_round_no);
-                $number = $data_frags[1] + 1;
+            if($data->tag != ""){
+                $number = $data->tag + 1;
             }
         }
 
@@ -555,5 +568,119 @@ class PTRounds extends DashboardController{
         }
 
         return $calendar_items_span;
+    }
+
+    function getFacilityStatistics($round_uuid){
+        $query = $this->db->query("CALL get_pt_facility_statistics('$round_uuid');");
+        $result = $query->row();
+        $query->next_result();
+        $query->free_result();
+        $statistics_array = [];
+        $stats_section = "";
+        if($result){
+            $statistics_array[] = [
+                                'text'      =>  'Facilities with participants',
+                                'no'        =>  $result->with_participants,
+                                'percentage'=>  round($result->with_participants / $result->total_sites * 100, 3)
+                            ];
+            $statistics_array[] = [
+                                'text'      =>  'Participants Have Responded',
+                                'no'        =>  $result->responded,
+                                'percentage'=>  round($result->responded / $result->total_sites * 100, 3)
+                            ];
+            if($result->responded == 0){
+                $statistics_array[] = [
+                                'text'      =>  'Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  0
+                            ];
+                $statistics_array[] = [
+                                'text'      =>  'Not Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  0
+                            ];
+            }else{
+                $statistics_array[] = [
+                                'text'      =>  'Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  round(0 / $result->responded * 100, 3)
+                            ];
+                $statistics_array[] = [
+                                'text'      =>  'Not Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  round(0 / $result->responded * 100, 3)
+                            ];
+            }
+            
+            
+            foreach ($statistics_array as $key => $value) {
+                $percentage_color = "info";
+                $percentage = $value['percentage'];
+                
+                if ($percentage >= 0 && $percentage < 25) {
+                    $percentage_color = "danger";
+                }elseif ($percentage >= 25 && $percentage < 50) {
+                    $percentage_color = "warning";
+                }elseif ($percentage >= 50 && $percentage < 75) {
+                    $percentage_color = "info";
+                }elseif ($percentage >= 75 && $percentage <= 100) {
+                    $percentage_color = "success";
+                }
+                else {
+                    # code...
+                }
+                
+                $stats_section .= "<div class = 'card'>";
+                $stats_section .= "<div class = 'card-block'>";
+                $stats_section .= "<div class='h4 mb-0'>{$value['no']}</div>";
+                $stats_section .= "<small class='text-muted text-uppercase font-weight-bold'>{$value['text']}</small>";
+                $stats_section .= "<progress class='progress progress-xs progress-{$percentage_color} mt-1 mb-0' value='{$percentage}' max='100'>{$percentage}%</progress>";
+                $stats_section .= "</div>";
+                $stats_section .= "</div>";
+            }
+        }
+        return $stats_section;
+    }
+
+    function getFacilitiesTable($pt_uuid, $type=NULL){
+        if($this->input->is_ajax_request()){
+            $columns = [];
+            $limit = $offset = $search_value = NULL;
+            $columns = [
+                0 => "facility_code",
+                1 => "facility_name",
+                2 => "status"
+            ];
+
+            $limit = $_REQUEST['length'];
+            $offset = $_REQUEST['start'];
+            $search_value = $_REQUEST['search']['value'];
+
+            $facilities = $this->M_PTRounds->searchFacilityReadiness($pt_uuid, $search_value, $limit, $offset);
+            $data = [];
+            if ($facilities) {
+                foreach ($facilities as $facility) {
+                    $data[] = [
+                        $facility->facility_code,
+                        $facility->facility_name,
+                        $facility->status,
+                        ""
+                    ];
+                }
+            }
+
+            $all_facilities = $this->M_PTRounds->searchFacilityReadiness($pt_uuid, NULL, NULL, NULL);
+            $total_data = count($all_facilities);
+            $data_total= count($data);
+            $json_data = [
+                 "draw"             =>  intval( $_REQUEST['draw']),
+                "recordsTotal"      =>  intval($total_data),
+                "recordsFiltered"   =>  intval(count($this->M_PTRounds->searchFacilityReadiness($pt_uuid, $search_value, NULL, NULL))),
+                'data'              =>  $data
+             ];
+
+
+            return $this->output->set_content_type('application/json')->set_output(json_encode($json_data));
+        }
     }
 }

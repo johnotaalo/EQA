@@ -23,7 +23,7 @@
 
     <main id = "page-holder">
         <?= @form_open('PTRounds/add/' . $step . '/' . $uuid, ['id'   =>  'rounds-form']); ?>
-            <div style = "width: 100%; height: 500px;overflow-y:auto;">
+            <div style = "width: 100%; min-height: 500px;overflow-y:auto;">
                 <?= @$this->load->view($page, $pageData); ?>
             </div>
             <div class = "form-group">

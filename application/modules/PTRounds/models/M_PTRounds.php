@@ -37,4 +37,15 @@ class M_PTRounds extends MY_Model{
 
         return $query->result();
     }
+
+    function searchFacilityReadiness($round_uuid, $search_value = NULL, $limit = NULL, $offset = NULL){
+        $search_value = ($search_value != NULL) ? $search_value : "";
+        $limit = ($limit == NULL) ? "NULL" : $limit;
+        $offset = ($offset == NULL) ? "NULL" : $offset;
+        $query = $this->db->query("CALL get_facility_readiness_data('$round_uuid', '$search_value', $limit, $offset)");
+        $result = $query->result();
+        $query->next_result();
+        $query->free_result();
+        return $result;
+    }
 }

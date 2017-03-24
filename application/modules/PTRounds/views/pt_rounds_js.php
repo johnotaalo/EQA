@@ -61,6 +61,18 @@
                 "minDate"   : '<?= @date('m/d/Y', strtotime($duration_from));  ?>',
                 "maxDate"   : '<?= @date('m/d/Y', strtotime($duration_to));  ?>'
             });
+        <?php }elseif($step == "facilities"){ ?>
+                $('#facilities').DataTable({
+                    serverSide: true,
+                    processing: true,
+                    ajax: {
+                        url: "<?= @base_url('PTRounds/getFacilitiesTable/'.$pt_details->uuid.'/'. $type); ?>",
+                        type: "POST",
+                        error: function(){
+                            alert("No data found in server");
+                        }
+                    }
+                });
         <?php } ?>
     });
 
