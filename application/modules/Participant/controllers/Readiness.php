@@ -55,13 +55,14 @@ class Readiness extends MY_Controller {
 	}
 	
 	private function set_session($session_data){
-		$this->session->set_userdata($session_data);        
+		$this->session->set_flashdata($session_data);
+		//$this->session->set_userdata($session_data);        
     }
 
 	public function logout()
     {
         $this->session->sess_destroy();
-        redirect('Participant/Readiness/authenticate');
+        redirect('Participant/Readiness/authenticate', 'refresh');
     }
 
     public function checkLogin(){
