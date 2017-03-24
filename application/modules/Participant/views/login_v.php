@@ -29,7 +29,7 @@
 						  <a href="#" class="font-size-12 text-muted pull-xs-right" id="page-signin-forgot-link">Forgot your password?</a>
 						</div>
 
-						<button id="loginready" type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Log in</button>
+						<button id="loginready" type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Log in</
 				</form>
 
 			</div>
@@ -38,3 +38,6 @@
 	  </div>
 	</div>
 </div>
+		<a href="<?php echo base_url('Auth/signin');?>">
+			<h3 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Login to Dashboard</h3>
+		</a>
