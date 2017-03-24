@@ -114,6 +114,9 @@ class PTRounds extends DashboardController{
             case 'facilities':
                 $view = "pt_facilities_v";
                 $pagedata['statistics'] = $this->getFacilityStatistics($id);
+                $js_data = [
+                    'pt_details'    =>  $pt_details
+                ];
                 $this->assets
                             ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                             ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
@@ -585,16 +588,31 @@ class PTRounds extends DashboardController{
                                 'no'        =>  $result->responded,
                                 'percentage'=>  round($result->responded / $result->total_sites * 100, 3)
                             ];
-            $statistics_array[] = [
+            if($result->responded == 0){
+                $statistics_array[] = [
+                                'text'      =>  'Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  0
+                            ];
+                $statistics_array[] = [
+                                'text'      =>  'Not Ready for this round',
+                                'no'        =>  0,
+                                'percentage'=>  0
+                            ];
+            }else{
+                $statistics_array[] = [
                                 'text'      =>  'Ready for this round',
                                 'no'        =>  0,
                                 'percentage'=>  round(0 / $result->responded * 100, 3)
                             ];
-            $statistics_array[] = [
+                $statistics_array[] = [
                                 'text'      =>  'Not Ready for this round',
                                 'no'        =>  0,
                                 'percentage'=>  round(0 / $result->responded * 100, 3)
                             ];
+            }
+            
+            
             foreach ($statistics_array as $key => $value) {
                 $percentage_color = "info";
                 $percentage = $value['percentage'];
@@ -624,19 +642,45 @@ class PTRounds extends DashboardController{
         return $stats_section;
     }
 
-    function getFacilitiesTable($type){
+    function getFacilitiesTable($pt_uuid, $type=NULL){
         if($this->input->is_ajax_request()){
             $columns = [];
             $limit = $offset = $search_value = NULL;
-             $columns = [
+            $columns = [
                 0 => "facility_code",
                 1 => "facility_name",
                 2 => "status"
+            ];
+
+            $limit = $_REQUEST['length'];
+            $offset = $_REQUEST['start'];
+            $search_value = $_REQUEST['search']['value'];
+
+            $facilities = $this->M_PTRounds->searchFacilityReadiness($pt_uuid, $search_value, $limit, $offset);
+            $data = [];
+            if ($facilities) {
+                foreach ($facilities as $facility) {
+                    $data[] = [
+                        $facility->facility_code,
+                        $facility->facility_name,
+                        $facility->status,
+                        ""
+                    ];
+                }
+            }
+
+            $all_facilities = $this->M_PTRounds->searchFacilityReadiness($pt_uuid, NULL, NULL, NULL);
+            $total_data = count($all_facilities);
+            $data_total= count($data);
+            $json_data = [
+                 "draw"             =>  intval( $_REQUEST['draw']),
+                "recordsTotal"      =>  intval($total_data),
+                "recordsFiltered"   =>  intval(count($this->M_PTRounds->searchFacilityReadiness($pt_uuid, $search_value, NULL, NULL))),
+                'data'              =>  $data
              ];
 
-             $limit = $_REQUEST['length'];
-             $offset = $_REQUEST['start'];
-             $search_value = $_REQUEST['search']['value'];
+
+            return $this->output->set_content_type('application/json')->set_output(json_encode($json_data));
         }
     }
 }
