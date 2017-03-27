@@ -40,6 +40,8 @@ class Readiness extends MY_Controller {
 						'is_logged_in'		=>	true
 					];
 
+
+
 					$this->set_session($session_data);
 					echo "true";
 				}
@@ -51,12 +53,15 @@ class Readiness extends MY_Controller {
 		}
 		
 		$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
-		redirect('Participant/Readiness/authenticate', 'refresh');
+		//redirect('Participant/Readiness/authenticate', 'refresh');
 	}
 	
 	private function set_session($session_data){
-		$this->session->set_flashdata($session_data);
-		//$this->session->set_userdata($session_data);        
+		foreach ($session_data as $key => $value) {
+
+			$this->session->set_flashdata($key,$value); 
+		}
+		    
     }
 
 	public function logout()
@@ -66,15 +71,19 @@ class Readiness extends MY_Controller {
     }
 
     public function checkLogin(){
-		if($this->session->userdata('is_logged_in') != true){
+		if($this->session->flashdata('is_logged_in') != true){
+			//echo "<pre>";print_r("Reached00");echo "</pre>";die();
 			redirect('Participant/Readiness/authenticate/','refresh');
 		}
 	}
 
 	public function readinessChecklist(){
+
+		$this->checkLogin();
+
 		$data = [];
 
-		$user_details = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+		$user_details = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->flashdata('uuid'));
 		$questions_data = $this->getQuestions();
 		//echo "<pre>";print_r($questions_data);echo "</pre>";die();
         $data = [
@@ -179,8 +188,9 @@ class Readiness extends MY_Controller {
             $question4_1 = $this->input->post('question_4_1');
             $question4_2 = $this->input->post('question_4_2');
             $question5 = $this->input->post('question_5');
-            $username  =   $this->session->userdata('username');
-            $facilityid  =   $this->session->userdata('facilityid');
+            $useruuid  =   $this->session->flashdata('uuid');
+            $facilityid  =   $this->session->flashdata('facilityid');
+            $comments = NULL;
             $pt_round_no = '';
 
             $response_array[] = [
@@ -196,7 +206,7 @@ class Readiness extends MY_Controller {
 
 
             $insertrounddata = [
-            	'participant_id'	=>	$username,
+            	'participant_id'	=>	$useruuid,
             	'pt_round_no'		=>	$pt_round_no,
             	'status'			=>	0,
                 'verdict'    	  	=>  0,
@@ -210,11 +220,15 @@ class Readiness extends MY_Controller {
             foreach ($response_array as $key => $values) {
             	foreach ($values as $question_id => $response) {
 	            	//echo "<pre>";print_r($value);echo "</pre>";die();
+	            	if($question_id == '5'){
+	            		$comments = $question4_1;
+	            	}
 
 	            	$insertresponsedata = [
 		            	'readiness_id'	=>	$readiness_id,
 		            	'questionnaire_id'		=>	$question_id,
-		            	'response'			=>	$response
+		            	'response'			=>	$response,
+		            	'extra_comments' => $comments
 	            	];
 
 	            	$this->db->insert('participant_readiness_responses', $insertresponsedata);

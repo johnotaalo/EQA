@@ -38,21 +38,21 @@ $(document).ready(function(){
 			}
 			else if(html=='false'){
 				// swal({
-	   //              title: "Error !!",
-	   //              text: "Wrong username or password",
-	   //              type: "error",
-	   //              showCancelButton: true,
-	   //              closeOnConfirm: false,
-	   //              showLoaderOnConfirm: true
-	   //          }, function(){
-	   //              $.get(url, function(data){
-	   //                  if(data.status == true){
-	   //                     window.location = "<?= @base_url('Participant/Readiness/authenticate'); ?>";
-	   //                  }else{
-	   //                      sweetAlert("Oops...", data.message, "error");
-	   //                  }
-	   //              });
-	   //          });
+			   //              title: "Error !!",
+			   //              text: "Wrong username or password",
+			   //              type: "error",
+			   //              showCancelButton: true,
+			   //              closeOnConfirm: false,
+			   //              showLoaderOnConfirm: true
+			   //          }, function(){
+			   //              $.get(url, function(data){
+			   //                  if(data.status == true){
+			   //                     window.location = "<?= @base_url('Participant/Readiness/authenticate'); ?>";
+			   //                  }else{
+			   //                      sweetAlert("Oops...", data.message, "error");
+			   //                  }
+			   //              });
+			   //          });
 			}
 		   },
 		   beforeSend:function()
