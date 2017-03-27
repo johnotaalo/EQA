@@ -8,14 +8,15 @@ class Readiness extends MY_Controller {
 		$this->load->model('M_Readiness');
 	}
 
-	public function authenticate()
+	public function authenticate($pt_uuid)
 	{
+		$data['pt_uuid']	=	$pt_uuid;
 		$this->assets
 			->addJs('dashboard/js/libs/jquery.validate.js')
             ->addJs("plugin/sweetalert/sweetalert.min.js");
         $this->assets->setJavascript('Participant/participant_login_js');
 		$this->assets->addCss('css/signin.css');
-		$this->template->setPageTitle('Readiness Form')->setPartial('login_v')->authTemplate();
+		$this->template->setPageTitle('Readiness Form')->setPartial('login_v', $data)->authTemplate();
 	}
 
 	public function authentication(){

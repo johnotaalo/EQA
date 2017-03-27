@@ -88,9 +88,6 @@ class PTRounds extends DashboardController{
                 $pagedata['lab_prefix'] = $this->lab_id_prefix;
                 if($id){
                     $pagedata['lab_id'] = str_replace('-', '', substr($pt_details->blood_lab_unit_id, strpos($pt_details->blood_lab_unit_id, '-', strpos($pt_details->blood_lab_unit_id, '-')+1)));
-                    $pagedata['no_labs'] = $this->db->get_where('pt_labs', ['pt_round_id' => $pt_details->id])->num_rows();
-                    $pagedata['no_testers'] = $this->db->get_where('pt_testers', ['pt_round_id' => $pt_details->id])->num_rows();
-                    $pagedata['samples_table'] = $this->createSamplesTable($pt_details->id);
                     $pagedata['round_duration'] = date('m/d/Y', strtotime($pt_details->from)) .' - ' . date('m/d/Y', strtotime($pt_details->to));
                 }
                 $this->assets
@@ -112,6 +109,9 @@ class PTRounds extends DashboardController{
                         ->addJs('dashboard/js/libs/daterangepicker.js');
                 break;
             case 'samples_labs':
+                $pagedata['no_labs'] = $this->db->get_where('pt_labs', ['pt_round_id' => $pt_details->id])->num_rows();
+                $pagedata['no_testers'] = $this->db->get_where('pt_testers', ['pt_round_id' => $pt_details->id])->num_rows();
+                $pagedata['samples_table'] = $this->createSamplesTable($pt_details->id);
                 $view = "pt_samples_labs_v";
                 break;
             case 'facilities':
@@ -455,21 +455,22 @@ class PTRounds extends DashboardController{
         if ($rounds) {
             foreach ($rounds as $round) {
                 $created = date('dS F, Y', strtotime($round->date_of_entry));
-                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('PTRounds/create/information/' . $round->uuid)."'>View</a>";
+                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('PTRounds/create/information/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
+                $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('PTRounds/PanelTracking/details/' . $round->uuid)."'><i class = 'fa fa-truck'></i>&nbsp;Panel Tracking</a>";
                 $status = ($round->status == "active") ? '<span class = "tag tag-success">Active</span>' : '<span class = "tag tag-danger">Inactive</span>';
                 if ($round->type == "ongoing") {
                     $ongoing .= "<tr>
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view}</td>
+                    <td>{$view} {$panel_tracking}</td>
                     </tr>";
                 }else{
                     $prevfut .= "<tr>
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view}</td>
+                    <td>{$view} {$panel_tracking}</td>
                     </tr>";
                 }
             }
