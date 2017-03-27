@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use Pbc\Premailer;
 
 class Mailer
 {
@@ -19,13 +20,14 @@ class Mailer
         
 	}
 
-	public function sendMail($to, $subject, $body){
+	public function sendMail($to, $subject, $body, $bcc){
 		$message = Swift_Message::newInstance();
-
+		$body = Premailer::html($body);
 		$message->setSubject($subject)
 				->setFrom($this->ci->config->item('from'), $this->ci->config->item('fromName'))
 				->setTo($to)
-				->setBody($body, 'text/html');
+				->setBcc($bcc)
+				->setBody($body['html'], 'text/html');
 		$mailer = Swift_Mailer::newInstance($this->transport);
 
 		$result = $mailer->send($message);

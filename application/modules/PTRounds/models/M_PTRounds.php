@@ -48,4 +48,25 @@ class M_PTRounds extends MY_Model{
         $query->free_result();
         return $result;
     }
+
+    function getParticipantRoundReadiness($facility_code, $pt_round_uuid){
+        $this->db->select("pr.readiness_id, p.participant_id, p.participant_fname, p.participant_lname, p.participant_email, p.participant_phonenumber, f.facility_code, f.facility_name, f.email, f.telephone, pr.status as readiness_status, pr.verdict as readiness_verdict, pr.comment as readiness_comment");
+        $this->db->from("participant_readiness pr");
+        $this->db->join("participants p", "p.uuid = pr.participant_id");
+        $this->db->join('facility f', 'f.id = p.participant_facility');
+        $this->db->where('f.facility_code', $facility_code);
+        $this->db->where('pr.pt_round_no', $pt_round_uuid);
+
+        return $this->db->get()->row();
+    }
+
+    function getReadinessResponses($readiness_id){
+        $this->db->select('q.question, q.question_no, prr.response, prr.extra_comments');
+        $this->db->from('questionnairs q');
+        $this->db->join('participant_readiness_responses prr', 'q.id = prr.questionnaire_id AND prr.readiness_id = ' . $readiness_id, 'left');
+        $this->db->order_by('q.question_no');
+        
+
+        return $this->db->get()->result();
+    }
 }

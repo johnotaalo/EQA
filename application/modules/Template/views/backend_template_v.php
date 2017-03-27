@@ -37,6 +37,9 @@
 			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 			text-decoration: none;
 		}
+		.text-success{
+			color: #66BB6A !important;
+		}
 	</style>
 </head>
 <body class="navbar-fixed sidebar-nav fixed-nav">

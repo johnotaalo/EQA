@@ -16,7 +16,8 @@
 		"ircmaxell/password-compat": "^1.0",
 		"phpoffice/phpexcel": "^1.8",
 		"doctrine/orm": "^2.5",
-		"swiftmailer/swiftmailer": "^5.4"
+		"swiftmailer/swiftmailer": "^5.4",
+		"paulbunyannet/premailer": "^1.1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

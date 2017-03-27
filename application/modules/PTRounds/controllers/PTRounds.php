@@ -111,6 +111,9 @@ class PTRounds extends DashboardController{
                         ->addJs('dashboard/js/libs/moment.min.js')
                         ->addJs('dashboard/js/libs/daterangepicker.js');
                 break;
+            case 'samples_labs':
+                $view = "pt_samples_labs_v";
+                break;
             case 'facilities':
                 $view = "pt_facilities_v";
                 $pagedata['statistics'] = $this->getFacilityStatistics($id);
@@ -586,29 +589,29 @@ class PTRounds extends DashboardController{
             $statistics_array[] = [
                                 'text'      =>  'Participants Have Responded',
                                 'no'        =>  $result->responded,
-                                'percentage'=>  round($result->responded / $result->total_sites * 100, 3)
+                                'percentage'=>  round($result->responded / $result->with_participants * 100, 3)
                             ];
             if($result->responded == 0){
                 $statistics_array[] = [
                                 'text'      =>  'Ready for this round',
                                 'no'        =>  0,
-                                'percentage'=>  0
+                                'percentage'=>  round($result->responded / $result->total_sites * 100, 3)
                             ];
                 $statistics_array[] = [
                                 'text'      =>  'Not Ready for this round',
                                 'no'        =>  0,
-                                'percentage'=>  0
+                                'percentage'=>  round($result->responded / $result->total_sites * 100, 3)
                             ];
             }else{
                 $statistics_array[] = [
                                 'text'      =>  'Ready for this round',
-                                'no'        =>  0,
-                                'percentage'=>  round(0 / $result->responded * 100, 3)
+                                'no'        =>  $result->ready,
+                                'percentage'=>  round($result->ready / $result->responded * 100, 3)
                             ];
                 $statistics_array[] = [
                                 'text'      =>  'Not Ready for this round',
-                                'no'        =>  0,
-                                'percentage'=>  round(0 / $result->responded * 100, 3)
+                                'no'        =>  $result->not_ready,
+                                'percentage'=>  round($result->not_ready / $result->responded * 100, 3)
                             ];
             }
             
@@ -660,11 +663,48 @@ class PTRounds extends DashboardController{
             $data = [];
             if ($facilities) {
                 foreach ($facilities as $facility) {
+                    $status_label = $smart_status_label = $complete_mark = $resend_link = "";
+                    $complete_mark = "<a target = '_blank' class='dropdown-item' href = '".base_url('PTRounds/facilityreadiness/'. $pt_uuid . '/' . $facility->facility_code)."'>Mark as Complete</a>";
+                    if($facility->status == "No Response"){
+                        $status_label = "<span class = 'tag tag-danger'>{$facility->status}</span>";
+                    }elseif ($facility->status == "In Review") {
+                        $status_label = "<span class = 'tag tag-warning'>{$facility->status}</span>";
+                    }elseif ($facility->status == "Complete") {
+                       $status_label = "<span class = 'tag tag-success'>{$facility->status}</span>";
+                    }
+                    if($facility->smart_status != NULL && $facility->smart_status != "No Response"){
+                        if ($facility->smart_status === "1" || $facility->smart_status === "0") {
+                            $smart_status_label = ($facility->smart_status == 1) ? "<span class = 'text-success'><i class = 'fa fa-circle'></i>&nbsp;Verdict: Accepted</span>" : "<span class = 'text-danger'><i class = 'fa fa-circle'></i>&nbsp;Verdict: Rejected</span>";
+                            $complete_mark = "";
+                        }else{
+
+                            if($facility->smart_status == "Okay"){
+                                $smart_status_label = "<a class = 'btn btn-success btn-sm' href = '#'><i class = 'fa fa-check'></i> Okay</a>";
+                            }elseif($facility->smart_status == "Not Okay"){
+                                $smart_status_label = "<a class = 'btn btn-danger btn-sm' href = '#'><i class = 'fa fa-times'></i> Not Okay</a>";
+                            }else{
+                                $smart_status_label = $facility->smart_status;
+                            }
+                        }
+                    }else{
+                        $smart_status_label = "<span class = 'tag tag-danger'>No Response</span>";
+                        $resend_link = "<a class='dropdown-item' href = '".base_url('PTRounds/sendemails/'. $pt_uuid . '/' . $facility->facility_code)."'>Resend Link to Email</a>";
+                    }
                     $data[] = [
                         $facility->facility_code,
                         $facility->facility_name,
-                        $facility->status,
-                        ""
+                        $status_label,
+                        "<center>" . $smart_status_label . "</center>",
+                        "<div class = 'dropdown'>
+                        <button class = 'btn btn-secondary dropdown-toggle' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup='true' aria-expanded = 'false'>
+                            Quick Actions
+                        </button>
+                        <div class = 'dropdown-menu' aria-labelledby= = 'dropdownMenuButton'>
+                            <a target = '_blank' class='dropdown-item' href = '".base_url('PTRounds/facilityreadiness/'. $pt_uuid . '/' . $facility->facility_code)."'>View Response</a>
+                            {$complete_mark}
+                            {$resend_link}
+                        </div>
+                        </div>"
                     ];
                 }
             }
@@ -678,9 +718,137 @@ class PTRounds extends DashboardController{
                 "recordsFiltered"   =>  intval(count($this->M_PTRounds->searchFacilityReadiness($pt_uuid, $search_value, NULL, NULL))),
                 'data'              =>  $data
              ];
-
-
             return $this->output->set_content_type('application/json')->set_output(json_encode($json_data));
+        }
+    }
+
+    function facilityreadiness($pt_round_uuid, $facility_code){
+        $result = $this->M_PTRounds->getParticipantRoundReadiness($facility_code, $pt_round_uuid);
+        if($result){
+            $data['result'] = $result;
+            $data['response_table'] = $this->generateResponseQuestionnaire($result->readiness_id);
+            $this->assets
+                        ->addCss('dashboard/js/libs/icheck/skins/flat/blue.css')
+                        ->addCss('dashboard/js/libs/icheck/skins/flat/green.css')
+                        ->addCss('dashboard/js/libs/icheck/skins/flat/red.css')
+                        ->addJs('dashboard/js/libs/icheck/icheck.min.js')
+                        ->setJavascript('PTRounds/readiness_js');
+            $this->template
+                    ->setPartial('PTRounds/pt_facility_readiness_v', $data)
+                    ->setPageTitle('Facility Readiness')
+                    ->readinessTemplate();
+        }else{
+            show_404();
+        }
+    }
+
+    function generateResponseQuestionnaire($readiness_id){
+        $responses = $this->M_PTRounds->getReadinessResponses($readiness_id);
+        $responses_table = "";
+        if($responses){
+            foreach ($responses as $response) {
+                $responses_table .= "<tr>";
+                $responses_table .= "<td>{$response->question_no}</td>";
+                $responses_table .= "<td>{$response->question}</td>";
+                $response_status = "";
+                if($response->response != NULL && $response->extra_comments == NULL){
+                    if($response->response == 0) {
+                        $response_status = "No";
+                    }
+                    elseif($response->response == 1){
+                        $response_status = "Yes";
+                    }
+                }elseif($response->extra_comments != NULL){
+                    $response_status = $response->extra_comments;
+                }
+                $responses_table .= "<td>{$response_status}</td>";
+                $responses_table .= "</tr>";
+            }
+        }
+
+        return $responses_table;
+    }
+
+    function addReadinessAssessmentOutcome($readiness_id){
+        $readiness = $this->db->get_where('participant_readiness', ['readiness_id' => $readiness_id])->row();
+        if ($readiness) {
+            $participant = $this->db->get_where('participants', ['uuid' => $readiness->participant_id])->row();
+            $facility = $this->db->get_where('facility', ['id'  =>  $participant->participant_facility])->row();
+            $verdict = $this->input->post('verdict');
+            $status = ($this->input->post('status') == 'on') ? 1 : 0;
+            $comment = $this->input->post('readiness_comment');
+
+            $update_data = [
+                'verdict'   =>  $verdict,
+                'status'    =>  $status,
+                'comment'   =>  $comment
+            ];
+
+            $this->db->where('readiness_id', $readiness->readiness_id);
+            $result = $this->db->update('participant_readiness', $update_data);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Successfully updated assessment outcome');
+            }else{
+                $this->session->set_flashdata('error', 'There was an issue updating your assessment outcome');
+            }
+            redirect('PTRounds/facilityreadiness/' . $readiness->pt_round_no . '/' . $facility->facility_code);
+        }else{
+            $this->session->set_flashdata('error', 'There was an issue updating your assessment outcome');
+            redirect('Dashboard','refresh');
+        }
+    }
+
+    function sendemails($pt_round_uuid, $facility_code = NULL){
+        $pt_round = $this->db->get_where('pt_round', ['uuid'   =>  $pt_round_uuid])->row();
+        $this->load->library('Mailer');
+        if ($pt_round) {
+            $recepients = [];
+            if($facility_code == NULL){
+                $facilities = $this->M_PTRounds->searchFacilityReadiness($pt_round_uuid);
+                $recepients_array = [];
+                foreach ($facilities as $facility) {
+                    if($facility->smart_status == NULL || $facility->smart_status == "No Response"){
+                        $participants = $this->db->get_where('participants', ['participant_facility' =>  $facility->facility_id])->result();
+                        if($participants){
+                            foreach ($participants as $participant) {
+                               $recepients_array[$participant->participant_email]  =  $participant->participant_fname . ' ' . $participant->participant_lname;
+                            }
+                        }elseif ($facility->email != "NULL" && $facility->email != "(NULL)" && $facility->email != "") {
+                            // $recepients_array[$facility->email]  =  $facility->facility_name;
+                        }
+                    }
+                }
+
+                if ($recepients_array) {
+                    $recepients = $recepients_array;
+                }
+            }else{
+                $facility = $this->db->get_where('facility', ['facility_code'   =>  $facility_code])->row();
+                $participants = $this->db->get_where('participants', ['participant_facility' =>  $facility->id])->result();
+                if($participants){
+                    foreach ($participants as $participant) {
+                        $recepients[$participant->participant_email]  =  $participant->participant_fname . ' ' . $participant->participant_lname;
+                    }
+                }elseif ($facility->email != "NULL" && $facility->email != "(NULL)" && $facility->email != "") {
+                    // $recepients[$facility->email]  =  $facility->facility_name;
+                }
+            }
+
+            $data = [
+                'pt_round_no'   =>  $pt_round->pt_round_no,
+                'round_uuid'    =>  $pt_round->uuid
+            ];
+            $body = $this->load->view('Template/email/assessment_link_v', $data, TRUE);
+            $result = $this->mailer->sendMail('john.otaalo@strathmore.edu', 'PT Round Assessment Link', $body, $recepients);
+            if($result == true){
+                $this->session->set_flashdata('success', 'Successfully sent the assessment link(s)');
+            }else{
+                $this->session->set_flashdata('error', 'There was an error sending the assessment link(s). Please contact the system administrator for further guidance');
+            }
+
+            redirect('PTRounds/create/facilities/' . $pt_round_uuid);
+        }else{
+            show_404();
         }
     }
 }
