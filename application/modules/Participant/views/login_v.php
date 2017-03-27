@@ -5,11 +5,11 @@
 	      <div class="box-row">
 			<div class="box-cell col-md-7">
 
-				<!-- <form method = "post" action="<?php echo base_url('Participant/Readiness/authentication');?>" class="p-a-4" id="readiness-login-form"> -->
-				<form method = "post" action="./" class="p-a-4" id="readiness-login-form">
+				<form method = "post" action='<?php echo base_url('Participant/Readiness/authentication/');?>' class="p-a-4" id="readiness-login-form">
+				<!-- <form method = "post" action="./" class="p-a-4" id="readiness-login-form"> -->
 				<h3 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Readiness Checklist</h3>
 						<h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Log in to verify your information</h4>
-
+						<input type="hidden" class="page-signin-form-control form-control" value="<?= @$pt_uuid; ?>" id="ptround" name="ptround">
 						<fieldset class="page-signin-form-group form-group form-group-lg">
 						  <div class="page-signin-icon text-muted"><i class="ion-person"></i></div>
 						  <input type="text" class="page-signin-form-control form-control" placeholder="Username or Email" id="username" name="username">

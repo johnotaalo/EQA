@@ -20,7 +20,7 @@ class Mailer
         
 	}
 
-	public function sendMail($to, $subject, $body, $bcc){
+	public function sendMail($to, $subject, $body, $bcc = null){
 		$message = Swift_Message::newInstance();
 		$body = Premailer::html($body);
 		$message->setSubject($subject)

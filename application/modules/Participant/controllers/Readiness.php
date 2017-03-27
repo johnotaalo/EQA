@@ -20,12 +20,12 @@ class Readiness extends MY_Controller {
 	}
 
 	public function authentication(){
-		$user = $this->M_Readiness->findParticipant($this->input->post('usname'));
+		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
 		//echo "<pre>";print_r($user);echo "</pre>";die();
 		if ($user) {
 			if($user->status == 1){
 			$this->load->library('Hash');
-				if (password_verify($this->input->post('passwd'), $user->password)) {
+				if (password_verify($this->input->post('password'), $user->password)) {
 					
 					$session_data = [
 						'uuid'				=>	$user->uuid,
@@ -44,7 +44,7 @@ class Readiness extends MY_Controller {
 
 
 					$this->set_session($session_data);
-					echo "true";
+					$this->readinessChecklist($this->input->post('ptround'));
 				}
 			}else{
 				echo "not_active";
@@ -71,25 +71,27 @@ class Readiness extends MY_Controller {
         redirect('Participant/Readiness/authenticate', 'refresh');
     }
 
-    public function checkLogin(){
+    public function checkLogin($pt_uuid){
 		if($this->session->flashdata('is_logged_in') != true){
 			//echo "<pre>";print_r("Reached00");echo "</pre>";die();
-			redirect('Participant/Readiness/authenticate/','refresh');
+			redirect('Participant/Readiness/authenticate/'.$pt_uuid,'refresh');
 		}
 	}
 
-	public function readinessChecklist(){
+	public function readinessChecklist($pt_uuid){
 
-		$this->checkLogin();
+		$this->checkLogin($pt_uuid);
+		// echo "<pre>";print_r("PT UUID ".$pt_uuid);echo "</pre>";die();
 
 		$data = [];
 
 		$user_details = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->flashdata('uuid'));
 		$questions_data = $this->getQuestions();
-		//echo "<pre>";print_r($questions_data);echo "</pre>";die();
+		//echo "<pre>";print_r($data['pt_uuid']);echo "</pre>";die();
         $data = [
             'user'  =>  $user_details,
-            'questionnair'  =>  $questions_data
+            'questionnair'  =>  $questions_data,
+            'pt_uuid'  =>  $pt_uuid
         ];
 
         $title = "Readiness Form";
@@ -183,6 +185,9 @@ class Readiness extends MY_Controller {
 	public function submitReadiness(){
 		$response_array = [];
 		if($this->input->post()){
+
+			$pt_round_no = $this->input->post('ptround');
+		//echo "<pre>";print_r("PT UUID".$pt_round_no);echo "</pre>";die();
             $question1 = $this->input->post('question_1');
             $question2 = $this->input->post('question_2');
             $question3 = $this->input->post('question_3');
@@ -192,7 +197,6 @@ class Readiness extends MY_Controller {
             $useruuid  =   $this->session->flashdata('uuid');
             $facilityid  =   $this->session->flashdata('facilityid');
             $comments = NULL;
-            $pt_round_no = '';
 
             $response_array[] = [
             	'1'		=>	$question1,
@@ -202,9 +206,6 @@ class Readiness extends MY_Controller {
                 '6'    	=>  $question4_2,
                 '7'    	=>  $question5
             ];
-
-            
-
 
             $insertrounddata = [
             	'participant_id'	=>	$useruuid,
