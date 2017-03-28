@@ -196,7 +196,7 @@ class Readiness extends MY_Controller {
             $question5 = $this->input->post('question_5');
             $useruuid  =   $this->session->flashdata('uuid');
             $facilityid  =   $this->session->flashdata('facilityid');
-            $comments = NULL;
+            
 
             $response_array[] = [
             	'1'		=>	$question1,
@@ -222,6 +222,8 @@ class Readiness extends MY_Controller {
             foreach ($response_array as $key => $values) {
             	foreach ($values as $question_id => $response) {
 	            	//echo "<pre>";print_r($value);echo "</pre>";die();
+	            	$comments = NULL;
+
 	            	if($question_id == '5'){
 	            		$comments = $question4_1;
 	            	}
@@ -243,10 +245,6 @@ class Readiness extends MY_Controller {
         }
 	}
 
-
-	public function assessmentForm(){
-
-	}
 
 	
 }

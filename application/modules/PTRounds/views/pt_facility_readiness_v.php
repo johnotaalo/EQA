@@ -55,7 +55,7 @@
 					<tr>
 						<td colspan="2">
 							<p><b>Email Address:</b></p>
-							<?= @$result->email; ?>
+							<?= @$result->participant_email; ?>
 						</td>
 						<td>
 							<p><b>Site Tel:</b></p>

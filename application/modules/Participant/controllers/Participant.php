@@ -10,12 +10,16 @@ class Participant extends MY_Controller {
 	}
 	function register(){
 		if ($this->input->server('REQUEST_METHOD') == "POST") {
-			$participant_id = $this->generateParticipantID();
+			$facility = $this->input->post('facility');
+			$participant_id = $this->generateParticipantID($facility);
+
+			echo "<pre>";print_r($participant_id);echo "</pre>";die();
+
 			$surname = $this->input->post('surname');
 			$firstname = $this->input->post('firstname');
 			$emailaddress = $this->input->post('participantEmail');
 			$phonenumber = $this->input->post('phonenumber');
-			$facility = $this->input->post('facility');
+			
 			$usertype = $this->input->post('usertype');
 			$password = $this->input->post('password');
 
@@ -65,15 +69,19 @@ class Participant extends MY_Controller {
 		}
 	}
 
-	private function generateParticipantID(){
-		$prefix = "NHRL-EQA/CD4/";
+	private function generateParticipantID($facility_id){
+		$prefix = $this->M_Participant->getFacilityCode($facility_id)->facility_code;
+
 		$max_id = $this->M_Participant->getMaxParticipant()->highest;
 		if (!$max_id) {
 			$max_id = 0;
 		}
 
 		$next = $max_id + 1;
-		return $prefix.str_pad($next, 3, "0", STR_PAD_LEFT);
+		//echo "<pre>";print_r($prefix);echo "</pre>";die();
+
+		return $prefix."_".str_pad($next, 3, "0", STR_PAD_LEFT);
+		
 	}
 }
 

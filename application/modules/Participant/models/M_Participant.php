@@ -38,6 +38,15 @@ class M_Participant extends CI_Model {
 		$query = $this->db->get("participants");
 		return $query->result();
 	}
+
+	function getFacilityCode($facility_id){
+		$this->db->select("facility_code");
+		$this->db->from("facility");
+		$this->db->where("id",$facility_id);
+		$query = $this->db->get();
+		
+		return $query->row();
+	}
 }
 
 /* End of file M_Participant.php */
