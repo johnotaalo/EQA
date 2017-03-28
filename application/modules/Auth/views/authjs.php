@@ -58,29 +58,61 @@
 			placeholder: "Equipment Available in Facility",
 		});
 
-		$('#userCompleteForm').validate({
+		$('#registrationForm').validate({
 			rules: {
-				password: {
-					required: true,
-					minlength: 5
-				},
-				confirm_password: {
-					required: true,
-					minlength: 5,
-					 equalTo: "input[name='password']" 
-				},
-				username: {
-					minlength: 6,
-					remote: {
-						url: "<?= @base_url('API/Users/checkExist'); ?>",
-						type: "POST"
-					}
-				}
+				surname: "required",
+				firstname: "required",
+				email_address: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "<?= @base_url('API/Users/checkEmail'); ?>",
+                        type: "POST"
+                    }
+                },
+                phonenumber: {
+                	required: true,
+                    remote: {
+                        url: "<?= @base_url('API/Users/checkPhone'); ?>",
+                        type: "POST"
+                    }
+                },
+                usertype: "required",
+                facility: "required",
+                'equipment[]': "required",
+                password: {
+                    minlength: 5,
+                    required: true
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                } 
 			},
 			messages : {
-				username: {
-					remote: "Username already in use!"
-				}
+				surname: "Please enter your Surname",
+				firstname: "Please enter your First Name",
+				email_address: {
+                    required: "Email Address cannot be empty",
+                    email: "This is not an email",
+                    remote: "Email already taken"
+                },
+                phonenumber: {
+                    required: "Please enter your phone number",
+                    remote: "Phone Number already taken, Please contact administrator"
+                },
+                usertype: "Please Select your User Type",
+                facility: "Please a facility",
+                'equipment[]': "Please Select at least one equipment",
+                password: {
+                    minlength: "Password is too short",
+                    required: "Please enter a password"
+                },
+                confirm_password: {
+                    minlength: "Password is too short",
+                    required: "Please enter a confirmatory password"
+                }
 			}
 		});
 	});

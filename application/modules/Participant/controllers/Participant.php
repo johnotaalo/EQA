@@ -13,11 +13,11 @@ class Participant extends MY_Controller {
 			$facility = $this->input->post('facility');
 			$participant_id = $this->generateParticipantID($facility);
 
-			echo "<pre>";print_r($participant_id);echo "</pre>";die();
+			//echo "<pre>";print_r($participant_id);echo "</pre>";die();
 
 			$surname = $this->input->post('surname');
 			$firstname = $this->input->post('firstname');
-			$emailaddress = $this->input->post('participantEmail');
+			$emailaddress = $this->input->post('email_address');
 			$phonenumber = $this->input->post('phonenumber');
 			
 			$usertype = $this->input->post('usertype');
