@@ -69,10 +69,6 @@ class Equipments extends DashboardController{
                 $this->session->set_flashdata('error', "There was a problem creating a new equipment. Please try again");
             }
 
-            
-
-            
-
             redirect('Equipments/equipmentlist', 'refresh');
         }
     }
@@ -178,9 +174,13 @@ class Equipments extends DashboardController{
 
             $this->db->set('equipment_name', $equipmentname);
             $this->db->where('uuid', $equipmentuuid);
-            $this->db->update('equipment');
-            
+
+            if($this->db->update('equipment')){
+            $this->session->set_flashdata('success', "Successfully updated the equipment to " . $equipmentname);
             $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+        }
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
