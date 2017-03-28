@@ -2,9 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Readiness extends MY_Controller {
-
+private static $pt_uuid;
 	public function __construct(){
 		parent::__construct();
+
+
 		$this->load->model('M_Readiness');
 	}
 
@@ -22,39 +24,53 @@ class Readiness extends MY_Controller {
 	public function authentication(){
 		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
 		//echo "<pre>";print_r($user);echo "</pre>";die();
+		$ptround = $this->input->post('ptround');
 		if ($user) {
+			
 			if($user->status == 1){
+				if($user->approved == 1){
 			$this->load->library('Hash');
-				if (password_verify($this->input->post('password'), $user->password)) {
-					
-					$session_data = [
-						'uuid'				=>	$user->uuid,
-						'username'			=>	$user->username,
-						'firstname'			=>	$user->firstname,
-						'lastname'			=>	$user->lastname,
-						'phone'				=>	$user->phone,
-						'emailaddress'		=>	$user->email_address,
-						'facilityid'		=>	$user->facility_code,
-						'facilityname'		=>	$user->facility_name,
-						'facilityphone'		=>	$user->telephone,
-						'facilityaltphone'	=>	$user->alt_telephone,
-						'is_logged_in'		=>	true
-					];
+
+					if (password_verify($this->input->post('password'), $user->password)) {
+						
+						$session_data = [
+							'uuid'				=>	$user->uuid,
+							'username'			=>	$user->username,
+							'firstname'			=>	$user->firstname,
+							'lastname'			=>	$user->lastname,
+							'phone'				=>	$user->phone,
+							'emailaddress'		=>	$user->email_address,
+							'facilityid'		=>	$user->facility_code,
+							'facilityname'		=>	$user->facility_name,
+							'facilityphone'		=>	$user->telephone,
+							'facilityaltphone'	=>	$user->alt_telephone,
+							'is_logged_in'		=>	true
+						];
 
 
 
-					$this->set_session($session_data);
-					$this->readinessChecklist($this->input->post('ptround'));
+						$this->set_session($session_data);
+
+						$this->readinessChecklist($ptround);
+					}else{
+						$this->session->set_flashdata('error', "Username or Password is incorrect. Please try again");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
+					}
+				}else{
+					$this->session->set_flashdata('error', "Your account is not approved. Please contact the administrator");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
 				}
 			}else{
-				echo "not_active";
+	            $this->session->set_flashdata('error', "Your account is not activated. Please your email account to activate");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
 			}
 		}else{
-			echo "false";
+			$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
+			redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
 		}
 		
-		$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
-		//redirect('Participant/Readiness/authenticate', 'refresh');
+		
+		
 	}
 	
 	private function set_session($session_data){
@@ -68,7 +84,7 @@ class Readiness extends MY_Controller {
 	public function logout()
     {
         $this->session->sess_destroy();
-        redirect('Participant/Readiness/authenticate', 'refresh');
+        redirect('Home', 'refresh');
     }
 
     public function checkLogin($pt_uuid){
@@ -132,7 +148,7 @@ class Readiness extends MY_Controller {
 
 				$question_view .= 	'<div class="form-group row">
 					                <div class="form-group">
-					                <label class="col-md-6 form-control-label" for="textarea-input">';
+					                <label class="col-md-6 form-control-label" for="question_'.$questions->question_no.'">';
 				    $question_view .= 	' &nbsp (a). ' .$questions->question;
 				    $questions->question_no = str_replace('.','_',$questions->question_no);
 				    $question_view .=   '</label>
@@ -151,10 +167,10 @@ class Readiness extends MY_Controller {
 		        $questions->question_no = str_replace('.','_',$questions->question_no);
 		        $question_view .=   '</label>
 	                    			<div class="col-md-6">
-	                        		<label class="radio-inline" for="inline-radio1">';
+	                        		<label class="radio-inline" for="question_'.$questions->question_no.'">';
             	$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
 				$question_view .= 	'</label>
-	    							<label class="radio-inline" for="inline-radio2">';
+	    							<label class="radio-inline" for="question_'.$questions->question_no.'">';
 				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
 				$question_view .= 	'</label>
 								    </div>
@@ -167,10 +183,10 @@ class Readiness extends MY_Controller {
 		 		$question_view .= 	$counter . '. ' .$questions->question;
 	 			$question_view .= 	'</label>
 	    							<div class="col-md-6">
-	        						<label class="radio-inline" for="inline-radio1">';
-				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
+	        						<label class="radio-inline" for="question_'.$questions->question_no.'">';
+				$question_view .= 	'<input required type="radio" id="question_'.$questions->question_no.'_1" name="question_'.$questions->question_no.'" value="1">Yes';
 				$question_view .= 	'</label>
-	    							<label class="radio-inline" for="inline-radio2">';
+	    							<label class="radio-inline" for="question_'.$questions->question_no.'">';
 				$question_view .= 	'<input type="radio" id="question_'.$questions->question_no.'_0" name="question_'.$questions->question_no.'" value="0">No';
 				$question_view .= 	'</label>
 								    </div>

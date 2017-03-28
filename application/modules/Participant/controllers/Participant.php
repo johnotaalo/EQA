@@ -80,7 +80,7 @@ class Participant extends MY_Controller {
 		$next = $max_id + 1;
 		//echo "<pre>";print_r($prefix);echo "</pre>";die();
 
-		return $prefix."_".str_pad($next, 3, "0", STR_PAD_LEFT);
+		return $prefix."-".str_pad($next, 3, "0", STR_PAD_LEFT);
 		
 	}
 }

@@ -1,5 +1,38 @@
 <script>   
     $(document).ready(function(){
+
+    	$('#ptround-form').validate({
+			rules: {
+				question_1: {
+					required: true
+				},
+				question_2: {
+					required: true
+				},
+				question_3: {
+					required: true
+				},
+				question_5: {
+					required: true
+				}
+			},
+			messages : {
+				question_1: {
+					required: "Please select answer for Question 1"
+				},
+				question_2: {
+					required: "Please select answer for Question 2"
+				},
+				question_3: {
+					required: "Please select answer for Question 3"
+				},
+				question_5: {
+					required: "Please select answer for Question 5"
+				}
+			}
+		});
+
+
     	var question_4_1 = document.getElementById("question_4_1");
     	var question_4_2_0 = document.getElementById("question_4_2_1");
     	var question_4_2_1 = document.getElementById("question_4_2_0");
@@ -80,6 +113,25 @@
         question_4_1.disabled = false;
 		question_4_2_0.disabled = false;
 		question_4_2_1.disabled = false;  
+
+		$('#ptround-form').validate({
+			rules: {
+				question_4_1: {
+					required: true
+				},
+				question_4_2: {
+					required: true
+				}
+			},
+			messages : {
+				question_4_1: {
+					required: "Please select answer for Question 4.1"
+				},
+				question_4_2: {
+					required: "Please select answer for Question 4.2"
+				}
+			}
+		});
 	}
 
 	function deactivatequestion(){

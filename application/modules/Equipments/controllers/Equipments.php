@@ -54,14 +54,24 @@ class Equipments extends DashboardController{
                 'equipment_name'    =>  $equipmentname
             ];
 
-            $this->db->insert('equipment', $insertdata);
+            //$this->db->insert('equipment', $insertdata);
 
-            $equipment_id = $this->db->insert_id();
+            if($this->db->insert('equipment', $insertdata)){
+                $this->session->set_flashdata('success', "Successfully created new Equipment");
 
-            $this->db->where('id', $equipment_id);
-            $equipment = $this->db->get('equipment')->row();
+                $equipment_id = $this->db->insert_id();
 
-            $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
+                $this->db->where('id', $equipment_id);
+                $equipment = $this->db->get('equipment')->row();
+
+                $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
+            }else{
+                $this->session->set_flashdata('error', "There was a problem creating a new equipment. Please try again");
+            }
+
+            
+
+            
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
@@ -131,7 +141,13 @@ class Equipments extends DashboardController{
         }
 
         $this->db->where('uuid', $id);
-        $this->db->update('equipment');
+        //$this->db->update('equipment');
+
+        if($this->db->update('equipment')){
+            $this->session->set_flashdata('success', "Successfully updated the equipment details");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+        }
 
         redirect('Equipments/equipmentlist', 'refresh');
 
