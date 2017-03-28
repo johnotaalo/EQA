@@ -111,7 +111,8 @@
                 },
                 confirm_password: {
                     minlength: "Password is too short",
-                    required: "Please enter a confirmatory password"
+                    required: "Please enter a confirmatory password",
+                    equalTo: "Passwords do not match "
                 }
 			}
 		});
