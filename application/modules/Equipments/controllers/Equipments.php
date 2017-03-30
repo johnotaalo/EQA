@@ -10,7 +10,6 @@ class Equipments extends DashboardController{
     }
 
     function index(){
-        
     }
 
     function equipmentlist($eFacilities = NULL){
