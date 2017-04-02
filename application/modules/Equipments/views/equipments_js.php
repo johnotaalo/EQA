@@ -2,6 +2,8 @@
     $(document).ready(function(){
         $('table').dataTable();
 
+        $('[data-toggle="tooltip"]').tooltip()
+
         $('#save-changes').click(function(){
             $('#createEquipment').submit();
         });
