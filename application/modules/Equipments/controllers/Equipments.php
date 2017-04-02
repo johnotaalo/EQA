@@ -49,9 +49,11 @@ class Equipments extends DashboardController{
     function create(){
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
+            $kitnames = $this->input->post('kitnames');
 
             $insertdata = [
-                'equipment_name'    =>  $equipmentname
+                'equipment_name'    =>  $equipmentname,
+                'kit_name'    =>  $kitnames
             ];
 
             //$this->db->insert('equipment', $insertdata);
@@ -82,6 +84,7 @@ class Equipments extends DashboardController{
         $heading = [
             "No.",
             "Equipment Name",
+            "Kit Names",
             "Status",
             "No. of Facilities Equipped",
             "Actions"
@@ -111,8 +114,9 @@ class Equipments extends DashboardController{
                 $tabledata[] = [
                     $counter,
                     $equipment->equipment_name,
+                    $equipment->kit_name,
                     $status,
-                    '<a href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
+                    '<a class="data-toggle="tooltip" data-placement="top" title="Facilities with this equipment"" href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
                 ];
             }
