@@ -112,22 +112,22 @@
                         <table class="table table-striped">
                             <tr>
                                 <thead>
-                                    <th>Antibody</th>
-                                    <th>FL1</th>
-                                    <th>Antibody</th>
-                                    <th>FL2</th>
-                                    <th>Antibody</th>
-                                    <th>FL3</th>
-                                    <th>Antibody</th>
-                                    <th>FL4</th>
+                                    <th style="text-align: center;">Antibody</th>
+                                    <th style="text-align: center;">FL1</th>
+                                    <th style="text-align: center;">Antibody</th>
+                                    <th style="text-align: center;">FL2</th>
+                                    <th style="text-align: center;">Antibody</th>
+                                    <th style="text-align: center;">FL3</th>
+                                    <th style="text-align: center;">Antibody</th>
+                                    <th style="text-align: center;">FL4</th>
                                 </thead>
                             </tr>
                             <tr>
-                                <td>CD3</td>
+                                <td style="text-align: center;">CD3</td>
                                 <td>
                                     <input type="text" class="page-signup-form-control form-control" placeholder="FL1" name = "fl1">
                                 </td>
-                                <td>CD4</td>
+                                <td style="text-align: center;">CD4</td>
                                 <td>
                                     <input type="text" class="page-signup-form-control form-control" placeholder="FL2" name = "fl2">
                                 </td>
@@ -179,13 +179,13 @@
                     <table class="table table-striped">
                         <tr>
                             <thead>
-                                <th>PANEL</th>
-                                <th>ABSOLUTE COUNT (cells/&mu;l)</th>
-                                <th>PERCENTAGES (%)</th>
+                                <th style="text-align: center;">PANEL</th>
+                                <th style="text-align: center;">ABSOLUTE COUNT (cells/&mu;l)</th>
+                                <th style="text-align: center;">PERCENTAGES (%)</th>
                             </thead>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 1
                             </th>
                             <td>
@@ -196,7 +196,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 2
                             </th>
                             <td>
@@ -207,7 +207,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 3
                             </th>
                             <td>
@@ -235,45 +235,45 @@
                 <div class="card-block">
                     <table class="table table-bordered">
                         <tr>
-                            <th rowspan="2">
+                            <th style="text-align: center;" rowspan="2">
                                 SPECIMEN
                             </th>
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 1
                             </th>
                             <!-- <td></td> -->
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 2
                             </th>
                             <!-- <td></td> -->
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 3
                             </th>
                             <!-- <td></td> -->
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Reported
                             </th>
                             <td>
@@ -296,7 +296,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Mean
                             </th>
                             <td>
@@ -319,7 +319,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Residual
                             </th>
                             <td>
@@ -342,7 +342,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 SD
                             </th>
                             <td>
@@ -365,7 +365,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 SDI
                             </th>
                             <td>
@@ -388,7 +388,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Performance
                             </th>
                             <td>
@@ -411,22 +411,22 @@
                             </td>
                         </tr>
                         <tr>
-                            <th rowspan="2">
+                            <th style="text-align: center;" rowspan="2">
                                 Key: 
                             </th>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong>Residual</strong> = Reported Value-Mean Value
                             </td>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong>SDI</strong> (Standard Deviation Index) = Residual / SD
                             </td>
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong style="font-size: 20px">&#9786;</strong> = Within Range
                             </td>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong style="font-size: 20px">&#x2639;</strong> = Out of Range
                             </td>
                         </tr>
@@ -445,45 +445,45 @@
                 <div class="card-block">
                     <table class="table table-bordered">
                         <tr>
-                            <th rowspan="2">
+                            <th style="text-align: center;" rowspan="2">
                                 SPECIMEN
                             </th>
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 1
                             </th>
                             <!-- <td></td> -->
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 2
                             </th>
                             <!-- <td></td> -->
-                            <th colspan="2">
+                            <th style="text-align: center;" colspan="2">
                                 PANEL 3
                             </th>
                             <!-- <td></td> -->
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD3
                             </th>
-                            <th>
+                            <th style="text-align: center;">
                                 CD4
                             </th>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Reported
                             </th>
                             <td>
@@ -506,7 +506,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Mean
                             </th>
                             <td>
@@ -529,7 +529,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Residual
                             </th>
                             <td>
@@ -552,7 +552,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 SD
                             </th>
                             <td>
@@ -575,7 +575,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 SDI
                             </th>
                             <td>
@@ -598,7 +598,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
+                            <th style="text-align: center;">
                                 Performance
                             </th>
                             <td>
@@ -621,22 +621,22 @@
                             </td>
                         </tr>
                         <tr>
-                            <th rowspan="2">
+                            <th style="text-align: center;" rowspan="2">
                                 Key: 
                             </th>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong>Residual</strong> = Reported Value-Mean Value
                             </td>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong>SDI</strong> (Standard Deviation Index) = Residual / SD
                             </td>
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong style="font-size: 20px">&#9786;</strong> = Within Range
                             </td>
-                            <td colspan="3">
+                            <td style="text-align: center;" colspan="3">
                                 <strong style="font-size: 20px">&#x2639;</strong> = Out of Range
                             </td>
                         </tr>
@@ -662,7 +662,7 @@
                                 <div class="card-header col-sm-12">
                                     <strong>Absolute Count - CD3</strong>
                                     <div class="card-actions">
-                                        <a href="http://www.chartjs.org/">
+                                        <a href="#">
                                             <small class="text-muted">download</small>
                                         </a>
                                     </div>
@@ -680,7 +680,7 @@
                                 <div class="card-header col-sm-12">
                                     <strong>Percentage - CD3</strong>
                                     <div class="card-actions">
-                                        <a href="http://www.chartjs.org/">
+                                        <a href="#">
                                             <small class="text-muted">download</small>
                                         </a>
                                     </div>
@@ -698,7 +698,7 @@
                                 <div class="card-header col-sm-12">
                                     <strong>Absolute Count - CD4</strong>
                                     <div class="card-actions">
-                                        <a href="http://www.chartjs.org/">
+                                        <a href="#">
                                             <small class="text-muted">download</small>
                                         </a>
                                     </div>
@@ -716,7 +716,7 @@
                                 <div class="card-header col-sm-12">
                                     <strong>Percentage - CD4</strong>
                                     <div class="card-actions">
-                                        <a href="http://www.chartjs.org/">
+                                        <a href="#">
                                             <small class="text-muted">download</small>
                                         </a>
                                     </div>

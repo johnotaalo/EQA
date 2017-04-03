@@ -12,19 +12,19 @@
 	            <div class="row">
 	            	<table class="table table-bordered">
 	            		<tr>
-		<th rowspan="2">Equipment Name</th>
-		<th rowspan="2">Lysis Method</th>
-		<th rowspan="2">Absolute Count beads</th>
-		<th rowspan="2">Kit Name</th>
-		<th rowspan="2">Flourochromes (mAb FL)</th>
-		<th colspan="2">Analytes</th>
+		<th style="text-align: center;" rowspan="2">Equipment Name</th>
+		<th style="text-align: center;" rowspan="2">Lysis Method</th>
+		<th style="text-align: center;" rowspan="2">Absolute Count beads</th>
+		<th style="text-align: center;" rowspan="2">Kit Name</th>
+		<th style="text-align: center;" rowspan="2">Flourochromes (mAb FL)</th>
+		<th style="text-align: center;" colspan="2">Analytes</th>
 	</tr>
 	<tr>
-		<th>Absolute</th>
-		<th>Percent</th>
+		<th style="text-align: center;">Absolute</th>
+		<th style="text-align: center;">Percent</th>
 	</tr>
 	<tr>
-		<th>BD FACSCalibur</th>
+		<th style="text-align: center;">BD FACSCalibur</th>
 		<td> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_1"> 
 		</td>
@@ -45,7 +45,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th rowspan="2">BD FACSCount</th>
+		<th style="text-align: center;" rowspan="2">BD FACSCount</th>
 		<td rowspan="2"> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_2"> 
 		</td>
@@ -80,7 +80,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>BD FACSPresto</th>
+		<th style="text-align: center;">BD FACSPresto</th>
 		<td> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_4"> 
 		</td>
@@ -101,7 +101,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>Partec Cyflow</th>
+		<th style="text-align: center;">Partec Cyflow</th>
 		<td> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_5"> 
 		</td>
@@ -122,7 +122,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>Alere PIMA</th>
+		<th style="text-align: center;">Alere PIMA</th>
 		<td> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_6"> 
 		</td>
@@ -143,7 +143,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>Guava PCA</th>
+		<th style="text-align: center;">Guava PCA</th>
 		<td> 
 			<input type="text" class="page-signup-form-control form-control" placeholder="" name = "lysis_equipment_7"> 
 		</td>

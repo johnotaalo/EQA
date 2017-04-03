@@ -79,15 +79,15 @@
 	            <div class="row">
 	            	<table class="table table-bordered">
 	            		<tr>
-			            	<th>
+			            	<th style="text-align: center;">
 			            		Equipment
 			            	</th>
-			            	<th>
+			            	<th style="text-align: center;">
 			            		Reagent
 			            	</th>
-			            	<th>
+			            	<th style="text-align: center;">
 			            		Lot Number
-			            	</th>
+			            	</th style="text-align: center;">
 			            	<th>
 			            		Expiry Date
 			            	</th>
@@ -215,16 +215,16 @@
 	            <div class="row">
 	            	<table class="table table-striped">
 	            		<tr>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				MAb-FL1
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				MAb-FL2
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				MAb-FL3
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				MAb-FL4
 	            			</th>
 	            		</tr>
@@ -300,46 +300,46 @@
 	            <div class="row">
 	            	<table class="table table-bordered">
 	            		<tr>
-	            			<th rowspan="3">
+	            			<th style="text-align: center;" rowspan="3">
 	            				PANEL
 	            			</th>
-	            			<th colspan="7">
+	            			<th style="text-align: center;" colspan="7">
 	            				RESULT
 	            			</th>
 	            		</tr>
 	            		<tr>
-	            			<th colspan="2">
+	            			<th style="text-align: center;" colspan="2">
 	            				CD3
 	            			</th>
-	            			<th colspan="2">
+	            			<th style="text-align: center;" colspan="2">
 	            				CD4
 	            			</th>
-	            			<th colspan="2">
+	            			<th style="text-align: center;" colspan="2">
 	            				Other (Specify)
 	            			</th>
 	            		</tr>
 	            		<tr>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Absolute
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Percent
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Absolute
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Percent
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Absolute
 	            			</th>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				Percent
 	            			</th>
 	            		</tr>
 	            		<tr>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				SS-R17-036
 	            			</th>
 	            			<td>
@@ -362,7 +362,7 @@
 	            			</td>
 	            		</tr>
 	            		<tr>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				SS-R17-037
 	            			</th>
 	            			<td>
@@ -385,7 +385,7 @@
 	            			</td>
 	            		</tr>
 	            		<tr>
-	            			<th>
+	            			<th style="text-align: center;">
 	            				SS-R17-038
 	            			</th>
 	            			<td>
