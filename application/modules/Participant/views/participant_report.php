@@ -1,14 +1,14 @@
- <form method="POST" action="<?= @base_url(''); ?>" class="p-a-4" id="registrationForm">
+<form method="POST" action="<?= @base_url(''); ?>" class="p-a-4" id="participant-report">
 
-                  <?php if($this->session->flashdata('success')){ ?>
-                        <div class = 'alert alert-success'>
-                            <?= @$this->session->flashdata('success'); ?>
-                        </div>
-                  <?php }elseif($this->session->flashdata('error')){ ?>
-                        <div class = 'alert alert-danger'>
-                            <?= @$this->session->flashdata('error'); ?>
-                        </div>
-                  <?php } ?>
+  <?php if($this->session->flashdata('success')){ ?>
+        <div class = 'alert alert-success'>
+            <?= @$this->session->flashdata('success'); ?>
+        </div>
+  <?php }elseif($this->session->flashdata('error')){ ?>
+        <div class = 'alert alert-danger'>
+            <?= @$this->session->flashdata('error'); ?>
+        </div>
+  <?php } ?>
 
   <div class="row">
     <div class="col-sm-12">
