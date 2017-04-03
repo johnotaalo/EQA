@@ -58,7 +58,6 @@
 			                <label for="date_analyzed">Date Analyzed (DD/MM/YYYY) : </label>
 			                <!-- <h5><?= @$user->date_analyzed; ?></h5> -->
 			            </div>
-
 		          	</div>
 
                 </div>   
@@ -446,5 +445,10 @@
             </div>
         </div>
     </div>
+
+
+
+    <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Save as Draft</button>
+    <button type="submit" class="btn btn-block btn-lg btn-success m-t-3">Mark as Complete</button>
 
 </form>
