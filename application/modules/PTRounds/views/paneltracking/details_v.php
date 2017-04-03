@@ -3,7 +3,7 @@
 		<!-- small box -->
 		<div class="small-box bg-aqua">
 			<div class="inner">
-				<h3>150</h3>
+				<h3><?= @$stats->batches; ?></h3>
 
 				<p>Batches created</p>
 			</div>
@@ -19,9 +19,9 @@
 		<!-- small box -->
 		<div class="small-box bgm-amber">
 			<div class="inner">
-				<h3>150</h3>
+				<h3><?= @$stats->panels_prepared; ?></h3>
 
-				<p>Total Batches Sent</p>
+				<p>Total Batches Assigned</p>
 			</div>
 			<div class="icon">
 				<i class="glyphicons glyphicons-cargo"></i>
@@ -35,7 +35,7 @@
 		<!-- small box -->
 		<div class="small-box bg-green">
 			<div class="inner">
-				<h3>150</h3>
+				<h3><?= @$stats->enroute; ?></h3>
 
 				<p>Enroute Panels</p>
 			</div>
@@ -51,7 +51,7 @@
 		<!-- small box -->
 		<div class="small-box bg-red">
 			<div class="inner">
-				<h3>150</h3>
+				<h3><?= @$stats->received; ?></h3>
 
 				<p>Received Panels</p>
 			</div>
@@ -74,25 +74,26 @@
 				</div>
 				<div class="col-sm-7">
 					<button type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-doc"></i> &nbsp; View Reports</button>
+					<button id = "courier-dispatch" type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-plane"></i> &nbsp; Courier Dispatch</button>
 				</div>
 			</div>
-			<hr/>
+			<!-- <hr/> -->
 			<div class="row">
 				<div class="col-md-12">
 					<div class = "table-responsive">
-						<table class = "table table-bordered table">
+						<table class = "table table-bordered table-striped" id = 'readyParticipants'>
 							<thead>
+								<th>Participant Name</th>
 								<th>MFL Code</th>
 								<th>Facility Name</th>
-								<th>G4S Branch</th>
-								<th>G4S Location</th>
+								<th>Assigned Batch</th>
 								<th>Status</th>
-								<th>Details</th>
+								<th>Action</th>
 							</thead>
 							<tbody>
-								<tr>
+								<!-- <tr>
 									<td colspan="6"><center>No data available</center></td>
-								</tr>
+								</tr> -->
 							</tbody>
 						</table>
 					</div>

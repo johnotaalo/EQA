@@ -294,5 +294,9 @@
 	<?php if(isset($javascript_file)) { ?>
 		<?php $this->load->view($javascript_file, $javascript_data); ?>
 	<?php } ?>
+
+	<script type="text/javascript">
+		$('[data-toggle="tooltip"]').tooltip();
+	</script>
 </body>
 </html>

@@ -19,4 +19,8 @@
 
 		$('#generalModal').modal();
 	});
+
+	$('#save-changes').click(function(){
+		$('#new_batch_form').submit();
+	});
 </script>
