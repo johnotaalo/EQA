@@ -274,47 +274,47 @@
                 <div class="card-block">
                     <table class="table table-bordered">
                         <tr>
-                            <td rowspan="2">
+                            <th rowspan="2">
                                 SPECIMEN
-                            </td>
-                            <td colspan="2">
+                            </th>
+                            <th colspan="2">
                                 PANEL 1
-                            </td>
+                            </th>
                             <!-- <td></td> -->
-                            <td colspan="2">
+                            <th colspan="2">
                                 PANEL 2
-                            </td>
+                            </th>
                             <!-- <td></td> -->
-                            <td colspan="2">
+                            <th colspan="2">
                                 PANEL 3
-                            </td>
+                            </th>
                             <!-- <td></td> -->
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <td>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
+                            </th>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Reported
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_rep_cd3">
                             </td>
@@ -335,9 +335,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Mean
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_mean_cd3">
                             </td>
@@ -358,9 +358,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Residual
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_res_cd3">
                             </td>
@@ -381,9 +381,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 SD
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_sd_cd3">
                             </td>
@@ -404,9 +404,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 SDI
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_sdi_cd3">
                             </td>
@@ -427,9 +427,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Performance
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "counts_panel1_per_cd3">
                             </td>
@@ -450,9 +450,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="2">
+                            <th rowspan="2">
                                 Key: 
-                            </td>
+                            </th>
                             <td colspan="3">
                                 <strong>Residual</strong> = Reported Value-Mean Value
                             </td>
@@ -484,47 +484,47 @@
                 <div class="card-block">
                     <table class="table table-bordered">
                         <tr>
-                            <td rowspan="2">
+                            <th rowspan="2">
                                 SPECIMEN
-                            </td>
-                            <td colspan="2">
+                            </th>
+                            <th colspan="2">
                                 PANEL 1
-                            </td>
+                            </th>
                             <!-- <td></td> -->
-                            <td colspan="2">
+                            <th colspan="2">
                                 PANEL 2
-                            </td>
+                            </th>
                             <!-- <td></td> -->
-                            <td colspan="2">
+                            <th colspan="2">
                                 PANEL 3
-                            </td>
+                            </th>
                             <!-- <td></td> -->
                         </tr>
                         <tr>
                             <!-- <td></td> -->
-                            <td>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD3
-                            </td>
-                            <td>
+                            </th>
+                            <th>
                                 CD4
-                            </td>
+                            </th>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Reported
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_rep_cd3">
                             </td>
@@ -545,9 +545,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Mean
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_mean_cd3">
                             </td>
@@ -568,9 +568,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Residual
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_res_cd3">
                             </td>
@@ -591,9 +591,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 SD
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_sd_cd3">
                             </td>
@@ -614,9 +614,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 SDI
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_sdi_cd3">
                             </td>
@@ -637,9 +637,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Performance
-                            </td>
+                            </th>
                             <td>
                                 <input type="text" class="page-signup-form-control form-control" placeholder="" name = "percentage_panel1_per_cd3">
                             </td>
@@ -660,9 +660,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="2">
+                            <th rowspan="2">
                                 Key: 
-                            </td>
+                            </th>
                             <td colspan="3">
                                 <strong>Residual</strong> = Reported Value-Mean Value
                             </td>
@@ -699,7 +699,7 @@
                         <!-- <div class="card-columns"> -->
                             <div class="card col-sm-6">
                                 <div class="card-header col-sm-12">
-                                    Absolute Count - CD3
+                                    <strong>Absolute Count - CD3</strong>
                                     <div class="card-actions">
                                         <a href="http://www.chartjs.org/">
                                             <small class="text-muted">docs</small>
@@ -717,7 +717,7 @@
                         <!-- <div class="card-columns"> -->
                             <div class="card col-sm-6">
                                 <div class="card-header col-sm-12">
-                                    Percentage - CD3
+                                    <strong>Percentage - CD3</strong>
                                     <div class="card-actions">
                                         <a href="http://www.chartjs.org/">
                                             <small class="text-muted">docs</small>
@@ -735,7 +735,7 @@
                         <!-- <div class="card-columns"> -->
                             <div class="card col-sm-6">
                                 <div class="card-header col-sm-12">
-                                    Absolute Count - CD4
+                                    <strong>Absolute Count - CD4</strong>
                                     <div class="card-actions">
                                         <a href="http://www.chartjs.org/">
                                             <small class="text-muted">docs</small>
@@ -753,7 +753,7 @@
                         <!-- <div class="card-columns"> -->
                             <div class="card col-sm-6">
                                 <div class="card-header col-sm-12">
-                                    Percentage - CD4
+                                    <strong>Percentage - CD4</strong>
                                     <div class="card-actions">
                                         <a href="http://www.chartjs.org/">
                                             <small class="text-muted">docs</small>
