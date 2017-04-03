@@ -150,6 +150,12 @@ class Template extends MX_Controller {
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']
 			],
+			'participantrounds'	=>	[
+				'icon'	=>	'icon-chemistry',
+				'text'	=>	'PT Rounds',
+				'link'	=>	'PTRounds',
+				'users'	=>	['participant']
+			]
 		];
 
 		if (count($menus) > 0) {
