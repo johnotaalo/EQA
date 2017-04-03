@@ -153,7 +153,7 @@ class Template extends MX_Controller {
 			'participantrounds'	=>	[
 				'icon'	=>	'icon-chemistry',
 				'text'	=>	'PT Rounds',
-				'link'	=>	'PTRounds',
+				'link'	=>	'Participant/PTRound/',
 				'users'	=>	['participant']
 			]
 		];
