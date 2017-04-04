@@ -167,14 +167,36 @@ class Equipments extends DashboardController{
     public function addAnalytes($equipment_id){
 
         if($this->input->post()){
-            $absolute = $this->input->post('absolute');
-            $absolutecd3 = $this->input->post('absolutecd3');
-            $absolutecd4 = $this->input->post('absolutecd4');
-
-            $percent = $this->input->post('percent');
-            $percentcd3 = $this->input->post('percentcd3');
-            $percentcd4 = $this->input->post('percentcd4');
-            
+            if($this->input->post('absolute') == NULL){
+                $absolute = 0;
+            }else{
+                $absolute = $this->input->post('absolute');
+            }
+            if($this->input->post('absolutecd3') == NULL){
+                $absolutecd3 = 0;
+            }else{
+                $absolutecd3 = $this->input->post('absolutecd3');
+            }
+            if($this->input->post('absolutecd4') == NULL){
+                $absolutecd4 = 0;
+            }else{
+                $absolutecd4 = $this->input->post('absolutecd4');
+            }
+            if($this->input->post('percent') == NULL){
+                $percent = 0;
+            }else{
+                $percent = $this->input->post('percent');
+            }
+            if($this->input->post('percentcd3') == NULL){
+                $percentcd3 = 0;
+            }else{
+                $percentcd3 = $this->input->post('percentcd3');
+            }
+            if($this->input->post('percentcd4') == NULL){
+                $percentcd4 = 0;
+            }else{
+                $percentcd4 = $this->input->post('percentcd4');
+            }
 
             $this->db->set('analytes_absolute', $absolute);
             $this->db->set('analytes_absolute_cd3', $absolutecd3);
