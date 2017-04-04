@@ -33,7 +33,7 @@
                         {
                 ?>
                     
-                    <button class = "btn btn-primary btn-sm" id = "btn-create-equipment"><i class = "icon-plus"></i> Create Equipment</button>
+                    <a href = "<?= @base_url('Equipments/newEquipmentView'); ?>"><button class = "btn btn-primary btn-sm" id = "btn-create-equipment"><i class = "icon-plus"></i> Create Equipment</button></a>
 
                 <?php 
                         }else{

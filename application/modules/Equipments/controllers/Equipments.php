@@ -46,6 +46,29 @@ class Equipments extends DashboardController{
                 ->adminTemplate();
     }
 
+    function newEquipmentView(){
+        $data = [];
+        $title = "Equipments";
+
+        $data = [
+                'table_view'    =>  $this->createEquipmentTable(),
+                'new_id_entry'  => $equipment_count + 1,
+                'equipmentview' => 1
+            ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('Equipments/equipments_js');
+        $this->template
+                ->setModal("Equipments/new_equipment_v", "Add New Equipment")
+                ->setPageTitle($title)
+                ->setPartial('Equipments/new_equipment_v', $data)
+                ->adminTemplate();
+    }
+
     function create(){
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
