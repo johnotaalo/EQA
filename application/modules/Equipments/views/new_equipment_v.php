@@ -22,7 +22,7 @@
 
                   <fieldset class="page-signup-form-group form-group form-group-lg">
                     <div class = "form-group">
-                        <label class = "control-label col-md-3">Kit Names</label>
+                        <label class = "control-label col-md-3">Kit Name</label>
                         <div class="col-md-9">
                             <input type = "text" name = "kitnames" class = "form-control"/>
                         </div>

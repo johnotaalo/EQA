@@ -116,8 +116,18 @@ class Equipments extends DashboardController{
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
             $kitnames = $this->input->post('kitnames');
-            $lysis = $this->input->post('lysis');
-            $acb = $this->input->post('acb');
+
+            if($this->input->post('lysis') == '' || $this->input->post('lysis') == NULL){
+                $lysis = 'N/A';
+            }else{
+                $lysis = $this->input->post('lysis');
+            }
+
+            if($this->input->post('acb') == '' || $this->input->post('acb') == NULL){
+                $acb = 'N/A';
+            }else{
+                $acb = $this->input->post('acb');
+            }
 
             $insertdata = [
                 'equipment_name'    =>  $equipmentname,
@@ -159,7 +169,7 @@ class Equipments extends DashboardController{
 
             $this->db->insert_batch('flourochromes', $flourochromes_data);
 
-            redirect('Equipments/equi/' . $equipment_id);
+            redirect('Equipments/newAnalytes/' . $equipment_id);
         }else{
 
         }
@@ -299,19 +309,23 @@ class Equipments extends DashboardController{
         $equipment = $this->db->get('equipments_v')->row();
         //echo '<pre>';print_r($equipment);echo '</pre>';die();
 
+        $flourochromes = $this->getFlourochromes($equipment->id);
+        
+
         $data = [
-            'equipment_id'  =>  $equipment->id,
-            'equipment_uuid'  =>  $equipment->uuid,
-            'equipment_name'  =>  $equipment->equipment_name,
-            'kit_name'  =>  $equipment->kit,
-            'lysis_method'  =>  $equipment->lysis,
+            'equipment_id'          =>  $equipment->id,
+            'equipment_uuid'        =>  $equipment->uuid,
+            'equipment_name'        =>  $equipment->equipment_name,
+            'kit_name'              =>  $equipment->kit,
+            'lysis_method'          =>  $equipment->lysis,
             'absolute_count_beads'  =>  $equipment->acb,
-            'analytes_absolute'  =>  $equipment->absolute,
-            'analytes_absolute_cd3'  =>  $equipment->absolute_cd3,
-            'analytes_absolute_cd4'  =>  $equipment->absolute_cd4,
-            'analytes_percent'  =>  $equipment->percent,
+            'analytes_absolute'     =>  $equipment->absolute,
+            'analytes_absolute_cd3' =>  $equipment->absolute_cd3,
+            'analytes_absolute_cd4' =>  $equipment->absolute_cd4,
+            'analytes_percent'      =>  $equipment->percent,
             'analytes_percent_cd3'  =>  $equipment->percent_cd3,
-            'analytes_percent_cd4'  =>  $equipment->percent_cd4
+            'analytes_percent_cd4'  =>  $equipment->percent_cd4,
+            'flourochromes'         =>  $flourochromes
         ];
 
         $this->assets
@@ -321,6 +335,20 @@ class Equipments extends DashboardController{
                 ->setPartial('Equipments/equipment_edit_v', $data)
                 ->setPageTitle('Equipment Edit')
                 ->adminTemplate();
+    }
+
+    function getFlourochromes($equipmentId){
+        $this->db->where('equipment_id', $equipmentId);
+        $flourochromes = $this->db->get('flourochromes_v')->result();
+
+
+        foreach ($flourochromes as $key => $flourochrome) {
+            // echo '<pre>';print_r($value);echo '</pre>';die();
+            $id = $flourochrome->id;
+            $name = $flourochrome->fl_name;
+
+            
+        }
     }
 
     function editEquipment(){
