@@ -1,5 +1,7 @@
 <form method="POST" action="<?= @base_url(''); ?>" class="p-a-4" id="participant-report">
 
+<input type="hidden" class="page-signup-form-control form-control" name="ptround">
+
   <?php if($this->session->flashdata('success')){ ?>
         <div class = 'alert alert-success'>
             <?= @$this->session->flashdata('success'); ?>
@@ -31,21 +33,22 @@
                   <fieldset class="page-signup-form-group form-group form-group-lg">
                     <label class="col-md-3 form-control-label">Facility Code</label>
                     <div class="col-md-9">
-                        <input type="text" class="page-signup-form-control form-control" placeholder="Facility Code" name = "facilitycode">
+                        <!-- <input type="text" class="page-signup-form-control form-control" placeholder="Facility Code" name = "facilitycode"> -->
+                        <h5><?= @$user->facility_code; ?></h5>
                     </div>
                   </fieldset>
 
                   <fieldset class="page-signup-form-group form-group form-group-lg">
                     <label class="col-md-3 form-control-label">Facility Name</label>
                     <div class="col-md-9">
-                        <input type="email" class="page-signup-form-control form-control" placeholder="Facility Name" name = "facilityname">
+                        <h5><?= @$user->facility_name; ?></h5>
                     </div>
                   </fieldset>
 
                   <fieldset class="page-signup-form-group form-group form-group-lg">
                     <label class="col-md-3 form-control-label">Analyst Name</label>
                     <div class="col-md-9">
-                        <input type="text" class="page-signup-form-control form-control" placeholder="Analyst Name" name = "analystname">
+                        <h5><?= @$user->firstname . ' ' . $user->lastname; ?></h5>
                     </div>
                   </fieldset>
 
