@@ -1,5 +1,7 @@
 <form method="POST" action="<?= @base_url(''); ?>" class="p-a-4" id="data-submission">
 
+<input type="hidden" class="page-signup-form-control form-control" name="ptround">
+
 <?php if($this->session->flashdata('success')){ ?>
         <div class = 'alert alert-success'>
             <?= @$this->session->flashdata('success'); ?>
@@ -26,37 +28,40 @@
 		         	<div class="row">
 			            <div class="form-group col-sm-4">
 			                <label for="username">Participant Name : </label>
-			                <!-- <h5><?= @$user->fname . $user->lname; ?></h5> -->
+			                <h5><?= @$user->firstname . $user->lastname; ?></h5>
 			            </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="cell">Cell : </label>
-			                <!-- <h5><?= @$user->cell . ' ' . $user->firstname; ?></h5> -->
+			                <h5><?= @$user->phone; ?></h5>
 			            </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="email">Email : </label>
-			                <!-- <h5><?= @$user->email_address; ?></h5> -->
+			                <h5><?= @$user->email_address; ?></h5>
 		                </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="facility">Facility : </label>
-			                <!-- <h5><?= @$user->facility; ?></h5> -->
+			                <h5><?= @$user->facility_name; ?></h5>
 			            </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="sample_code">Sample Split Code : </label>
 			                <!-- <h5><?= @$user->sample_code . ' ' . $user->firstname; ?></h5> -->
+			                <input type="text" class="page-signup-form-control form-control" placeholder="" name = "sample_code">
 			            </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="date_received">Date Received (DD/MM/YYYY) : </label>
 			                <!-- <h5><?= @$user->date_received; ?></h5> -->
+			                <input type="text" class="page-signup-form-control form-control" placeholder="" name = "date_received">
 		                </div>
 
 			            <div class="form-group col-sm-4">
 			                <label for="date_analyzed">Date Analyzed (DD/MM/YYYY) : </label>
 			                <!-- <h5><?= @$user->date_analyzed; ?></h5> -->
+			                <input type="text" class="page-signup-form-control form-control" placeholder="" name = "date_analyzed">
 			            </div>
 		          	</div>
 
@@ -430,7 +435,7 @@
 	            	<fieldset class="page-signup-form-group form-group form-group-lg">
 	                    <div class="form-group col-sm-4">
                             <label for="ccmonth">QA Reveiwer Name</label>
-                            <select class="form-control" id="ccmonth">
+                            <select class="form-control" name="qaname" id="qaname">
                                 <option>10777_001 - QA Name 1</option>
                                 <option>10231_005 - QA Name 2</option>
                                 <option>10233_010 - QA Name 3</option>
