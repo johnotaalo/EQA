@@ -18,7 +18,7 @@
                     <div class = "row">
                         <div class = "col-md-7">
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Equipment ID :<strong> <?= @$equipment_id; ?> </strong></label>
+                                    
                                     <div class = "col-md-9">
                                         <input  type = "hidden" name = "equipmentuuid" class = "form-control" value = "<?= @$equipment_uuid; ?>" required/>
                                     </div>
@@ -28,6 +28,69 @@
                                     <label class = "col-md-3 form-control-label">Equipment Name :</label>
                                     <div class = "col-md-9">
                                         <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$equipment_name; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">Kit Name :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$kit_name; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">Lysis Method :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$lysis_method; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">Absolute Count Beads :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$absolute_count_beads; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">Analytes Absolute :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">CD3 :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute_cd3; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">CD4 :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute_cd4; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">Analytes Percent :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">CD3 :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent_cd3; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class = "form-group row">
+                                    <label class = "col-md-3 form-control-label">CD4 :</label>
+                                    <div class = "col-md-9">
+                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent_cd4; ?>" required/>
                                     </div>
                                 </div>
 

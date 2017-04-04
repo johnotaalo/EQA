@@ -45,18 +45,18 @@
                     <div class="col-md-9">
                         <div class="checkbox">
                             <label for="checkbox1">
-                                <input type="checkbox" id="percent" name="percent" value="option1">
+                                <input type="checkbox" id="percent" name="percent" value="1">
                             </label>
                         </div>
                         <div class="percent">
                           <div class="checkbox">
                               <label for="checkbox2">
-                                  <input type="checkbox" id="percentcd3" name="percentcd3" value="option2">&nbsp;&nbsp;CD3
+                                  <input type="checkbox" id="percentcd3" name="percentcd3" value="1">&nbsp;&nbsp;CD3
                               </label>
                           </div>
                           <div class="checkbox">
                               <label for="checkbox3">
-                                  <input type="checkbox" id="percentcd4" name="percentcd4" value="option3">&nbsp;&nbsp;CD4
+                                  <input type="checkbox" id="percentcd4" name="percentcd4" value="1">&nbsp;&nbsp;CD4
                               </label>
                           </div>
                         </div>

@@ -123,7 +123,8 @@ class Equipments extends DashboardController{
                 'equipment_name'    =>  $equipmentname,
                 'kit_name'    =>  $kitnames,
                 'lysis_method'    =>  $lysis,
-                'absolute_count_beads'    =>  $acb
+                'absolute_count_beads'    =>  $acb,
+                'equipment_status'    =>  1
             ];
 
             //$this->db->insert('equipment', $insertdata);
@@ -158,7 +159,7 @@ class Equipments extends DashboardController{
 
             $this->db->insert_batch('flourochromes', $flourochromes_data);
 
-            redirect('Equipments/newAnalytes/' . $equipment_id);
+            redirect('Equipments/equi/' . $equipment_id);
         }else{
 
         }
@@ -208,12 +209,12 @@ class Equipments extends DashboardController{
             $this->db->where('id', $equipment_id);
 
             if($this->db->update('equipment')){
-                $this->session->set_flashdata('success', "Successfully updated the equipment details");
+                $this->session->set_flashdata('success', "Successfully added the new equipment details");
             }else{
-                $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+                $this->session->set_flashdata('error', "There was a problem adding the new equipment details. Please try again");
             }
 
-            redirect('Equipments/newAnalytes/' . $equipment_id);
+            redirect('Equipments/equipmentlist/');
         }else{
 
         }
@@ -226,7 +227,6 @@ class Equipments extends DashboardController{
         $heading = [
             "No.",
             "Equipment Name",
-            "Kit Names",
             "Status",
             "No. of Facilities Equipped",
             "Actions"
@@ -256,7 +256,6 @@ class Equipments extends DashboardController{
                 $tabledata[] = [
                     $counter,
                     $equipment->equipment_name,
-                    $equipment->kit_name,
                     $status,
                     '<a class="data-toggle="tooltip" data-placement="top" title="Facilities with this equipment"" href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
@@ -297,13 +296,23 @@ class Equipments extends DashboardController{
 
     function equipmentEdit($id){
         $this->db->where('uuid', $id);
-        $equipment = $this->db->get('equipment')->row();
-
+        $equipment = $this->db->get('equipments_v')->row();
+        //echo '<pre>';print_r($equipment);echo '</pre>';die();
         $data = [
             'equipment_id'  =>  $equipment->id,
             'equipment_uuid'  =>  $equipment->uuid,
-            'equipment_name'  =>  $equipment->equipment_name
+            'equipment_name'  =>  $equipment->equipment_name,
+            'kit_name'  =>  $equipment->kit,
+            'lysis_method'  =>  $equipment->lysis,
+            'absolute_count_beads'  =>  $equipment->acb,
+            'analytes_absolute'  =>  $equipment->absolute,
+            'analytes_absolute_cd3'  =>  $equipment->absolute_cd3,
+            'analytes_absolute_cd4'  =>  $equipment->absolute_cd4,
+            'analytes_percent'  =>  $equipment->percent,
+            'analytes_percent_cd3'  =>  $equipment->percent_cd3,
+            'analytes_percent_cd4'  =>  $equipment->percent_cd4
         ];
+
         $this->assets
                 ->addJs('dashboard/js/libs/jquery.validate.js');
         $this->assets->setJavascript('Equipments/equipment_update_js');
