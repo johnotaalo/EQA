@@ -17,6 +17,7 @@ class Dashboard extends DashboardController {
 		$type = $this->session->userdata('type');
 		$this->assets->addCss('css/main.css');
 		$this->assets->addJs('js/main.js');
+
 		$view = "admin_dashboard";
 		if($type == 'participant'){
 			$view = "dashboard_v";
@@ -29,12 +30,17 @@ class Dashboard extends DashboardController {
                 'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
                 'new_equipments'    =>  $this->dashboard_m->newEquipments()
             ];
-			
-			//echo'<pre>';print_r($data);echo '</pre>';die();
-
-		}
+		}else if($type == "qareviewer"){
+            $view = "qa_dashboard";
+            $data = [
+            
+            ];
+        }
 		$this->template->setPageTitle('EQA Dashboard')->setPartial($view,$data)->adminTemplate();
 	}
+
+
+	
 
 }
 

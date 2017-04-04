@@ -62,7 +62,8 @@
 	        </div>
 	        <div class="card-block">
 	          <form method = "post" action="<?php echo base_url('Participant/Readiness/submitReadiness');?>" class="p-a-4" id="page-signin-form">
-				<input type="hidden" class="page-signin-form-control form-control" value="<?= @$pt_uuid; ?>" id="ptround" name="ptround">
+				<input type="hidden" class="page-signin-form-control form-control" value="<?= @$pt_uuid; ?>" id="ptround-form" name="ptround">
+
                 <?= @$questionnair; ?>
 
                 <button id="submit-readiness" type="submit" class="btn btn-block btn-primary">Submit PT Readiness Checklist</button>

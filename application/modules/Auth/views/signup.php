@@ -7,7 +7,19 @@
           <div class="font-size-15 m-t-1 line-height-1">External.Quality.Assurance</div>
         </div>
 
-        <form method="POST" action="<?= @base_url('Participant/register'); ?>" class="p-a-4">
+        <form method="POST" action="<?= @base_url('Participant/register'); ?>" class="p-a-4" id="registrationForm">
+        <!-- <?= @form_open_multipart('Participant/register', ["class" =>  "p-a-4", 'id'  =>  'registrationForm']); ?> -->
+
+          <?php if($this->session->flashdata('success')){ ?>
+                <div class = 'alert alert-success'>
+                    <?= @$this->session->flashdata('success'); ?>
+                </div>
+          <?php }elseif($this->session->flashdata('error')){ ?>
+                <div class = 'alert alert-danger'>
+                    <?= @$this->session->flashdata('error'); ?>
+                </div>
+          <?php } ?>
+
           <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Participant Registration</h4>
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
@@ -22,7 +34,7 @@
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
             <div class="page-signup-icon text-muted"><i class="ion-at"></i></div>
-            <input type="email" class="page-signup-form-control form-control" placeholder="Email" name = "participantEmail">
+            <input type="email" class="page-signup-form-control form-control" placeholder="Email" name = "email_address">
           </fieldset>
 
           <fieldset class="page-signup-form-group form-group form-group-lg">
@@ -55,7 +67,7 @@
 
           <fieldset class = "page-signup-form-group form-group form-group-lg">
             <div class="page-signup-icon text-muted"><i class="ion-lock-combination"></i></div>
-            <input class="page-signup-form-control form-control" type="password" placeholder="Choose a Password" name = "password" />
+            <input class="page-signup-form-control form-control" type="password" placeholder="Choose a Password" id="password" name = "password" />
           </fieldset>
 
           <fieldset class = "page-signup-form-group form-group form-group-lg">

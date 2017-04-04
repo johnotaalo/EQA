@@ -6,6 +6,16 @@
 			<div class="box-cell col-md-7">
 
 				<form method = "post" action='<?php echo base_url('Participant/Readiness/authentication/');?>' class="p-a-4" id="readiness-login-form">
+
+				<?php if($this->session->flashdata('success')){ ?>
+                <div class = 'alert alert-success'>
+                    <?= @$this->session->flashdata('success'); ?>
+                </div>
+            <?php }elseif($this->session->flashdata('error')){ ?>
+                <div class = 'alert alert-danger'>
+                    <?= @$this->session->flashdata('error'); ?>
+                </div>
+            <?php } ?>
 				<!-- <form method = "post" action="./" class="p-a-4" id="readiness-login-form"> -->
 				<h3 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Readiness Checklist</h3>
 						<h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">Log in to verify your information</h4>

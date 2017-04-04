@@ -4,21 +4,13 @@ $(document).ready(function(){
 
 	$('#readiness-login-form').validate({
 			rules: {
-				passw: {
-					required: true,
-					minlength: 5
-				},
-				uname: {
-					minlength: 6,
-					remote: {
-						url: "<?= @base_url('API/Users/checkExist'); ?>",
-						type: "POST"
-					}
+				username: {
+					required: true
 				}
 			},
 			messages : {
 				username: {
-					remote: "Username already in use!"
+					required: "Please enter your username"
 				}
 			}
 		});

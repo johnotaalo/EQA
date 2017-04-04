@@ -49,19 +49,27 @@ class Equipments extends DashboardController{
     function create(){
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
+            $kitnames = $this->input->post('kitnames');
 
             $insertdata = [
-                'equipment_name'    =>  $equipmentname
+                'equipment_name'    =>  $equipmentname,
+                'kit_name'    =>  $kitnames
             ];
 
-            $this->db->insert('equipment', $insertdata);
+            //$this->db->insert('equipment', $insertdata);
 
-            $equipment_id = $this->db->insert_id();
+            if($this->db->insert('equipment', $insertdata)){
+                $this->session->set_flashdata('success', "Successfully created new Equipment");
 
-            $this->db->where('id', $equipment_id);
-            $equipment = $this->db->get('equipment')->row();
+                $equipment_id = $this->db->insert_id();
 
-            $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
+                $this->db->where('id', $equipment_id);
+                $equipment = $this->db->get('equipment')->row();
+
+                $message = "Equipment Name : <strong>" . $equipment->equipment_name . "</strong> is registered successfully";
+            }else{
+                $this->session->set_flashdata('error', "There was a problem creating a new equipment. Please try again");
+            }
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
@@ -76,6 +84,7 @@ class Equipments extends DashboardController{
         $heading = [
             "No.",
             "Equipment Name",
+            "Kit Names",
             "Status",
             "No. of Facilities Equipped",
             "Actions"
@@ -105,8 +114,9 @@ class Equipments extends DashboardController{
                 $tabledata[] = [
                     $counter,
                     $equipment->equipment_name,
+                    $equipment->kit_name,
                     $status,
-                    '<a href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
+                    '<a class="data-toggle="tooltip" data-placement="top" title="Facilities with this equipment"" href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
                 ];
             }
@@ -131,7 +141,13 @@ class Equipments extends DashboardController{
         }
 
         $this->db->where('uuid', $id);
-        $this->db->update('equipment');
+        //$this->db->update('equipment');
+
+        if($this->db->update('equipment')){
+            $this->session->set_flashdata('success', "Successfully updated the equipment details");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+        }
 
         redirect('Equipments/equipmentlist', 'refresh');
 
@@ -162,9 +178,13 @@ class Equipments extends DashboardController{
 
             $this->db->set('equipment_name', $equipmentname);
             $this->db->where('uuid', $equipmentuuid);
-            $this->db->update('equipment');
-            
+
+            if($this->db->update('equipment')){
+            $this->session->set_flashdata('success', "Successfully updated the equipment to " . $equipmentname);
             $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+        }
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
