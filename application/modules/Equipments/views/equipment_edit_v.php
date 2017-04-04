@@ -34,63 +34,103 @@
                                 <div class = "form-group row">
                                     <label class = "col-md-3 form-control-label">Kit Name :</label>
                                     <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$kit_name; ?>" required/>
+                                        <input type = "text" name = "kitname" class = "form-control" value = "<?= @$kit_name; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
                                     <label class = "col-md-3 form-control-label">Lysis Method :</label>
                                     <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$lysis_method; ?>" required/>
+                                        <input type = "text" name = "lysismethod" class = "form-control" value = "<?= @$lysis_method; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
                                     <label class = "col-md-3 form-control-label">Absolute Count Beads :</label>
                                     <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$absolute_count_beads; ?>" required/>
+                                        <input type = "text" name = "acb" class = "form-control" value = "<?= @$absolute_count_beads; ?>" required/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="absolute">Analytes Absolute :</label>
+                                    <div class="col-md-9">
+                                        <select id="absolute" name="absolute" class="form-control input-lg" size="1">
+                                        <?php if($analytes_absolute == 1){ ?>
+                                            <option selected value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        <?php }else if($analytes_absolute == 0){ ?>
+                                            <option selected value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Analytes Absolute :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute; ?>" required/>
+                                    <label for="absolute_cd3" class = "col-md-3 form-control-label">CD3 :</label>
+                                    <div class="checkbox">
+                                        <label >
+                                        <?php if($analytes_absolute_cd3 == 1){ ?>
+                                            <input type="checkbox" id="absolute_cd3" name="absolute_cd3" value="1" checked>
+                                       <?php }else if($analytes_absolute_cd3 == 0){ ?>
+                                            <input type="checkbox" id="absolute_cd3" name="absolute_cd3" value="1">
+                                       <?php } ?>
+                                            
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">CD3 :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute_cd3; ?>" required/>
+                                    <label for="absolute_cd4" class = "col-md-3 form-control-label">CD4 :</label>
+                                    <div class="checkbox">
+                                        <label >
+                                        <?php if($analytes_absolute_cd4 == 1){ ?>
+                                            <input type="checkbox" id="absolute_cd4" name="absolute_cd4" value="1" checked>
+                                       <?php }else if($analytes_absolute_cd4 == 0){ ?>
+                                            <input type="checkbox" id="absolute_cd4" name="absolute_cd4" value="1">
+                                       <?php } ?>
+                                            
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="percent">Analytes Percent :</label>
+                                    <div class="col-md-9">
+                                        <select id="percent" name="percent" class="form-control input-lg" size="1">
+                                        <?php if($analytes_percent == 1){ ?>
+                                            <option selected value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        <?php }else if($analytes_percent == 0){ ?>
+                                            <option selected value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">CD4 :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_absolute_cd4; ?>" required/>
+                                    <label for="percent_cd3" class = "col-md-3 form-control-label">CD3 :</label>
+                                    <div class="checkbox">
+                                        <label >
+                                        <?php if($analytes_percent_cd3 == 1){ ?>
+                                            <input type="checkbox" id="percent_cd3" name="percent_cd3" value="1" checked>
+                                       <?php }else if($analytes_percent_cd3 == 0){ ?>
+                                            <input type="checkbox" id="percent_cd3" name="percent_cd3" value="1">
+                                       <?php } ?>
+                                            
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Analytes Percent :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent; ?>" required/>
-                                    </div>
-                                </div>
-
-                                <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">CD3 :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent_cd3; ?>" required/>
-                                    </div>
-                                </div>
-
-                                <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">CD4 :</label>
-                                    <div class = "col-md-9">
-                                        <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$analytes_percent_cd4; ?>" required/>
+                                    <label for="percent_cd4" class = "col-md-3 form-control-label">CD4 :</label>
+                                    <div class="checkbox">
+                                        <label >
+                                        <?php if($analytes_percent_cd4 == 1){ ?>
+                                            <input type="checkbox" id="percent_cd4" name="percent_cd4" value="1" checked>
+                                       <?php }else if($analytes_percent_cd4 == 0){ ?>
+                                            <input type="checkbox" id="percent_cd4" name="percent_cd4" value="1">
+                                       <?php } ?>
+                                            
                                     </div>
                                 </div>
 

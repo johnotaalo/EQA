@@ -298,6 +298,7 @@ class Equipments extends DashboardController{
         $this->db->where('uuid', $id);
         $equipment = $this->db->get('equipments_v')->row();
         //echo '<pre>';print_r($equipment);echo '</pre>';die();
+
         $data = [
             'equipment_id'  =>  $equipment->id,
             'equipment_uuid'  =>  $equipment->uuid,
@@ -325,17 +326,51 @@ class Equipments extends DashboardController{
     function editEquipment(){
         if($this->input->post()){
             $equipmentuuid = $this->input->post('equipmentuuid');
+
             $equipmentname = $this->input->post('equipmentname');
+            $kitname = $this->input->post('kitname');
+            $lysismethod = $this->input->post('lysismethod');
+            $acb = $this->input->post('acb');
+            $absolute = $this->input->post('absolute');
+            $percent = $this->input->post('percent'); 
+
+            if($absolute == 0 || $absolute == NULL){
+                $absolute_cd3 = 0;
+                $absolute_cd4 = 0;
+            }else{
+                $absolute_cd3 = $this->input->post('absolute_cd3');
+                $absolute_cd4 = $this->input->post('absolute_cd4');
+            }
+
+            if($percent == 0 || $percent == NULL){
+                $percent_cd3 = 0;
+                $percent_cd4 = 0;
+            }else{
+                $percent_cd3 = $this->input->post('percent_cd3');
+                $percent_cd4 = $this->input->post('percent_cd4');
+            }
 
             $this->db->set('equipment_name', $equipmentname);
+            $this->db->set('kit_name', $kitname);
+            $this->db->set('lysis_method', $lysismethod);
+            $this->db->set('absolute_count_beads', $acb);
+            $this->db->set('analytes_absolute', $absolute);
+            $this->db->set('analytes_absolute_cd3', $absolute_cd3);
+            $this->db->set('analytes_absolute_cd4', $absolute_cd4);
+            $this->db->set('analytes_percent', $percent);
+            $this->db->set('analytes_percent_cd3', $percent_cd3);
+            $this->db->set('analytes_percent_cd4', $percent_cd4);
+
             $this->db->where('uuid', $equipmentuuid);
 
+
+
             if($this->db->update('equipment')){
-            $this->session->set_flashdata('success', "Successfully updated the equipment to " . $equipmentname);
-            $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
-        }else{
-            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
-        }
+                $this->session->set_flashdata('success', "Successfully updated the equipment " . $equipmentname);
+                $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+            }else{
+                $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+            }
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
