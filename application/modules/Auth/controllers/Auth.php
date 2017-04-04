@@ -120,7 +120,7 @@ class Auth extends MY_Controller {
 		$user = $this->auth_m->findUser($this->input->post('username'));
 		if ($user) {
 			$this->load->library('Hash');
-			if (password_verify($this->input->post('password'), $user->password)) {
+			if (password_verify($this->input->post('password'), $user->password) && $user->approved == 1 && $user->status == 1) {
 				$session_data = [
 					'uuid'			=>	$user->uuid,
 					'type'			=>	$user->user_type,
