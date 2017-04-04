@@ -304,6 +304,34 @@ class Equipments extends DashboardController{
 
     }
 
+    function flouroState($type, $id){
+        switch($type){
+            case 'activate':
+                $this->db->set('fl_status', 1);
+
+            break;
+
+            case 'deactivate':
+                $this->db->set('fl_status', 0);
+                
+            break;
+        }
+
+        $this->db->where('fl_id', $id);
+        //$this->db->update('equipment');
+
+        if($this->db->update('flourochromes')){
+            $this->session->set_flashdata('success', "Successfully updated the flourochrome details");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the flourochrome details. Please try again");
+        }
+
+        redirect('Equipments/equipmentlist', 'refresh');
+
+    }
+
+    
+
     function equipmentEdit($id){
         $this->db->where('uuid', $id);
         $equipment = $this->db->get('equipments_v')->row();
@@ -311,7 +339,6 @@ class Equipments extends DashboardController{
 
         $flourochromes = $this->getFlourochromes($equipment->id);
         
-
         $data = [
             'equipment_id'          =>  $equipment->id,
             'equipment_uuid'        =>  $equipment->uuid,
@@ -338,17 +365,30 @@ class Equipments extends DashboardController{
     }
 
     function getFlourochromes($equipmentId){
+        $counter = 0;
         $this->db->where('equipment_id', $equipmentId);
+        $this->db->where('fl_status', 1);
         $flourochromes = $this->db->get('flourochromes_v')->result();
+
+        $result_view = '';
 
 
         foreach ($flourochromes as $key => $flourochrome) {
             // echo '<pre>';print_r($value);echo '</pre>';die();
-            $id = $flourochrome->id;
-            $name = $flourochrome->fl_name;
-
-            
+            $counter ++;           
+            $result_view .= "<div class = 'form-group row'>
+                                <label class = 'col-md-3 form-control-label'>Flourochrome ".$counter."</label>
+                                <div class = 'col-md-6'>
+                                    <input type = 'text' name = 'flouro[]' class = 'form-control' value = '".$flourochrome->fl_name."' required/>
+                                </div>
+                                <div class = 'col-md-3'>
+                                    <a href = ".base_url("Equipments/flouroState/deactivate/$flourochrome->id")." class = 'remove-flouro'><i class = 'fa fa-times'></i></a>
+                                </div>
+                            </div>
+                            ";
         }
+
+        return $result_view;
     }
 
     function editEquipment(){
@@ -394,8 +434,30 @@ class Equipments extends DashboardController{
 
 
             if($this->db->update('equipment')){
+                $this->db->where('uuid', $equipmentuuid);
+                $equipment_id = $this->db->get('equipments_v')->row()->id;
+
+                // echo '<pre>';print_r($equipment_id);echo '</pre>';die();
+
+                $this->db->set('fl_status', 0);
+                $this->db->where('equipment_id', $equipment_id);
+                $this->db->update('flourochromes');
+
+                $flourochromes = $this->input->post('flouro');
+                $flourochromes_data = [];
+
+                foreach ($flourochromes as $flourochrome) {
+                    $flourochromes_data[] = [
+                        'fl_name'   =>  $flourochrome,
+                        'equipment_id'   =>  $equipment_id
+                    ];
+                }
+
+                $this->db->insert_batch('flourochromes', $flourochromes_data);
+
+
                 $this->session->set_flashdata('success', "Successfully updated the equipment " . $equipmentname);
-                $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
+
             }else{
                 $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
             }

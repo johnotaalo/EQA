@@ -16,7 +16,7 @@
             <?= @form_open_multipart('Equipments/editEquipment', ["class" =>  "form-horizontal", 'id'  =>  'equipmentEditForm']); ?>
          
                     <div class = "row">
-                        <div class = "col-md-7">
+                        <div class = "col-md-6">
                                 <div class = "form-group row">
                                     
                                     <div class = "col-md-9">
@@ -25,37 +25,37 @@
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Equipment Name :</label>
+                                    <label class = "col-md-3 form-control-label">Equipment Name</label>
                                     <div class = "col-md-9">
                                         <input type = "text" name = "equipmentname" class = "form-control" value = "<?= @$equipment_name; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Kit Name :</label>
+                                    <label class = "col-md-3 form-control-label">Kit Name</label>
                                     <div class = "col-md-9">
                                         <input type = "text" name = "kitname" class = "form-control" value = "<?= @$kit_name; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Lysis Method :</label>
+                                    <label class = "col-md-3 form-control-label">Lysis Method</label>
                                     <div class = "col-md-9">
                                         <input type = "text" name = "lysismethod" class = "form-control" value = "<?= @$lysis_method; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class = "form-group row">
-                                    <label class = "col-md-3 form-control-label">Absolute Count Beads :</label>
+                                    <label class = "col-md-3 form-control-label">Absolute Count Beads</label>
                                     <div class = "col-md-9">
                                         <input type = "text" name = "acb" class = "form-control" value = "<?= @$absolute_count_beads; ?>" required/>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="absolute">Analytes Absolute :</label>
-                                    <div class="col-md-9">
-                                        <select id="absolute" name="absolute" class="form-control input-lg" size="1">
+                                    <label class="col-md-3 form-control-label" for="absolute">Analytes Absolute</label>
+                                    <div class="col-md-3">
+                                        <select id="absolute" name="absolute" class="form-control input-sm" size="1">
                                         <?php if($analytes_absolute == 1){ ?>
                                             <option selected value="1">Yes</option>
                                             <option value="0">No</option>
@@ -65,10 +65,8 @@
                                         <?php } ?>
                                         </select>
                                     </div>
-                                </div>
 
-                                <div class = "form-group row">
-                                    <label for="absolute_cd3" class = "col-md-3 form-control-label">CD3 :</label>
+                                    <label for="absolute_cd3" class = "col-md-3 form-control-label">CD3</label>
                                     <div class="checkbox">
                                         <label >
                                         <?php if($analytes_absolute_cd3 == 1){ ?>
@@ -78,10 +76,8 @@
                                        <?php } ?>
                                             
                                     </div>
-                                </div>
 
-                                <div class = "form-group row">
-                                    <label for="absolute_cd4" class = "col-md-3 form-control-label">CD4 :</label>
+                                    <label for="absolute_cd4" class = "col-md-3 form-control-label">CD4</label>
                                     <div class="checkbox">
                                         <label >
                                         <?php if($analytes_absolute_cd4 == 1){ ?>
@@ -91,12 +87,14 @@
                                        <?php } ?>
                                             
                                     </div>
+
+
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="percent">Analytes Percent :</label>
-                                    <div class="col-md-9">
-                                        <select id="percent" name="percent" class="form-control input-lg" size="1">
+                                    <label class="col-md-3 form-control-label" for="percent">Analytes Percent</label>
+                                    <div class="col-md-3">
+                                        <select id="percent" name="percent" class="form-control input-sm" size="1">
                                         <?php if($analytes_percent == 1){ ?>
                                             <option selected value="1">Yes</option>
                                             <option value="0">No</option>
@@ -106,10 +104,8 @@
                                         <?php } ?>
                                         </select>
                                     </div>
-                                </div>
 
-                                <div class = "form-group row">
-                                    <label for="percent_cd3" class = "col-md-3 form-control-label">CD3 :</label>
+                                    <label for="percent_cd3" class = "col-md-3 form-control-label">CD3</label>
                                     <div class="checkbox">
                                         <label >
                                         <?php if($analytes_percent_cd3 == 1){ ?>
@@ -119,10 +115,8 @@
                                        <?php } ?>
                                             
                                     </div>
-                                </div>
 
-                                <div class = "form-group row">
-                                    <label for="percent_cd4" class = "col-md-3 form-control-label">CD4 :</label>
+                                    <label for="percent_cd4" class = "col-md-3 form-control-label">CD4</label>
                                     <div class="checkbox">
                                         <label >
                                         <?php if($analytes_percent_cd4 == 1){ ?>
@@ -133,6 +127,17 @@
                                             
                                     </div>
                                 </div>
+                        </div>
+
+                        <div class = "col-md-6">
+                            <div class="row">
+                                <div class = "col-md-12">
+                                    <strong>Flourochromes</strong>
+                                </div>
+                            <div class = "col-md-12">
+
+                        <?= @$flourochromes; ?>
+
 
                         </div>
                         
