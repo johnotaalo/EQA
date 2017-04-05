@@ -10,6 +10,14 @@ class M_PTRound extends CI_Model {
 
         return $query->row();
     }
+
+    public function Equipments(){
+    	// $this->db->where('facility_code', $facility_code);
+
+        $query = $this->db->get('equipments_v')->result();
+
+        return $query;
+    }
 }
 
 /* End of file M_Participant.php */

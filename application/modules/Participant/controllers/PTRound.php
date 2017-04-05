@@ -58,19 +58,29 @@ class PTRound extends MY_Controller {
 
 	public function Round($round_uuid){
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+        
+
+        $participant_id = $user->username;
+        $facility_code = $user->facility_code;
+
+        $equipments = $this->M_PTRound->Equipments();
+
+        //echo "<pre>";print_r($equipments);echo "</pre>";die();
+        $equipment_tabs = $this->createTabs($round_uuid,$equipments);
 
 		$data = [
                 'pt_uuid'    =>  $round_uuid,
-                'user'    =>  $user,
-                'participant_report' => 'participant_report',
+                'participant'    =>  $participant_id,
+                'equipment_tabs'    =>  $equipment_tabs,
                 'data_submission' => 'data_submission',
-                'equipment_information' => 'equipment_information'
+                'equipment_information' => 'equipment_information',
+                'participant_report' => 'participant_report'
             ];
                 
 		$this->assets
 			->addJs('dashboard/js/libs/jquery.validate.js')
             ->addJs("plugin/sweetalert/sweetalert.min.js");
-        $this->assets->setJavascript('Participant/participant_login_js');
+        // $this->assets->setJavascript('Participant/participant_login_js');
 		$this->assets->addCss('css/signin.css');
 		$this->template->setPageTitle('PT Forms')->setPartial('pt_form_v',$data)->adminTemplate();
 	}
@@ -160,6 +170,161 @@ class PTRound extends MY_Controller {
 
             //$this->db->insert('participant_readiness', $insertrounddata);
         }
+    }
+
+    public function createTabs($round_uuid, $equipments){
+        // echo "<pre>";print_r($equipments);echo "</pre>";die();
+        $equipment_tabs = '';
+
+        $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
+
+        foreach ($equipments as $key => $equipment) {
+            $equipment_tabs .= "<li class='nav-item'>
+                    <a class='nav-link active' data-toggle='tab' href='".$equipment->equipment_name."' role='tab' aria-controls='home'><i class='icon-calculator'></i>";
+            $equipment_tabs .= $equipment->equipment_name;
+            $equipment_tabs .= "&nbsp;
+                        <span class='tag tag-success'>Complete</span>
+                    </a>
+                </li>";
+        }
+
+        $equipment_tabs .= "</ul>
+                            <div class='tab-content'>";
+
+$counter = 0;
+        foreach ($equipments as $key => $value) {
+            $equipment_tabs .= "<div class='tab-pane active' id='". $equipment->equipment_name ."' role='tabpanel'>
+                    <div class='row'>
+
+    <div class='col-sm-12'>
+        <div class='card'>
+            <div class='card-header'>
+                <strong>RESULTS</strong>
+            </div>
+            <div class='card-block'>
+
+                <div class='row'>
+                    <table class='table table-bordered'>
+                        <tr>
+                            <th style='text-align: center;' rowspan='3'>
+                                PANEL
+                            </th>
+                            <th style='text-align: center;' colspan='7'>
+                                RESULT
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;' colspan='2'>
+                                CD3
+                            </th>
+                            <th style='text-align: center;' colspan='2'>
+                                CD4
+                            </th>
+                            <th style='text-align: center;' colspan='2'>
+                                Other (Specify)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;'>
+                                SS-R17-036
+                            </th>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;'>
+                                SS-R17-037
+                            </th>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;'>
+                                SS-R17-038
+                            </th>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
+                            </td>
+                            <td>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>   
+            </div>
+        </div>
+    </div>
+                </div>";
+        }
+
+        $equipment_tabs .= "</div>";
+
     }
 
     public function participantRepoSubmission(){
