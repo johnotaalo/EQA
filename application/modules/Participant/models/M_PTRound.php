@@ -19,18 +19,24 @@ class M_PTRound extends CI_Model {
         return $query;
     }
 
-    public function Samples(){
-  //   	SELECT pts.id AS sample_id, pts.uuid AS sample_uuid, pts.sample_name FROM participant_readiness pr
-		// JOIN pt_round ptr ON ptr.uuid = pr.pt_round_no
-		// JOIN pt_batches ptb ON ptb.pt_round_id = ptr.id
-		// JOIN pt_tubes ptt ON ptt.pt_round_id = ptr.id
-		// JOIN pt_batch_tube pbt ON pbt.batch_id = ptb.id AND ptt.id = pbt.tube_id
-		// JOIN pt_samples pts ON pts.id = pbt.sample_id AND ptr.id = pts.pt_round_id
-		// WHERE pr.participant_id = '3019e45a-1386-11e7-a133-080027c30a85'
-		// AND ptr.uuid = 'b7f000a3-1386-11e7-a133-080027c30a85'
-		// GROUP BY pts.id
+    public function getSamples($round_uuid,$participant_id){
+
+    	$this->db->select('pts.id,pts.uuid');
+    	$this->db->from('participant_readiness pr');
+    	$this->db->join('pt_round ptr', 'ptr.uuid = pr.pt_round_no');
+    	$this->db->join('pt_batches ptb', 'ptb.pt_round_id = ptr.id');
+    	$this->db->join('pt_tubes ptt', 'ptt.pt_round_id = ptr.id');
+    	$this->db->join('pt_batch_tube pbt', 'pbt.batch_id = ptb.id AND ptt.id = pbt.tube_id');
+    	$this->db->join('pt_samples pts', 'pts.id = pbt.sample_id AND ptr.id = pts.pt_round_id');
+    	$this->db->where('pr.participant_id', $participant_id);
+    	$this->db->where('ptr.uuid', $round_uuid);
+    	$this->db->group_by('pts.id');
+
+        $query = $this->db->get();
+
+		return $query->result();
     }
 }
 
 /* End of file M_Participant.php */
-/* Location: ./application/modules/Participant/models/M_Participant.php */
+/* Location: ./application/modules/Participant/models/M_PTRound.php */
