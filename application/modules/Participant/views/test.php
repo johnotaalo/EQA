@@ -1,126 +1,46 @@
 <div class="row">
-    <div class="col-sm-12">
-    	
-        <div class="card">
-            <div class="card-header">
-                <strong>RESULTS</strong>
+    <a href = "<?= @base_url('Dashboard/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Dashboard</button></a>
+</div>
+
+<div class="container-fluid pt-2">
+    <div class="animated fadeIn">
+        <div class="animated fadeIn">
+            <div class="row">
+
+
+    <div class="col-md-12 mb-2">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#submission" role="tab" aria-controls="home"><i class="icon-calculator"></i> PT Data Submission &nbsp;
+                <!-- <span class="tag tag-success">New</span> -->
+                </a>
+            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#equipment" role="tab" aria-controls="profile"><i class="icon-basket-loaded"></i> CD4 Equipment Info &nbsp;
+                <span class="tag tag-pill tag-danger">29</span>
+                </a>
+            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#report" role="tab" aria-controls="messages"><i class="icon-pie-chart"></i> Participant Report &nbsp;
+                <!-- <span class="tag tag-pill tag-danger">29</span> -->
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="submission" role="tabpanel">
+                <?= @$this->load->view($data_submission); ?>
             </div>
-            <div class="card-block">
-
-	            <div class="row">
-	            	<table class="table table-bordered">
-	            		<tr>
-	            			<th style="text-align: center;" rowspan="3">
-	            				PANEL
-	            			</th>
-	            			<th style="text-align: center;" colspan="7">
-	            				RESULT
-	            			</th>
-	            		</tr>
-	            		<tr>
-	            			<th style="text-align: center;" colspan="2">
-	            				CD3
-	            			</th>
-	            			<th style="text-align: center;" colspan="2">
-	            				CD4
-	            			</th>
-	            			<th style="text-align: center;" colspan="2">
-	            				Other (Specify)
-	            			</th>
-	            		</tr>
-	            		<tr>
-	            			<th style="text-align: center;">
-	            				Absolute
-	            			</th>
-	            			<th style="text-align: center;">
-	            				Percent
-	            			</th>
-	            			<th style="text-align: center;">
-	            				Absolute
-	            			</th>
-	            			<th style="text-align: center;">
-	            				Percent
-	            			</th>
-	            			<th style="text-align: center;">
-	            				Absolute
-	            			</th>
-	            			<th style="text-align: center;">
-	            				Percent
-	            			</th>
-	            		</tr>
-	            		<tr>
-	            			<th style="text-align: center;">
-	            				SS-R17-036
-	            			</th>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_abs_1">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_per_1">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_abs_1">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_per_1">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_abs_1">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_per_1">
-	            			</td>
-	            		</tr>
-	            		<tr>
-	            			<th style="text-align: center;">
-	            				SS-R17-037
-	            			</th>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_abs_2">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_per_2">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_abs_2">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_per_2">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_abs_2">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_per_2">
-	            			</td>
-	            		</tr>
-	            		<tr>
-	            			<th style="text-align: center;">
-	            				SS-R17-038
-	            			</th>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_abs_3">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd3_per_3">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_abs_3">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "cd4_per_3">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_abs_3">
-	            			</td>
-	            			<td>
-	            				<input type="text" class="page-signup-form-control form-control" placeholder="" name = "other_per_3">
-	            			</td>
-	            		</tr>
-	            	</table>
-	          	</div>
-
-            </div>   
+            <!-- <div class="tab-pane" id="equipment" role="tabpanel">
+                <?= @$this->load->view($equipment_information); ?>
+            </div> -->
+            <div class="tab-pane" id="report" role="tabpanel">
+               <?= @$this->load->view($participant_report); ?>
             </div>
         </div>
     </div>
+
+            </div>
+        </div>
+    </div>
+</div>

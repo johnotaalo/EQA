@@ -21,10 +21,10 @@
 
     	<strong><center>METHODOLOGY</center></strong>
 
-			<!-- <?= @$equipment_tabs; ?> -->
+			<?= @$equipment_tabs; ?>
 
 
-            <!-- <ul class="nav nav-tabs" role="tablist">
+            <!--  <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#home4" role="tab" aria-controls="home"><i class="icon-calculator"></i> BD FacsCalibur &nbsp;
                		 	<span class="tag tag-success">Complete</span>
@@ -181,13 +181,13 @@
                     3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
                     dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </div>
-            </div>
+            </div> -->
 
 
 
 
         </div>
-    </div> -->
+    </div> 
 
     <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">Save as Draft</button>
     <button type="submit" class="btn btn-block btn-lg btn-success m-t-3">Mark as Complete</button>
