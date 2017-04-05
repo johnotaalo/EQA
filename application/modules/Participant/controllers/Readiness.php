@@ -23,7 +23,7 @@ private static $pt_uuid;
 
 	public function authentication(){
 		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
-		//echo "<pre>";print_r($user);echo "</pre>";die();
+		// echo "<pre>";print_r($user);echo "</pre>";die();
 		$ptround = $this->input->post('ptround');
 		if ($user) {
 			

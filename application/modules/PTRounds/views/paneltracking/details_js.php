@@ -33,6 +33,10 @@
 				}
 			});
 		});
+
+		$('#dispatch-list').click(function(){
+			window.location = "<?= @base_url('PTRounds/PanelTracking/dispatchList/' . $pt_round_uuid); ?>";
+		});
 	});
 
 	function redirect(){

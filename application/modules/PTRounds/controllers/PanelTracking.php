@@ -433,7 +433,9 @@ class PanelTracking extends DashboardController {
 					$this->db->update('pt_panel_tracking', $insert_data);
 				}
 
-				$this->dispatchList($pt_round_uuid);
+				// $this->dispatchList($pt_round_uuid);
+				$this->session->set_flashdata('success', "Successfully dispatched the panels to {$insert_data['courier_company']}");
+				redirect('PTRounds/PanelTracking/details/' . $pt_round_uuid);
 			}else{
 				$data = [
 					'pt_round_no'	=>	$pt_round_uuid
@@ -501,7 +503,24 @@ class PanelTracking extends DashboardController {
 		$pdf->WriteHTML($stylesheet, 1);
 		$pdf->WriteHTML($pdf_view, 2);
 
-		$pdf->output();
+		$pdf->output('Dispatch List ' . date('d-m-Y') . '.pdf', 'D');
+	}
+
+	function track($readiness_uuid){
+		$data = [];
+		$readiness = $this->db->get_where('participant_readiness', ['uuid' => $readiness_uuid])->row();
+		if($readiness){
+			$data = [
+				'pt_round_no'	=>	$readiness->pt_round_no,
+				'tracking'		=>	$this->db->get_where('pt_ready_participants', ['readiness_uuid'	=>	$readiness_uuid, 'pt_round_uuid' => $readiness->pt_round_no])->row()
+			];
+			$this->template
+					->setPartial('PTRounds/paneltracking/track_v', $data)
+					->adminTemplate();
+		}
+		else{
+			show_404();
+		}
 	}
 
 	function getDispatchRatio($pt_round_uuid){
