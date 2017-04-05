@@ -146,7 +146,7 @@ class PTRound extends MY_Controller {
 
                         $submission_id = $this->db->insert_id();
                         foreach ($samples as $key => $sample) {
-                            
+
                             $insertequipmentdata = [
                             'sample_id'    =>  $submission_id,
                             'cd3_absolute'    =>  $cd3_abs,
@@ -162,17 +162,19 @@ class PTRound extends MY_Controller {
                         
                     }
                 }else{
-                    $submission_id = $submission->id;
+                    foreach ($samples as $key => $sample) {
+                        $submission_id = $submission->id;
 
-                    $this->db->set('cd3_absolute', $cd3_abs);
-                    $this->db->set('cd3_percent', $cd3_per);
-                    $this->db->set('cd4_absolute', $cd4_abs);
-                    $this->db->set('cd4_percent', $cd4_per);
-                    $this->db->set('other_absolute', $other_abs);
-                    $this->db->set('other_percent', $other_per);
+                        $this->db->set('cd3_absolute', $cd3_abs);
+                        $this->db->set('cd3_percent', $cd3_per);
+                        $this->db->set('cd4_absolute', $cd4_abs);
+                        $this->db->set('cd4_percent', $cd4_per);
+                        $this->db->set('other_absolute', $other_abs);
+                        $this->db->set('other_percent', $other_per);
 
-                    $this->db->where('sample_id', $submission_id);
-                    $this->db->update('pt_equipment_results');
+                        $this->db->where('sample_id', $submission_id);
+                        $this->db->update('pt_equipment_results');
+                    }
                 }
 
                 
