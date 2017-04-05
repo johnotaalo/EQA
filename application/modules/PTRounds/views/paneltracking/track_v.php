@@ -102,5 +102,33 @@
 				</td>
 			</tr>
 		</table>
+
+		<?php if($tracking->status_code == 3){?>
+		<table class = "table">
+			<tr>
+				<th style="width: 30%;">Panel Received on: </th>
+				<td><?= @date('dS F, Y', strtotime($tracking->participant_received_date)); ?></td>
+			</tr>
+			<tr>
+				<th style="width: 30%;">Panel Condition</th>
+				<td>
+					<?php
+						if($tracking->panel_condition == 1){
+							echo "Good";
+						}else{
+							echo "Bad";
+						}
+					?>
+				</td>
+			</tr>
+
+			<tr>
+				<th style="width: 30%;">Participant Comment</th>
+				<td>
+					<?= @$tracking->panel_condition_comment; ?>
+				</td>
+			</tr>
+		</table>
+		<?php } ?>
 	</div>
 </div>
