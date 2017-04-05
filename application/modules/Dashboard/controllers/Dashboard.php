@@ -61,7 +61,6 @@ class Dashboard extends DashboardController {
 			$dashboard_data->pt_round = $pt_round;
 
 			$today =  date('Y-m-d');
-			// $today = "2017-06-01";
 
 			$this->db->select('c.item_name, c.colors, ptc.date_from, ptc.date_to');
 			$this->db->from('pt_calendar ptc');
