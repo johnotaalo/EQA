@@ -115,15 +115,17 @@ class PTRound extends MY_Controller {
             $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
             $participant_id = $user->username;
 
-            // echo "<pre>";print_r($round_id);echo "</pre>";die();
+            
 
             $equipments = $this->M_PTRound->Equipments();
                         
 
             foreach ($equipments as $key => $equipment) {
                 $eq_id = $equipment->id;
-                $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$eq_id);
+                //echo "<pre>";print_r($eq_id);echo "</pre>";
 
+                $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$eq_id);
+ 
                 $cd3_abs = $this->input->post('cd3_abs_'.$eq_id);
                 $cd3_per = $this->input->post('cd3_per_'.$eq_id);
                 $cd4_abs = $this->input->post('cd4_abs_'.$eq_id);
@@ -178,7 +180,7 @@ class PTRound extends MY_Controller {
                 case 'draft':
 
                     $this->session->set_flashdata('success', "Successfully saved as draft ");
-                       echo json_encode('draft');
+                       //echo json_encode('draft');
             
                     break;
 
@@ -193,7 +195,7 @@ class PTRound extends MY_Controller {
                         $this->session->set_flashdata('error', "There was a problem completing the submission. Please try again");
                     }
 
-                    echo json_encode('complete');
+                    //echo json_encode('complete');
 
                     
                     break;

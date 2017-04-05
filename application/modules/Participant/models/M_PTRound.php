@@ -29,10 +29,10 @@ class M_PTRound extends CI_Model {
     	$this->db->join('pt_batch_tube pbt', 'pbt.batch_id = ptb.id AND ptt.id = pbt.tube_id');
     	$this->db->join('pt_samples pts', 'pts.id = pbt.sample_id AND ptr.id = pts.pt_round_id');
 
-    	// $this->db->where('ptr.uuid', 'b7f000a3-1386-11e7-a133-080027c30a85');
-    	// $this->db->where('pr.participant_id', '3019e45a-1386-11e7-a133-080027c30a85'); 
-    	$this->db->where('ptr.uuid', $round_uuid);
-    	$this->db->where('pr.participant_id', $participant_id); 
+    	$this->db->where('ptr.uuid', 'b7f000a3-1386-11e7-a133-080027c30a85');
+    	$this->db->where('pr.participant_id', '3019e45a-1386-11e7-a133-080027c30a85'); 
+    	// $this->db->where('ptr.uuid', $round_uuid);
+    	// $this->db->where('pr.participant_id', $participant_id); 
 
     	$this->db->group_by('pts.id');
 
