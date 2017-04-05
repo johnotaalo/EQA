@@ -81,7 +81,7 @@
 				</div>
 				<div class="col-sm-7">
 					<button type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-doc"></i> &nbsp; View Reports</button>
-					<?php if($stats->enroute == 0){ ?>
+					<?php if($stats->enroute == 0 && $stats->received == 0){ ?>
 					<button id = "courier-dispatch" type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-plane"></i> &nbsp; Courier Dispatch</button>
 					<?php } ?>
 					<?php if($stats->enroute != 0){ ?>

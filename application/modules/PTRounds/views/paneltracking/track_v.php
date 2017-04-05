@@ -102,5 +102,14 @@
 				</td>
 			</tr>
 		</table>
+
+		<?php if($tracking->status_code == 3){?>
+		<table class = "table">
+			<tr>
+				<th>Panel Received on: </th>
+				<td><?= @date('dS F, Y', $tracking->participant_received_date); ?></td>
+			</tr>
+		</table>
+		<?php } ?>
 	</div>
 </div>
