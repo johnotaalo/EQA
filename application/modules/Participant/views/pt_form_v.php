@@ -17,7 +17,7 @@
             </li>
             <!-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#equipment" role="tab" aria-controls="profile"><i class="icon-basket-loaded"></i> CD4 Equipment Info &nbsp;
-                <!-- <span class="tag tag-pill tag-danger">29</span> -->
+                <span class="tag tag-pill tag-danger">29</span>
                 </a>
             </li> -->
             <li class="nav-item">
