@@ -95,9 +95,16 @@ class Dashboard extends DashboardController {
 				$this->db->where('readiness_uuid', $readiness->uuid);
 				$this->db->where('pt_round_uuid', $pt_round->uuid);
 				$participant_readiness = $this->db->get('pt_ready_participants')->row();
+				$dashboard_data->readiness = $participant_readiness;
 
 				if($participant_readiness->status_code == 2){
 					$dashboard_data->current = "enroute";
+				}elseif($participant_readiness->status_code == 3){
+					if($participant_readiness->panel_condition == 1){
+						$dashboard_data->current = "pt_round_submission";
+					}else{
+						$dashboard_data->current = "bad_panel";
+					}
 				}
 			}else{
 				$dashboard_data->current = "readiness";
