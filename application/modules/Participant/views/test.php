@@ -15,9 +15,14 @@
                 <!-- <span class="tag tag-success">New</span> -->
                 </a>
             </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#equipment" role="tab" aria-controls="profile"><i class="icon-basket-loaded"></i> CD4 Equipment Info &nbsp;
+                <span class="tag tag-pill tag-danger">29</span>
+                </a>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#report" role="tab" aria-controls="messages"><i class="icon-pie-chart"></i> Participant Report &nbsp;
-                
+                <!-- <span class="tag tag-pill tag-danger">29</span> -->
                 </a>
             </li>
         </ul>
@@ -26,6 +31,9 @@
             <div class="tab-pane active" id="submission" role="tabpanel">
                 <?= @$this->load->view($data_submission); ?>
             </div>
+            <!-- <div class="tab-pane" id="equipment" role="tabpanel">
+                <?= @$this->load->view($equipment_information); ?>
+            </div> -->
             <div class="tab-pane" id="report" role="tabpanel">
                <?= @$this->load->view($participant_report); ?>
             </div>

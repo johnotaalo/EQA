@@ -103,6 +103,8 @@ class Dashboard extends DashboardController {
 				$dashboard_data->current = "readiness";
 			}
 			
+		}else{
+			$dashboard_data->rounds = $query->num_rows();
 		}
 
 		return $dashboard_data;

@@ -1,0 +1,1 @@
+CREATE ALGORITHM=UNDEFINED DEFINER=`homestead`@`%` SQL SECURITY DEFINER VIEW `flourochromes_v` AS select `fl`.`fl_id` AS `id`,`fl`.`fl_name` AS `fl_name`,`fl`.`equipment_id` AS `equipment_id`,`fl`.`fl_status` AS `fl_status` from (`flourochromes` `fl` left join `equipment` `e` on((`e`.`id` = `fl`.`fl_id`)))

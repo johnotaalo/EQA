@@ -38,16 +38,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <a class="logo" href="#">
-                                <img src="<?= @$assets_url; ?>frontend/images/files/eqa-logo.png" alt="">
+                                <img height="50px" width="50px" src="<?= @$assets_url; ?>frontend/images/files/gok.png" alt="">
+                                <img height="60px" width="180px" src="<?= @$assets_url; ?>frontend/images/files/ministry.png" alt="">
                                 <h5><span class="colored">Scour</span></h5>
                                 <span>Landing Template</span>
                             </a>
+
+                            <div>
+                                
+                            </div>
+
                             <ul id="main-menu" class="main-menu">
                                 <li><a data-scroll-nav="0" href="#header">Home</a></li>
-                                <li><a data-scroll-nav="1" href="#what-we-do">What We Do</a></li>
-                                <li><a data-scroll-nav="2" href="#featured-projects">FAQs</a></li>
-                                <li><a data-scroll-nav="3" href="#register-now">How To</a></li>
-                                <li><a data-scroll-nav="4" href="#featured-plans">Contact Us</a></li>
+                                <li><a data-scroll-nav="1" href="#aboutus">About Us</a></li>
+                                <li><a data-scroll-nav="2" href="#library">Library</a></li>
+                                <li><a data-scroll-nav="4" href="#contactus">Contact Us</a></li>
                             </ul>
                             <a class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signup'); ?>">Register</a>
                             <a style="margin-right: 10px;" class="header-btn btn small colorful hover-dark" href="<?= @base_url('Auth/signin'); ?>">Login</a>
