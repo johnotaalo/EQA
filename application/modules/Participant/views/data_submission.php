@@ -1,4 +1,4 @@
-<!-- <form method="POST" action="<?= @base_url('Participant/PTRound/dataSubSubmission/'); ?><?php echo $pt_uuid; ?>" class="p-a-4" id="data-submission"> -->
+<!-- <form method="POST" action="<?= @base_url('Participant/PTRound/dataSubmission/draft/'); ?><?php echo $pt_uuid; ?>" class="p-a-4" id="data-submission"> -->
 <form method="POST" class="p-a-4" id="data-submission">
 <input type="hidden" class="page-signup-form-control form-control" id="ptround" value="<?php echo $pt_uuid; ?>">
 

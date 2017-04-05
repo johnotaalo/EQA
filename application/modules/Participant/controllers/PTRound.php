@@ -78,8 +78,11 @@ class PTRound extends MY_Controller {
             ];
                 
         $this->assets
-            ->addJs('dashboard/js/libs/jquery.validate.js')
-            ->addJs("plugin/sweetalert/sweetalert.min.js");
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js')
+                ->addJs("plugin/sweetalert/sweetalert.min.js");
         $this->assets->setJavascript('Participant/data_submission_js');
         $this->assets->addCss('css/signin.css');
         $this->template->setPageTitle('PT Forms')->setPartial('pt_form_v',$data)->adminTemplate();
@@ -103,22 +106,23 @@ class PTRound extends MY_Controller {
     }
 
 
-    public function dataSubSubmission($type,$round){
+    public function dataSubmission($type,$round){
+        //echo json_encode('reached');  
         if($this->input->post()){
 
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
-            $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round);
+            $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
             $participant_id = $user->username;
 
-            $submission = $this->getDataSubmission($round_id,$participant_id,$eq_id);
+            // echo "<pre>";print_r($round_id);echo "</pre>";die();
 
             $equipments = $this->M_PTRound->Equipments();
                         
 
             foreach ($equipments as $key => $equipment) {
                 $eq_id = $equipment->id;
-                $submission = $this->getDataSubmission($round_id,$participant_id,$eq_id);
+                $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$eq_id);
 
                 $cd3_abs = $this->input->post('cd3_abs_'.$eq_id);
                 $cd3_per = $this->input->post('cd3_per_'.$eq_id);
@@ -174,7 +178,7 @@ class PTRound extends MY_Controller {
                 case 'draft':
 
                     $this->session->set_flashdata('success', "Successfully saved as draft ");
-                        
+                       echo json_encode('draft');
             
                     break;
 
@@ -189,6 +193,8 @@ class PTRound extends MY_Controller {
                         $this->session->set_flashdata('error', "There was a problem completing the submission. Please try again");
                     }
 
+                    echo json_encode('complete');
+
                     
                     break;
                 
@@ -197,12 +203,9 @@ class PTRound extends MY_Controller {
                     break;
             }
 
-            
-
-            //$str = '21839547737_10150750480732738_12342134234';
-            //echo substr($str, strrpos($str, '_') + 1);
+        }else{
+          echo json_encode('nopost');  
         }
-            
 
         
     }
