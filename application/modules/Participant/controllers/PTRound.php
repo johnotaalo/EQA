@@ -118,6 +118,7 @@ class PTRound extends MY_Controller {
             
 
             $equipments = $this->M_PTRound->Equipments();
+            $samples = $this->M_PTRound->getSamples($round_id,$participant_id);
                         
 
             foreach ($equipments as $key => $equipment) {
@@ -142,9 +143,11 @@ class PTRound extends MY_Controller {
                     ];
 
                     if($this->db->insert('pt_data_submission', $insertsampledata)){
-                        $submission_id = $this->db->insert_id();
 
-                        $insertequipmentdata = [
+                        $submission_id = $this->db->insert_id();
+                        foreach ($samples as $key => $sample) {
+                            
+                            $insertequipmentdata = [
                             'sample_id'    =>  $submission_id,
                             'cd3_absolute'    =>  $cd3_abs,
                             'cd3_percent'    =>  $cd3_per,
@@ -155,6 +158,8 @@ class PTRound extends MY_Controller {
                         ];
 
                         $this->db->insert('pt_equipment_results', $insertequipmentdata);
+                        }
+                        
                     }
                 }else{
                     $submission_id = $submission->id;
