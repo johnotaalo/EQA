@@ -112,18 +112,65 @@ class Equipments extends DashboardController{
     }
 
 
+    function equipmentEdit($id){
+        $this->db->where('uuid', $id);
+        $equipment = $this->db->get('equipments_v')->row();
+        //echo '<pre>';print_r($equipment);echo '</pre>';die();
+
+        $flourochromes = $this->getFlourochromes($equipment->id);
+        
+        $data = [
+            'equipment_id'          =>  $equipment->id,
+            'equipment_uuid'        =>  $equipment->uuid,
+            'equipment_name'        =>  $equipment->equipment_name,
+            'kit_name'              =>  $equipment->kit,
+            'lysis_method'          =>  $equipment->lysis,
+            'absolute_count_beads'  =>  $equipment->acb,
+            'analytes_absolute'     =>  $equipment->absolute,
+            'analytes_absolute_cd3' =>  $equipment->absolute_cd3,
+            'analytes_absolute_cd4' =>  $equipment->absolute_cd4,
+            'analytes_percent'      =>  $equipment->percent,
+            'analytes_percent_cd3'  =>  $equipment->percent_cd3,
+            'analytes_percent_cd4'  =>  $equipment->percent_cd4,
+            'flourochromes'         =>  $flourochromes
+        ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('Equipments/equipment_update_js');
+        $this->template
+                ->setPartial('Equipments/equipment_edit_v', $data)
+                ->setPageTitle('Equipment Edit')
+                ->adminTemplate();
+    }
+
+
     function create(){
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
             $kitnames = $this->input->post('kitnames');
-            $lysis = $this->input->post('lysis');
-            $acb = $this->input->post('acb');
+
+            if($this->input->post('lysis') == '' || $this->input->post('lysis') == NULL){
+                $lysis = 'N/A';
+            }else{
+                $lysis = $this->input->post('lysis');
+            }
+
+            if($this->input->post('acb') == '' || $this->input->post('acb') == NULL){
+                $acb = 'N/A';
+            }else{
+                $acb = $this->input->post('acb');
+            }
 
             $insertdata = [
                 'equipment_name'    =>  $equipmentname,
                 'kit_name'    =>  $kitnames,
                 'lysis_method'    =>  $lysis,
-                'absolute_count_beads'    =>  $acb
+                'absolute_count_beads'    =>  $acb,
+                'equipment_status'    =>  1
             ];
 
             //$this->db->insert('equipment', $insertdata);
@@ -208,12 +255,12 @@ class Equipments extends DashboardController{
             $this->db->where('id', $equipment_id);
 
             if($this->db->update('equipment')){
-                $this->session->set_flashdata('success', "Successfully updated the equipment details");
+                $this->session->set_flashdata('success', "Successfully added the new equipment details");
             }else{
-                $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+                $this->session->set_flashdata('error', "There was a problem adding the new equipment details. Please try again");
             }
 
-            redirect('Equipments/newAnalytes/' . $equipment_id);
+            redirect('Equipments/equipmentlist/');
         }else{
 
         }
@@ -226,7 +273,6 @@ class Equipments extends DashboardController{
         $heading = [
             "No.",
             "Equipment Name",
-            "Kit Names",
             "Status",
             "No. of Facilities Equipped",
             "Actions"
@@ -256,7 +302,6 @@ class Equipments extends DashboardController{
                 $tabledata[] = [
                     $counter,
                     $equipment->equipment_name,
-                    $equipment->kit_name,
                     $status,
                     '<a class="data-toggle="tooltip" data-placement="top" title="Facilities with this equipment"" href = ' . base_url("Equipments/equipmentlist/$id") . ' >'. $equipment->facilities .'</a>',
                     $change_state
@@ -295,38 +340,132 @@ class Equipments extends DashboardController{
 
     }
 
-    function equipmentEdit($id){
-        $this->db->where('uuid', $id);
-        $equipment = $this->db->get('equipment')->row();
+    function flouroState($type, $id){
+        switch($type){
+            case 'activate':
+                $this->db->set('fl_status', 1);
 
-        $data = [
-            'equipment_id'  =>  $equipment->id,
-            'equipment_uuid'  =>  $equipment->uuid,
-            'equipment_name'  =>  $equipment->equipment_name
-        ];
-        $this->assets
-                ->addJs('dashboard/js/libs/jquery.validate.js');
-        $this->assets->setJavascript('Equipments/equipment_update_js');
-        $this->template
-                ->setPartial('Equipments/equipment_edit_v', $data)
-                ->setPageTitle('Equipment Edit')
-                ->adminTemplate();
+            break;
+
+            case 'deactivate':
+                $this->db->set('fl_status', 0);
+                
+            break;
+        }
+
+        $this->db->where('fl_id', $id);
+        //$this->db->update('equipment');
+
+        if($this->db->update('flourochromes')){
+            $this->session->set_flashdata('success', "Successfully updated the flourochrome details");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the flourochrome details. Please try again");
+        }
+
+        redirect('Equipments/equipmentlist', 'refresh');
+
+    }
+
+    
+
+
+    function getFlourochromes($equipmentId){
+        $counter = 0;
+        $this->db->where('equipment_id', $equipmentId);
+        $this->db->where('fl_status', 1);
+        $flourochromes = $this->db->get('flourochromes_v')->result();
+
+        $result_view = '';
+
+
+        foreach ($flourochromes as $key => $flourochrome) {
+            // echo '<pre>';print_r($value);echo '</pre>';die();
+            $counter ++;           
+            $result_view .= "<div class = 'form-group row divcounter'>
+                                <label class = 'col-md-3 form-control-label counter'>Flourochrome ".$counter."</label>
+                                <div class = 'col-md-6'>
+                                    <input type = 'text' name = 'flouro[]' class = 'form-control' value = '".$flourochrome->fl_name."' required/>
+                                </div>
+                                <div class = 'col-md-3'>
+                                    <a href = ".base_url("Equipments/flouroState/deactivate/$flourochrome->id")." class = 'remove-flouro'><i class = 'fa fa-times'></i>
+                                    </a>
+                                </div>
+                            </div>";
+        }
+
+        return $result_view;
     }
 
     function editEquipment(){
         if($this->input->post()){
             $equipmentuuid = $this->input->post('equipmentuuid');
+
             $equipmentname = $this->input->post('equipmentname');
+            $kitname = $this->input->post('kitname');
+            $lysismethod = $this->input->post('lysismethod');
+            $acb = $this->input->post('acb');
+            $absolute = $this->input->post('absolute');
+            $percent = $this->input->post('percent'); 
+
+            if($absolute == 0 || $absolute == NULL){
+                $absolute_cd3 = 0;
+                $absolute_cd4 = 0;
+            }else{
+                $absolute_cd3 = $this->input->post('absolute_cd3');
+                $absolute_cd4 = $this->input->post('absolute_cd4');
+            }
+
+            if($percent == 0 || $percent == NULL){
+                $percent_cd3 = 0;
+                $percent_cd4 = 0;
+            }else{
+                $percent_cd3 = $this->input->post('percent_cd3');
+                $percent_cd4 = $this->input->post('percent_cd4');
+            }
 
             $this->db->set('equipment_name', $equipmentname);
+            $this->db->set('kit_name', $kitname);
+            $this->db->set('lysis_method', $lysismethod);
+            $this->db->set('absolute_count_beads', $acb);
+            $this->db->set('analytes_absolute', $absolute);
+            $this->db->set('analytes_absolute_cd3', $absolute_cd3);
+            $this->db->set('analytes_absolute_cd4', $absolute_cd4);
+            $this->db->set('analytes_percent', $percent);
+            $this->db->set('analytes_percent_cd3', $percent_cd3);
+            $this->db->set('analytes_percent_cd4', $percent_cd4);
+
             $this->db->where('uuid', $equipmentuuid);
 
+
+
             if($this->db->update('equipment')){
-            $this->session->set_flashdata('success', "Successfully updated the equipment to " . $equipmentname);
-            $message = "Equipment Name : <strong>" . $equipmentname . "</strong> has been edited successfully";
-        }else{
-            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
-        }
+                $this->db->where('uuid', $equipmentuuid);
+                $equipment_id = $this->db->get('equipments_v')->row()->id;
+
+                // echo '<pre>';print_r($equipment_id);echo '</pre>';die();
+
+                $this->db->set('fl_status', 0);
+                $this->db->where('equipment_id', $equipment_id);
+                $this->db->update('flourochromes');
+
+                $flourochromes = $this->input->post('flouro');
+                $flourochromes_data = [];
+
+                foreach ($flourochromes as $flourochrome) {
+                    $flourochromes_data[] = [
+                        'fl_name'   =>  $flourochrome,
+                        'equipment_id'   =>  $equipment_id
+                    ];
+                }
+
+                $this->db->insert_batch('flourochromes', $flourochromes_data);
+
+
+                $this->session->set_flashdata('success', "Successfully updated the equipment " . $equipmentname);
+
+            }else{
+                $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+            }
 
             redirect('Equipments/equipmentlist', 'refresh');
         }
@@ -345,10 +484,6 @@ class Equipments extends DashboardController{
             "Actions"
         ];
         $facilitytabledata = [];
-
-        // $this->db->get('facility');
-        // $this->db->join('facility_equipment_mapping', 'facility_equipment_mapping.facility_code = facility.facility_code');
-        // $this->db->join('equipment', 'facility_equipment_mapping.equipment_id = equipment.id');
 
         $this->db->where('e_uuid', $equipmentId);
         $efacilities = $this->db->get('equipment_facilities_v')->result();

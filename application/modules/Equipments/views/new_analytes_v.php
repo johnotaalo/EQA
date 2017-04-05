@@ -18,45 +18,43 @@
                     <label class="col-md-3 form-control-label">Absolute</label>
                     <div class="col-md-9">
                         <div class="checkbox">
-                            <label for="checkbox1">
+                            <label for="absolute">
                                 <input type="checkbox" id="absolute" name="absolute" value="1">
                             </label>
                         </div>
 
                         <div class="absolute">
                           <div class="checkbox">
-                              <label for="checkbox2">
+                              <label for="absolutecd3">
                                   <input type="checkbox" id="absolutecd3" name="absolutecd3" value="1">&nbsp;&nbsp;CD3
                               </label>
                           </div>
                           <div class="checkbox">
-                              <label for="checkbox3">
+                              <label for="absolutecd4">
                                   <input type="checkbox" id="absolutecd4" name="absolutecd4" value="1">&nbsp;&nbsp;CD4
                               </label>
                           </div>
                         </div>
-
-
-
                     </div>
-                  </div>  
+                  </div> 
+
                   <div class="col-md-6">
                     <label class="col-md-3 form-control-label">Percent</label>
                     <div class="col-md-9">
                         <div class="checkbox">
-                            <label for="checkbox1">
-                                <input type="checkbox" id="percent" name="percent" value="option1">
+                            <label for="percent">
+                                <input type="checkbox" id="percent" name="percent" value="1">
                             </label>
                         </div>
                         <div class="percent">
                           <div class="checkbox">
-                              <label for="checkbox2">
-                                  <input type="checkbox" id="percentcd3" name="percentcd3" value="option2">&nbsp;&nbsp;CD3
+                              <label for="percentcd3">
+                                  <input type="checkbox" id="percentcd3" name="percentcd3" value="1">&nbsp;&nbsp;CD3
                               </label>
                           </div>
                           <div class="checkbox">
-                              <label for="checkbox3">
-                                  <input type="checkbox" id="percentcd4" name="percentcd4" value="option3">&nbsp;&nbsp;CD4
+                              <label for="percentcd4">
+                                  <input type="checkbox" id="percentcd4" name="percentcd4" value="1">&nbsp;&nbsp;CD4
                               </label>
                           </div>
                         </div>
