@@ -66,7 +66,7 @@ class PTRound extends MY_Controller {
         $equipments = $this->M_PTRound->Equipments();
 
         //echo "<pre>";print_r($equipments);echo "</pre>";die();
-        $equipment_tabs = $this->createTabs($round_uuid,$equipments);
+        $equipment_tabs = $this->createTabs($round_uuid,$participant_id);
         // echo "<pre>";print_r($equipment_tabs);echo "</pre>";die();
         $data = [
                 'pt_uuid'    =>  $round_uuid,
@@ -172,8 +172,11 @@ class PTRound extends MY_Controller {
         }
     }
 
-    public function createTabs($round_uuid, $equipments){
-        // echo "<pre>";print_r($equipments);echo "</pre>";die();
+    public function createTabs($round_uuid, $participant_id){
+        
+
+        $samples = $this->M_PTRound->getSamples($round_uuid,$participant_id);
+        echo "<pre>";print_r($samples);echo "</pre>";die();
         $equipment_tabs = '';
 
         $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
@@ -191,12 +194,11 @@ class PTRound extends MY_Controller {
         $equipment_tabs .= "</ul>
                             <div class='tab-content'>";
 
-$counter = 0;
+        $counter = 0;
         foreach ($equipments as $key => $value) {
             $equipment_tabs .= "<div class='tab-pane active' id='". $equipment->equipment_name ."' role='tabpanel'>
                     <div class='row'>
-
-    <div class='col-sm-12'>
+        <div class='col-sm-12'>
         <div class='card'>
             <div class='card-header'>
                 <strong>RESULTS</strong>
@@ -243,84 +245,19 @@ $counter = 0;
                             <th style='text-align: center;'>
                                 Percent
                             </th>
-                        </tr>
-                        <tr>
-                            <th style='text-align: center;'>
-                                SS-R17-036
-                            </th>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style='text-align: center;'>
-                                SS-R17-037
-                            </th>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style='text-align: center;'>
-                                SS-R17-038
-                            </th>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_'".$counter.">
-                            </td>
-                            <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_'".$counter.">
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                        </tr>";
 
-            </div>   
-            </div>
-        </div>
-    </div>
-                </div>";
+                    // foreach ($variable as $key => $value) {
+                        
+                    // }
+
+                    $equipment_tabs .= "</table>
+                                        </div>
+                                        </div>   
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>";
         }
 
         $equipment_tabs .= "</div>";
