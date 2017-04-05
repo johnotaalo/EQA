@@ -168,7 +168,6 @@ class PTRounds extends DashboardController{
     }
 
     function add($step, $id = NULL){
-        // echo "<pre>";print_r($this->input->post());die;
         $nextpage = $this->nextpage($step);
         $round_id = ($id != NULL) ? $this->db->get_where('pt_round', ['uuid' => $id])->row()->id : 0;
         if($step != NULL){

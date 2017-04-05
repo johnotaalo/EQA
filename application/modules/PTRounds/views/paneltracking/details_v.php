@@ -64,7 +64,14 @@
 		</div>
 	</div>
 </div>
-
+<?php if($this->session->flashdata('success')){?>
+	<div class="alert alert-success alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<?= @$this->session->flashdata('success'); ?>
+	</div>
+<?php } ?>
 <div class="row">
 	<div class="card card-accent-primary">
 		<div class="card-block">
@@ -74,7 +81,13 @@
 				</div>
 				<div class="col-sm-7">
 					<button type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-doc"></i> &nbsp; View Reports</button>
+					<?php if($stats->enroute == 0){ ?>
 					<button id = "courier-dispatch" type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-plane"></i> &nbsp; Courier Dispatch</button>
+					<?php } ?>
+					<?php if($stats->enroute != 0){ ?>
+					<button id = "delivery-notes" type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-credit-card"></i> &nbsp; Delivery Notes</button>
+					<button id = "dispatch-list" type="button" class="btn btn-outline-primary pull-right ml-1"><i class="icon-cloud-download"></i> &nbsp; Dispatch List</button>
+					<?php } ?>
 				</div>
 			</div>
 			<!-- <hr/> -->

@@ -6,9 +6,9 @@
 		&nbsp;
 		Courier Dispatch Details
 
-		<div class="pull-right">
+		<!-- <div class="pull-right">
 			<button id = "courier-dispatch" type="button" class="btn btn-outline-primary ml-1"><i class="icon-cloud-download"></i> &nbsp; Export Dispatch List</button>
-		</div>
+		</div> -->
 	</div>
 	<div class="card-block">
 		<form method="POST" class="form-horizontal">

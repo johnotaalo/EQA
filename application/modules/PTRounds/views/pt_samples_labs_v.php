@@ -2,13 +2,13 @@
     <div class = "col-md-4">
         <div class="form-group">
             <label class = "control-label">Number of Testers</label>
-            <input class = "form-control" name = "no_testers" type = "number" min = "1" value = "<?php if(isset($no_testers)) { echo $no_testers; } else { echo "1"; }?>" <?php if(isset($no_testers)) {echo "disabled"; }?> />
+            <input class = "form-control" name = "no_testers" type = "number" min = "1" value = "<?php if(isset($no_testers)  && $no_testers != NULL) { echo $no_testers; } else { echo "1"; }?>" <?php if(isset($no_testers) && $no_testers != NULL) {echo "disabled"; }?> />
         </div>
     </div>
     <div class = "col-md-4">
         <div class="form-group">
             <label class = "control-label">Number of Labs</label>
-            <input class = "form-control" name = "no_labs" type = "number" min = "1" value = "<?php if(isset($no_labs)) { echo $no_labs; } else { echo "1"; }?>" <?php if(isset($no_labs)) {echo "disabled"; } ?>/>
+            <input class = "form-control" name = "no_labs" type = "number" min = "1" value = "<?php if(isset($no_labs)  && $no_testers != NULL) { echo $no_labs; } else { echo "1"; }?>" <?php if(isset($no_labs) && $no_testers != NULL) {echo "disabled"; } ?>/>
         </div>
     </div>
 </div>
