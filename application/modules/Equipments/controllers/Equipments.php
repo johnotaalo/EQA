@@ -112,6 +112,42 @@ class Equipments extends DashboardController{
     }
 
 
+    function equipmentEdit($id){
+        $this->db->where('uuid', $id);
+        $equipment = $this->db->get('equipments_v')->row();
+        //echo '<pre>';print_r($equipment);echo '</pre>';die();
+
+        $flourochromes = $this->getFlourochromes($equipment->id);
+        
+        $data = [
+            'equipment_id'          =>  $equipment->id,
+            'equipment_uuid'        =>  $equipment->uuid,
+            'equipment_name'        =>  $equipment->equipment_name,
+            'kit_name'              =>  $equipment->kit,
+            'lysis_method'          =>  $equipment->lysis,
+            'absolute_count_beads'  =>  $equipment->acb,
+            'analytes_absolute'     =>  $equipment->absolute,
+            'analytes_absolute_cd3' =>  $equipment->absolute_cd3,
+            'analytes_absolute_cd4' =>  $equipment->absolute_cd4,
+            'analytes_percent'      =>  $equipment->percent,
+            'analytes_percent_cd3'  =>  $equipment->percent_cd3,
+            'analytes_percent_cd4'  =>  $equipment->percent_cd4,
+            'flourochromes'         =>  $flourochromes
+        ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('Equipments/equipment_update_js');
+        $this->template
+                ->setPartial('Equipments/equipment_edit_v', $data)
+                ->setPageTitle('Equipment Edit')
+                ->adminTemplate();
+    }
+
+
     function create(){
         if($this->input->post()){
             $equipmentname = $this->input->post('equipmentname');
@@ -332,37 +368,6 @@ class Equipments extends DashboardController{
 
     
 
-    function equipmentEdit($id){
-        $this->db->where('uuid', $id);
-        $equipment = $this->db->get('equipments_v')->row();
-        //echo '<pre>';print_r($equipment);echo '</pre>';die();
-
-        $flourochromes = $this->getFlourochromes($equipment->id);
-        
-        $data = [
-            'equipment_id'          =>  $equipment->id,
-            'equipment_uuid'        =>  $equipment->uuid,
-            'equipment_name'        =>  $equipment->equipment_name,
-            'kit_name'              =>  $equipment->kit,
-            'lysis_method'          =>  $equipment->lysis,
-            'absolute_count_beads'  =>  $equipment->acb,
-            'analytes_absolute'     =>  $equipment->absolute,
-            'analytes_absolute_cd3' =>  $equipment->absolute_cd3,
-            'analytes_absolute_cd4' =>  $equipment->absolute_cd4,
-            'analytes_percent'      =>  $equipment->percent,
-            'analytes_percent_cd3'  =>  $equipment->percent_cd3,
-            'analytes_percent_cd4'  =>  $equipment->percent_cd4,
-            'flourochromes'         =>  $flourochromes
-        ];
-
-        $this->assets
-                ->addJs('dashboard/js/libs/jquery.validate.js');
-        $this->assets->setJavascript('Equipments/equipment_update_js');
-        $this->template
-                ->setPartial('Equipments/equipment_edit_v', $data)
-                ->setPageTitle('Equipment Edit')
-                ->adminTemplate();
-    }
 
     function getFlourochromes($equipmentId){
         $counter = 0;
@@ -376,16 +381,16 @@ class Equipments extends DashboardController{
         foreach ($flourochromes as $key => $flourochrome) {
             // echo '<pre>';print_r($value);echo '</pre>';die();
             $counter ++;           
-            $result_view .= "<div class = 'form-group row'>
-                                <label class = 'col-md-3 form-control-label'>Flourochrome ".$counter."</label>
+            $result_view .= "<div class = 'form-group row divcounter'>
+                                <label class = 'col-md-3 form-control-label counter'>Flourochrome ".$counter."</label>
                                 <div class = 'col-md-6'>
                                     <input type = 'text' name = 'flouro[]' class = 'form-control' value = '".$flourochrome->fl_name."' required/>
                                 </div>
                                 <div class = 'col-md-3'>
-                                    <a href = ".base_url("Equipments/flouroState/deactivate/$flourochrome->id")." class = 'remove-flouro'><i class = 'fa fa-times'></i></a>
+                                    <a href = ".base_url("Equipments/flouroState/deactivate/$flourochrome->id")." class = 'remove-flouro'><i class = 'fa fa-times'></i>
+                                    </a>
                                 </div>
-                            </div>
-                            ";
+                            </div>";
         }
 
         return $result_view;
@@ -479,10 +484,6 @@ class Equipments extends DashboardController{
             "Actions"
         ];
         $facilitytabledata = [];
-
-        // $this->db->get('facility');
-        // $this->db->join('facility_equipment_mapping', 'facility_equipment_mapping.facility_code = facility.facility_code');
-        // $this->db->join('equipment', 'facility_equipment_mapping.equipment_id = equipment.id');
 
         $this->db->where('e_uuid', $equipmentId);
         $efacilities = $this->db->get('equipment_facilities_v')->result();

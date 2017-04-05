@@ -131,17 +131,19 @@
 
                         <div class = "col-md-6">
                             <div class="row">
-                                <div class = "col-md-12">
-                                    <strong>Flourochromes</strong>
+                                <div class = "form-group row">
+                                    <label class = "col-md-6 form-control-label"><strong>Flourochromes</strong></label>
+                                    <div class="col-md-6">
+                                      <a class = "btn btn-success btn-sm" id = "add-edit-flouro"><i class = "icon-plus"></i> Add flourochrome
+                                      </a>
+                                    </div>
                                 </div>
-                            <div class = "col-md-12">
 
-                        <?= @$flourochromes; ?>
-
-
-                        </div>
+                                <div id = "flouro-chromes" class = "col-md-12">
+                                    <?= @$flourochromes; ?>
+                                </div>
                         
-                    </div>
+                            </div>
                     <div class = "row">
                         <div style = "margin-top: 10px;">
                             <button id = "saveChanges" class = "btn btn-primary btn-block" type = "submit">
