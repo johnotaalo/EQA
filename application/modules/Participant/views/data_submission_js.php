@@ -3,7 +3,8 @@
 $(document).ready(function(){
 
 
-	$('.submit').click(function(){
+	$('.submit').click(function(e){
+		e.preventDefault();
 	  var datatype = $(this).attr('data-type');
 	  var formData = $("#data-submission").serialize();
 

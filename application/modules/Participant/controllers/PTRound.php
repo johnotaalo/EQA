@@ -60,7 +60,7 @@ class PTRound extends MY_Controller {
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
         
 
-        $participant_id = $user->username;
+        $participant_id = $user->uuid;
         $facility_code = $user->facility_code;
 
         $equipments = $this->M_PTRound->Equipments();
@@ -107,13 +107,13 @@ class PTRound extends MY_Controller {
 
 
     public function dataSubmission($type,$round){
-        //echo json_encode('reached');  
+        // echo json_encode('reached');  
         if($this->input->post()){
-
+// echo json_encode('reached0');  
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
             $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
-            $participant_id = $user->username;
+            $participant_id = $user->p_id;
 
             
 
@@ -122,6 +122,7 @@ class PTRound extends MY_Controller {
                         
 
             foreach ($equipments as $key => $equipment) {
+                // echo json_encode('reached1');  
                 $eq_id = $equipment->id;
                 //echo "<pre>";print_r($eq_id);echo "</pre>";
 
@@ -135,6 +136,7 @@ class PTRound extends MY_Controller {
                 $other_per = $this->input->post('other_per_'.$eq_id);
 
                 if(!($submission)){
+                    //echo json_encode('reached2');  
                     $insertsampledata = [
                         'round_id'    =>  $round_id,
                         'participant_id'    =>  $participant_id,
@@ -143,7 +145,7 @@ class PTRound extends MY_Controller {
                     ];
 
                     if($this->db->insert('pt_data_submission', $insertsampledata)){
-
+// echo json_encode('nopost'); 
                         $submission_id = $this->db->insert_id();
                         foreach ($samples as $key => $sample) {
 
@@ -156,12 +158,19 @@ class PTRound extends MY_Controller {
                             'other_absolute'    =>  $other_abs,
                             'other_percent'    =>  $other_per
                         ];
-
-                        $this->db->insert('pt_equipment_results', $insertequipmentdata);
+                        try {
+                            $this->db->insert('pt_equipment_results', $insertequipmentdata);
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
                         }
                         
+                        }
+                        
+                    }else{
+
                     }
                 }else{
+                    // echo json_encode('reached3');  
                     foreach ($samples as $key => $sample) {
                         $submission_id = $submission->id;
 

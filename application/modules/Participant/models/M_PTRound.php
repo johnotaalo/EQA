@@ -29,9 +29,14 @@ class M_PTRound extends CI_Model {
     	$this->db->join('participant_readiness par', 'par.readiness_id = ppt.pt_readiness_id');
     	$this->db->join('pt_round pr', 'pr.uuid = par.pt_round_no');
 
-    	$this->db->group_by('ps.id');
+    	$this->db->where('pr.uuid', $round_uuid);
+    	$this->db->where('par.participant_id', $participant_id);
+
+    	// $this->db->group_by('ps.id');
 
         $query = $this->db->get();
+
+        // echo $this->db->last_query();die;
 
 		return $query->result();
     }
