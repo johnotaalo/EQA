@@ -221,9 +221,16 @@ class PTRound extends MY_Controller {
 
     public function createTabs($round_uuid, $participant_id, $equipments){
         
+        $datas=[];
         $tab = 0;
+        $zero = '0';
         $samples = $this->M_PTRound->getSamples($round_uuid,$participant_id);
-        //echo "<pre>";print_r($samples);echo "</pre>";die();
+
+        $this->db->where('round_uuid',$round_uuid);
+        $this->db->where('participant_id',$participant_id);
+
+        $datas = $this->db->get('data_entry_v')->result();
+        
         $equipment_tabs = '';
 
         $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
@@ -253,6 +260,7 @@ class PTRound extends MY_Controller {
 
         $counter = 0;
         $counter2 = 0;
+        $counter3 = 0;
         foreach ($equipments as $key => $equipment) {
             $counter++;
 
@@ -278,7 +286,7 @@ class PTRound extends MY_Controller {
                 <div class='row'>
                     <table class='table table-bordered'>
                         <tr>
-                            <th style='text-align: center;' rowspan='3'>
+                            <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
                             </th>
                             <th style='text-align: center;' colspan='7'>
@@ -344,6 +352,7 @@ class PTRound extends MY_Controller {
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_$equipment->id'>
                             </td>
                         </tr>";
+                        $counter3++;
                     }
 
                     $equipment_tabs .= "</table>
