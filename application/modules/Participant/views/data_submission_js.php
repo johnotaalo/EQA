@@ -20,11 +20,18 @@ $(document).ready(function(){
 	  	$.ajax({
 		   	type: "POST",
 		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+equipmentid+ '/' +round,
-		   	dataType: 'json',
 			data: formData,
 		   success: function(html){   
-		   //alert(html);
-		   	window.location = "<?= @base_url('Participant/PTRound/'); ?>";
+		   		if(html){
+
+                	
+                    window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                    $("#data-info").html("Saving Data ...");
+                }else{
+                	
+                	$("#data-info").html("Loading Error ...");
+                	window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                }	
 		   },
 		   beforeSend:function()
 		   {

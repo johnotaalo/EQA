@@ -3,7 +3,7 @@
 <strong><center>METHODOLOGY</center></strong>
 
 <?php if($this->session->flashdata('success')){ ?>
-        <div class = 'alert alert-success'>
+        <div id="data-info" class = 'alert alert-success'>
             <?= @$this->session->flashdata('success'); ?>
         </div>
   <?php }elseif($this->session->flashdata('error')){ ?>

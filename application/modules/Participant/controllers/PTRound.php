@@ -109,7 +109,6 @@ class PTRound extends MY_Controller {
         
 
         if($this->input->post()){
-            // echo "<pre>";print_r("Reached0");echo "</pre>";  
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
             $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
@@ -117,7 +116,6 @@ class PTRound extends MY_Controller {
             $participant_id = $user->p_id;
 
             $samples = $this->M_PTRound->getSamples($round,$participant_uuid);
-            // echo json_encode($samples);
              
             $counter2 = 0;
             $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
@@ -142,8 +140,6 @@ class PTRound extends MY_Controller {
                             $cd4_per = $this->input->post('cd4_per_'.$counter2);
                             $other_abs = $this->input->post('other_abs_'.$counter2);
                             $other_per = $this->input->post('other_per_'.$counter2);
-
-                            //echo "<pre>";print_r($cd3_abs);echo "</pre>";
 
                             $insertequipmentdata = [
                             'sample_id'    =>  $submission_id,
@@ -170,8 +166,12 @@ class PTRound extends MY_Controller {
                         }
 
                 }else{
-                    echo json_encode('Problem submitting into Round Data');
+                    // echo "submission_error";
+                    $this->session->set_flashdata('error', "A problem was encountered while saving data. Please try again...");
                 }
+
+                echo "submission_save";
+                $this->session->set_flashdata('success', "Successfully saved new data");
 
             }else{
 
@@ -199,7 +199,7 @@ class PTRound extends MY_Controller {
                             'other_percent'    =>  $other_per
                             ];
 
-                    $this->db->insert('pt_equipment_results', $insertequipmentdata);
+                    $update = $this->db->insert('pt_equipment_results', $insertequipmentdata);
 
                     //echo "<pre>";print_r($cd3_abs);echo "</pre>";die();
 
@@ -215,16 +215,21 @@ class PTRound extends MY_Controller {
                     
                     $counter2 ++;
                 }
+                $this->session->set_flashdata('success', "Successfully updated data");
+                echo "submission_update";
             }
 
-            if($this->db->update('pt_equipment_results')){
-                $this->session->set_flashdata('success', "Successfully saved");
-            }else{
-                $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
-            }
-            redirect('Participant/PTRound/');
+            // if($update){
+            //     $this->session->set_flashdata('success', "Successfully saved");
+            // }else{
+            //     $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
+            // }
+            //echo "<pre>";print_r("REACHED");echo "</pre>";die();
+
+            // redirect('Participant/PTRound/Round/'.$round);
         }else{
-          echo json_encode('noposting');  
+            //echo "no_post";
+          $this->session->set_flashdata('error', "No data was received");
         }
 
         
