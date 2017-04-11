@@ -23,8 +23,8 @@ $(document).ready(function(){
 		   	dataType: 'json',
 			data: formData,
 		   success: function(html){   
-		   alert(html);
-
+		   //alert(html);
+		   	window.location = "<?= @base_url('Participant/PTRound/'); ?>";
 		   },
 		   beforeSend:function()
 		   {

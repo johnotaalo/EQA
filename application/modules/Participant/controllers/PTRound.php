@@ -106,7 +106,7 @@ class PTRound extends MY_Controller {
 
 
     public function dataSubmission($equipmentid,$round){
-        $counter2 = 0;
+        
 
         if($this->input->post()){
             // echo "<pre>";print_r("Reached0");echo "</pre>";  
@@ -119,9 +119,9 @@ class PTRound extends MY_Controller {
             $samples = $this->M_PTRound->getSamples($round,$participant_uuid);
             // echo json_encode($samples);
              
-
+            $counter2 = 0;
             $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
-
+            // echo "<pre>";print_r($submission);echo "</pre>";die();
             if(!($submission)){
 
                 $insertsampledata = [
@@ -174,10 +174,13 @@ class PTRound extends MY_Controller {
                 }
 
             }else{
-                // echo "<pre>";print_r("Reached3");echo "</pre>";
-                foreach ($samples as $key => $sample) {     
 
-                    $submission_id = $submission->id;
+                $submission_id = $submission->id;
+
+                    $this->db->where('sample_id', $submission_id);
+                    $this->db->delete('pt_equipment_results');
+                
+                foreach ($samples as $key => $sample) {     
 
                     $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
                     $cd3_per = $this->input->post('cd3_per_'.$counter2);
@@ -186,27 +189,41 @@ class PTRound extends MY_Controller {
                     $other_abs = $this->input->post('other_abs_'.$counter2);
                     $other_per = $this->input->post('other_per_'.$counter2);
 
-                    $this->db->set('cd3_absolute', $cd3_abs);
-                    $this->db->set('cd3_percent', $cd3_per);
-                    $this->db->set('cd4_absolute', $cd4_abs);
-                    $this->db->set('cd4_percent', $cd4_per);
-                    $this->db->set('other_absolute', $other_abs);
-                    $this->db->set('other_percent', $other_per);
+                    $insertequipmentdata = [
+                            'sample_id'    =>  $submission_id,
+                            'cd3_absolute'    =>  $cd3_abs,
+                            'cd3_percent'    =>  $cd3_per,
+                            'cd4_absolute'    =>  $cd4_abs,
+                            'cd4_percent'    =>  $cd4_per,
+                            'other_absolute'    =>  $other_abs,
+                            'other_percent'    =>  $other_per
+                            ];
 
-                    $this->db->where('sample_id', $submission_id);
+                    $this->db->insert('pt_equipment_results', $insertequipmentdata);
 
-                    if($this->db->update('pt_equipment_results')){
-                        $this->session->set_flashdata('success', "Successfully saved");
-                    }else{
-                        $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
-                    }
+                    //echo "<pre>";print_r($cd3_abs);echo "</pre>";die();
+
+                    // $this->db->set('cd3_absolute', $cd3_abs);
+                    // $this->db->set('cd3_percent', $cd3_per);
+                    // $this->db->set('cd4_absolute', $cd4_abs);
+                    // $this->db->set('cd4_percent', $cd4_per);
+                    // $this->db->set('other_absolute', $other_abs);
+                    // $this->db->set('other_percent', $other_per);
+
+                    // $this->db->where('sample_id', $submission_id);
+
+                    
                     $counter2 ++;
                 }
             }
+
+            if($this->db->update('pt_equipment_results')){
+                $this->session->set_flashdata('success', "Successfully saved");
+            }else{
+                $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
+            }
             redirect('Participant/PTRound/');
         }else{
-
-// echo "<pre>";print_r("Reached5");echo "</pre>";
           echo json_encode('noposting');  
         }
 
