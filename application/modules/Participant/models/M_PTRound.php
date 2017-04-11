@@ -14,6 +14,7 @@ class M_PTRound extends CI_Model {
     public function Equipments(){
     	// $this->db->where('facility_code', $facility_code);
     	$this->db->where('equipment_status', 1);
+        // $this->db->order_by("name", "asc");
         $query = $this->db->get('equipments_v')->result();
 
         return $query;
