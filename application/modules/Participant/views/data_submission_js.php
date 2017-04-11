@@ -3,39 +3,23 @@
 $(document).ready(function(){
 
 
-	$('.submit').click(function(e){
-		e.preventDefault();
-	  var datatype = $(this).attr('data-type');
-	  var formData = $("#data-submission").serialize();
+	$("form").submit(function(e){
+		 e.preventDefault();
+	  var form = $(this);
+	  var id = form.attr('id');
+	  var formData = $('#'+id).serialize();
+		// alert(formData);
 
-	  var round= $("#ptround").val();
-		//alert(formData);
-	  // 	$.ajax({
-		 //   	type: "POST",
-		 //   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+datatype+ '/' +round,
-		 //   	dataType: 'json',
-			// data: formData,
-		 //   success: function(html){   
-		 //   alert(html);
-
-		 //   },
-		 //   beforeSend:function()
-		 //   {
-			// // $("#add_err").css('display', 'inline', 'important');
-			// // $("#add_err").html("<img src='images/ajax-loader.gif' /> Loading...")
-		 //   }
-	  // 	});
-	   
-		dataSubmit(datatype,formData);
+		dataSubmit(id, formData);
 	 
 	});
 
-	function dataSubmit(datatype,formData){
-		var round= $("#ptround").val();
-		//alert(formData);
+	function dataSubmit(equipmentid,formData){
+		var round= $(".ptround").val();
+		 // alert(round);
 	  	$.ajax({
 		   	type: "POST",
-		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+datatype+ '/' +round,
+		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+equipmentid+ '/' +round,
 		   	dataType: 'json',
 			data: formData,
 		   success: function(html){   

@@ -72,8 +72,7 @@ class PTRound extends MY_Controller {
                 'pt_uuid'    =>  $round_uuid,
                 'participant'    =>  $participant_id,
                 'equipment_tabs'    =>  $equipment_tabs,
-                'data_submission' => 'data_submission',
-                'participant_report' => 'participant_report'
+                'data_submission' => 'data_submission'
 
             ];
                 
@@ -106,48 +105,47 @@ class PTRound extends MY_Controller {
     }
 
 
-    public function dataSubmission($type,$round){
-        // echo json_encode('reached');  
+    public function dataSubmission($equipmentid,$round){
+        $counter2 = 0;
+
         if($this->input->post()){
-// echo json_encode('reached0');  
+            // echo "<pre>";print_r("Reached0");echo "</pre>";  
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
             $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
+            $participant_uuid = $user->uuid;
             $participant_id = $user->p_id;
 
-            
+            $samples = $this->M_PTRound->getSamples($round,$participant_uuid);
+            // echo json_encode($samples);
+             
 
-            $equipments = $this->M_PTRound->Equipments();
-            $samples = $this->M_PTRound->getSamples($round_id,$participant_id);
-                        
+            $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
 
-            foreach ($equipments as $key => $equipment) {
-                // echo json_encode('reached1');  
-                $eq_id = $equipment->id;
-                //echo "<pre>";print_r($eq_id);echo "</pre>";
+            if(!($submission)){
 
-                $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$eq_id);
- 
-                $cd3_abs = $this->input->post('cd3_abs_'.$eq_id);
-                $cd3_per = $this->input->post('cd3_per_'.$eq_id);
-                $cd4_abs = $this->input->post('cd4_abs_'.$eq_id);
-                $cd4_per = $this->input->post('cd4_per_'.$eq_id);
-                $other_abs = $this->input->post('other_abs_'.$eq_id);
-                $other_per = $this->input->post('other_per_'.$eq_id);
-
-                if(!($submission)){
-                    //echo json_encode('reached2');  
-                    $insertsampledata = [
+                $insertsampledata = [
                         'round_id'    =>  $round_id,
                         'participant_id'    =>  $participant_id,
-                        'equipment_id'    =>  $eq_id,
+                        'equipment_id'    =>  $equipmentid,
                         'status'    =>  0
                     ];
 
-                    if($this->db->insert('pt_data_submission', $insertsampledata)){
-// echo json_encode('nopost'); 
-                        $submission_id = $this->db->insert_id();
+                if($this->db->insert('pt_data_submission', $insertsampledata)){
+                    $submission_id = $this->db->insert_id();
+
                         foreach ($samples as $key => $sample) {
+
+                            $counter2 ++;
+
+                            $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
+                            $cd3_per = $this->input->post('cd3_per_'.$counter2);
+                            $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
+                            $cd4_per = $this->input->post('cd4_per_'.$counter2);
+                            $other_abs = $this->input->post('other_abs_'.$counter2);
+                            $other_per = $this->input->post('other_per_'.$counter2);
+
+                            echo "<pre>";print_r($cd3_abs);echo "</pre>";
 
                             $insertequipmentdata = [
                             'sample_id'    =>  $submission_id,
@@ -157,88 +155,82 @@ class PTRound extends MY_Controller {
                             'cd4_percent'    =>  $cd4_per,
                             'other_absolute'    =>  $other_abs,
                             'other_percent'    =>  $other_per
-                        ];
-                        try {
-                            $this->db->insert('pt_equipment_results', $insertequipmentdata);
-                        } catch (Exception $e) {
-                            echo $e->getMessage();
-                        }
-                        
-                        }
-                        
-                    }else{
+                            ];
 
-                    }
+                            try {
+                                if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
+                                    $this->session->set_flashdata('success', "Successfully saved new data");
+                                }else{
+                                    $this->session->set_flashdata('error', "There was a problem saving the new data. Please try again");
+                                }
+                                
+                            } catch (Exception $e) {
+                                echo $e->getMessage();
+                            }
+                        }
+
                 }else{
-                    // echo json_encode('reached3');  
-                    foreach ($samples as $key => $sample) {
-                        $submission_id = $submission->id;
-
-                        $this->db->set('cd3_absolute', $cd3_abs);
-                        $this->db->set('cd3_percent', $cd3_per);
-                        $this->db->set('cd4_absolute', $cd4_abs);
-                        $this->db->set('cd4_percent', $cd4_per);
-                        $this->db->set('other_absolute', $other_abs);
-                        $this->db->set('other_percent', $other_per);
-
-                        $this->db->where('sample_id', $submission_id);
-                        $this->db->update('pt_equipment_results');
-                    }
+                    echo json_encode('Problem submitting into Round Data');
                 }
 
-                
+            }else{
+                // echo "<pre>";print_r("Reached3");echo "</pre>";
+                foreach ($samples as $key => $sample) {
+                    $counter2 ++;
 
-                
-            }
-                    
+                    $submission_id = $submission->id;
 
-            switch ($type) {
-                case 'draft':
+                    $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
+                    $cd3_per = $this->input->post('cd3_per_'.$counter2);
+                    $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
+                    $cd4_per = $this->input->post('cd4_per_'.$counter2);
+                    $other_abs = $this->input->post('other_abs_'.$counter2);
+                    $other_per = $this->input->post('other_per_'.$counter2);
 
-                    $this->session->set_flashdata('success', "Successfully saved as draft ");
-                       //echo json_encode('draft');
-            
-                    break;
+                    $this->db->set('cd3_absolute', $cd3_abs);
+                    $this->db->set('cd3_percent', $cd3_per);
+                    $this->db->set('cd4_absolute', $cd4_abs);
+                    $this->db->set('cd4_percent', $cd4_per);
+                    $this->db->set('other_absolute', $other_abs);
+                    $this->db->set('other_percent', $other_per);
 
-                case 'complete':
+                    $this->db->where('sample_id', $submission_id);
 
-                    $this->db->set('status', 1);
-                    $this->db->where('round_id', $submission->round_id);
-
-                    if($this->db->update('pt_data_submission')){
-                        $this->session->set_flashdata('success', "Successfully completed the submission for PT");
+                    if($this->db->update('pt_equipment_results')){
+                        $this->session->set_flashdata('success', "Successfully saved");
                     }else{
-                        $this->session->set_flashdata('error', "There was a problem completing the submission. Please try again");
+                        $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
                     }
 
-                    //echo json_encode('complete');
-
-                    
-                    break;
-                
-                default:
-                    echo 'There was a problem with data submission. Please contact the administrator'; die();
-                    break;
+                    redirect('Participant/PTRound/');
+                }
             }
 
         }else{
-          echo json_encode('nopost');  
+
+// echo "<pre>";print_r("Reached5");echo "</pre>";
+          echo json_encode('noposting');  
         }
 
         
     }
 
-    public function createTabs($round_uuid, $participant_id, $equipments){
+    public function createTabs($round_uuid, $participant_uuid, $equipments){
         
         $datas=[];
         $tab = 0;
         $zero = '0';
-        $samples = $this->M_PTRound->getSamples($round_uuid,$participant_id);
+        $samples = $this->M_PTRound->getSamples($round_uuid,$participant_uuid);
+        //echo "<pre>";print_r($participant_id);echo "</pre>";die();
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+        $id = $user->p_id;
 
         $this->db->where('round_uuid',$round_uuid);
-        $this->db->where('participant_id',$participant_id);
+        $this->db->where('participant_id',$id);
 
         $datas = $this->db->get('data_entry_v')->result();
+
+        // echo "<pre>";print_r($datas[0]->cd3_absolute);echo "</pre>";die();
         
         $equipment_tabs = '';
 
@@ -246,6 +238,9 @@ class PTRound extends MY_Controller {
 
         foreach ($equipments as $key => $equipment) {
             $tab++;
+            $equipment_tabs .= "
+                ";
+
             $equipment_tabs .= "<li class='nav-item'>";
             if($tab == 1){
                 $equipment_tabs .= "<a class='nav-link active' data-toggle='tab'";
@@ -268,10 +263,11 @@ class PTRound extends MY_Controller {
                             <div class='tab-content'>";
 
         $counter = 0;
-        $counter2 = 0;
         $counter3 = 0;
+
         foreach ($equipments as $key => $equipment) {
             $counter++;
+            $counter2 =0;
 
             $equipmentname = $equipment->equipment_name;
             $equipmentname = str_replace(' ', '_', $equipmentname);
@@ -292,6 +288,11 @@ class PTRound extends MY_Controller {
                 <strong>RESULTS FOR ". $equipment->equipment_name ."</strong>
             </div>
             <div class='card-block'>
+            <form method='POST' class='p-a-4' id='".$equipment->id."'>
+                <input type='hidden' class='page-signup-form-control form-control ptround' value='".$round_uuid."'>
+
+
+
                 <div class='row'>
                     <table class='table table-bordered'>
                         <tr>
@@ -337,28 +338,56 @@ class PTRound extends MY_Controller {
                     
                     foreach ($samples as $key => $sample) {
                         $counter2 ++;
+
+
+
+                        $value = 0;
                         $equipment_tabs .= "<tr>
                                             <th style='text-align: center;'>";
                         $equipment_tabs .= $sample->sample_name;
 
                         $equipment_tabs .= "</th>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_abs_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->cd3_absolute;}else{$value = 0;}
+
+                        $equipment_tabs .= $value ."' name = 'cd3_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd3_per_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->cd3_percent;}else{$value = 0;}
+
+                        $equipment_tabs .= $value."' name = 'cd3_per_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_abs_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->cd4_absolute;}else{$value = 0;}
+
+                        $equipment_tabs .= $value."'  name = 'cd4_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'cd4_per_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->cd4_percent;}else{$value = 0;}
+
+                        $equipment_tabs .= $value."' name = 'cd4_per_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_abs_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->other_absolute;}else{$value = 0;}
+
+                        $equipment_tabs .= $value."' name = 'other_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' name = 'other_per_$equipment->id'>
+                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+
+                        if($datas){$value = $datas[$counter3]->other_percent;}else{$value = 0;}
+                        
+                        $equipment_tabs .= $value."' name = 'other_per_$counter2'>
                             </td>
                         </tr>";
                         $counter3++;
@@ -366,11 +395,21 @@ class PTRound extends MY_Controller {
 
                     $equipment_tabs .= "</table>
                                         </div>
+
+
+                                        <button type='submit' class='btn btn-block btn-lg btn-primary m-t-3 submit'>
+                                            Save
+                                        </button>
+
+                                        </form>
+
                                         </div>   
                                         </div>
                                         </div>
                                         </div>
                                         </div>";
+
+                    $equipment_tabs .= "";
         }
 
         $equipment_tabs .= "</div>";
