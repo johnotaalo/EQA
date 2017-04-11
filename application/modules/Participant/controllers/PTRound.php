@@ -136,8 +136,6 @@ class PTRound extends MY_Controller {
 
                         foreach ($samples as $key => $sample) {
 
-                            $counter2 ++;
-
                             $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
                             $cd3_per = $this->input->post('cd3_per_'.$counter2);
                             $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
@@ -145,7 +143,7 @@ class PTRound extends MY_Controller {
                             $other_abs = $this->input->post('other_abs_'.$counter2);
                             $other_per = $this->input->post('other_per_'.$counter2);
 
-                            echo "<pre>";print_r($cd3_abs);echo "</pre>";
+                            //echo "<pre>";print_r($cd3_abs);echo "</pre>";
 
                             $insertequipmentdata = [
                             'sample_id'    =>  $submission_id,
@@ -167,6 +165,8 @@ class PTRound extends MY_Controller {
                             } catch (Exception $e) {
                                 echo $e->getMessage();
                             }
+
+                            $counter2 ++;
                         }
 
                 }else{
@@ -175,8 +175,7 @@ class PTRound extends MY_Controller {
 
             }else{
                 // echo "<pre>";print_r("Reached3");echo "</pre>";
-                foreach ($samples as $key => $sample) {
-                    $counter2 ++;
+                foreach ($samples as $key => $sample) {     
 
                     $submission_id = $submission->id;
 
@@ -201,11 +200,10 @@ class PTRound extends MY_Controller {
                     }else{
                         $this->session->set_flashdata('error', "There was a problem saving the data. Please try again");
                     }
-
-                    redirect('Participant/PTRound/');
+                    $counter2 ++;
                 }
             }
-
+            redirect('Participant/PTRound/');
         }else{
 
 // echo "<pre>";print_r("Reached5");echo "</pre>";
@@ -223,12 +221,9 @@ class PTRound extends MY_Controller {
         $samples = $this->M_PTRound->getSamples($round_uuid,$participant_uuid);
         //echo "<pre>";print_r($participant_id);echo "</pre>";die();
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-        $id = $user->p_id;
+        $participant_id = $user->p_id;
 
-        $this->db->where('round_uuid',$round_uuid);
-        $this->db->where('participant_id',$id);
-
-        $datas = $this->db->get('data_entry_v')->result();
+        
 
         // echo "<pre>";print_r($datas[0]->cd3_absolute);echo "</pre>";die();
         
@@ -267,7 +262,7 @@ class PTRound extends MY_Controller {
 
         foreach ($equipments as $key => $equipment) {
             $counter++;
-            $counter2 =0;
+            
 
             $equipmentname = $equipment->equipment_name;
             $equipmentname = str_replace(' ', '_', $equipmentname);
@@ -278,7 +273,11 @@ class PTRound extends MY_Controller {
                 $equipment_tabs .= "<div class='tab-pane' id='". $equipmentname ."' role='tabpanel'>";
             }
             
+            $this->db->where('round_uuid',$round_uuid);
+            $this->db->where('participant_id',$participant_id);
+            $this->db->where('equipment_id',$equipment->id);
 
+            $datas = $this->db->get('data_entry_v')->result();
 
 
             $equipment_tabs .= "<div class='row'>
@@ -335,11 +334,10 @@ class PTRound extends MY_Controller {
                             </th>
                         </tr>";
 
-                    
+                    $counter2 = 0;
                     foreach ($samples as $key => $sample) {
-                        $counter2 ++;
-
-
+                        
+                    //echo "<pre>";print_r($datas);echo "</pre>";die();
 
                         $value = 0;
                         $equipment_tabs .= "<tr>
@@ -349,48 +347,97 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= "</th>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
-
-                        if($datas){$value = $datas[$counter3]->cd3_absolute;}else{$value = 0;}
+                                
+                        //echo "<pre>";print_r($datas[$counter2]->equipment_id);echo "</pre>";die();
+                            if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd3_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                            }else{
+                                $value = 0;
+                            }
 
                         $equipment_tabs .= $value ."' name = 'cd3_abs_$counter2'>
                             </td>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
 
-                        if($datas){$value = $datas[$counter3]->cd3_percent;}else{$value = 0;}
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd3_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
                         $equipment_tabs .= $value."' name = 'cd3_per_$counter2'>
                             </td>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
 
-                        if($datas){$value = $datas[$counter3]->cd4_absolute;}else{$value = 0;}
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd4_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
                         $equipment_tabs .= $value."'  name = 'cd4_abs_$counter2'>
                             </td>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
 
-                        if($datas){$value = $datas[$counter3]->cd4_percent;}else{$value = 0;}
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd4_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
                         $equipment_tabs .= $value."' name = 'cd4_per_$counter2'>
                             </td>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
 
-                        if($datas){$value = $datas[$counter3]->other_absolute;}else{$value = 0;}
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->other_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
                         $equipment_tabs .= $value."' name = 'other_abs_$counter2'>
                             </td>
                             <td>
                                 <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
 
-                        if($datas){$value = $datas[$counter3]->other_percent;}else{$value = 0;}
-                        
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->other_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
+
                         $equipment_tabs .= $value."' name = 'other_per_$counter2'>
                             </td>
                         </tr>";
-                        $counter3++;
+                        $counter2++;
                     }
 
                     $equipment_tabs .= "</table>

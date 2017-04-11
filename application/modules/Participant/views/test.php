@@ -11,3 +11,6 @@ if($datas){
 }else{
     $zero;
 }
+
+
+if($equipment->id == $data->equipment_id)
