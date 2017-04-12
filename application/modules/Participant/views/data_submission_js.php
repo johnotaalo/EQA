@@ -2,6 +2,8 @@
 
 $(document).ready(function(){
 
+	var round = $(".ptround").val();
+
 
 	$("form").submit(function(e){
 		 e.preventDefault();
@@ -15,7 +17,6 @@ $(document).ready(function(){
 	});
 
 	function dataSubmit(equipmentid,formData){
-		var round= $(".ptround").val();
 		 // alert(round);
 	  	$.ajax({
 		   	type: "POST",
@@ -42,6 +43,44 @@ $(document).ready(function(){
 	}
 
 
-	});
+
+	$(".check-complete").click(function() {
+       var equipmentid = $(this).val();
+
+       // alert(equipmentid);
+            
+   	});
+
+ 
+
+
+   	$(".check-complete").click(function(e) {
+
+        e.preventDefault();
+        var equipmentid = $(this).val();
+
+  		 // alert(equipmentid);
+        swal({
+            title: "Are you sure you want to Mark as Complete ?",
+            text: "Once marked as complete, changes won't be made on this equipment",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function(){
+            $.get('<?= @base_url('Participant/PTRound/EquipmentComplete/'); ?>'+equipmentid+'/'+round, function(data){
+                if(data.response == true){
+                    window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                    $("#data-info").html("Saving Data ...");
+                }else{
+                    sweetAlert("Oops...", data.message, "error");
+                }
+            });
+        });
+    });
+
+
+
+   });
 
 </script>
