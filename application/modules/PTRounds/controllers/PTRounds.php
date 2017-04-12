@@ -728,6 +728,7 @@ class PTRounds extends DashboardController{
     function facilityreadiness($pt_round_uuid, $facility_code){
         $result = $this->M_PTRounds->getParticipantRoundReadiness($facility_code, $pt_round_uuid);
         if($result){
+            $data['pt_round'] = $pt_round_uuid;
             $data['result'] = $result;
             $data['response_table'] = $this->generateResponseQuestionnaire($result->readiness_id);
             $this->assets

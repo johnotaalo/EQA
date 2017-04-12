@@ -62,7 +62,7 @@
             <div class="page-signup-icon text-muted"><i class="ion-wrench"></i></div>
             <select id = "equipment" name = "equipment[]" class="page-signup-form-control form-control" multiple>
             </select>
-            <span class="help-block">* Select multiple equipments if more </span>
+            <span class="help-block">* Select multiple equipments if more <span class="text-danger">(Kindly confirm, if not sure...)</span> </span>
           </fieldset>
 
           <fieldset class = "page-signup-form-group form-group form-group-lg">
@@ -87,6 +87,8 @@
 
       <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signin-link">
         Already have an account? <a href="<?= @base_url('Auth/signIn'); ?>"><u>Log In</u></a>
+      </div>
+      <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signup-link"><a href="<?= @base_url('Home'); ?>" class=""><u>Home</u></a>
       </div>
     </div>
   </div>

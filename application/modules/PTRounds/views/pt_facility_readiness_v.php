@@ -1,4 +1,8 @@
 <div class="container">
+
+<a href = "<?= @base_url('PTRounds/create/facilities/'); ?><?= @$pt_round; ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Round Details</button></a><br /><br />
+
+
 	<?php if($this->session->flashdata('error')){?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">

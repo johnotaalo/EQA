@@ -331,7 +331,12 @@ class PTRound extends MY_Controller {
                     
             <label class='checkbox-inline' for='check-complete'>";
 
-            $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+            if($datas){
+                $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+            }else{
+                $getCheck = 0; 
+            }
+            
 
             //echo "<pre>";print_r($getCheck);echo "</pre>";die();
 
