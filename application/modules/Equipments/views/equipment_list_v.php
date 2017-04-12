@@ -33,12 +33,12 @@
                         {
                 ?>
                     
-                    <a href = "<?= @base_url('Equipments/newEquipmentView'); ?>"><button class = "btn btn-primary btn-sm" id = "btn-create-equipment"><i class = "icon-plus"></i> Create Equipment</button></a>
+                    <a href = "<?= @base_url('Equipments/newEquipmentView'); ?>"><button class = "btn btn-primary btn-sm" id = "btn-create-equipment"><i class = "icon-plus"></i> Create Equipment</button></a><br /><br />
 
                 <?php 
                         }else{
                 ?>
-                    <a href = "<?= @base_url('Equipments/equipmentlist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Equipments</button></a>
+                    <a href = "<?= @base_url('Equipments/equipmentlist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Equipments</button></a><br /><br />
                 <?php 
                         }
                 ?>

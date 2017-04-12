@@ -51,13 +51,16 @@ class PTRounds extends DashboardController{
 
         $data = [
             'pt_details'    =>  $this->db->get_where('pt_round', ['uuid' => $pt_round])->row(),
-            'legend'        =>  $this->createCalendarColorLegend()
+            'legend'        =>  $this->createCalendarColorLegend(),
+            'pt_round'      =>  $pt_round
         ];
         $this->assets->setJavascript('PTRounds/calendar_js');
         $this->template
                 ->setPartial('PTRounds/view_pt_calendar', $data)
                 ->adminTemplate();
     }
+
+
     function create($step = NULL, $id = NULL){
         $data = $pagedata = [];
         $pt_details = new StdClass;

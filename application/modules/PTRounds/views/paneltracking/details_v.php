@@ -1,4 +1,13 @@
 <div class="row">
+
+<div class="col-lg-12 col-xs-6">
+	<a href = "<?= @base_url('PTRounds/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Rounds</button></a><br /><br />
+</div>
+
+
+
+
+
 	<div class="col-lg-3 col-xs-6">
 		<!-- small box -->
 		<div class="small-box bg-aqua">

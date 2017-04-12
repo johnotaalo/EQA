@@ -1,3 +1,6 @@
+<a href = "<?= @base_url('PTRounds/PanelTracking/details/'); ?><?= @$pt_uuid; ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Panel Tracking</button></a><br /><br />
+
+
 <?php if($this->session->flashdata('success')){?>
 	 <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
