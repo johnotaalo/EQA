@@ -16,6 +16,8 @@ $(document).ready(function(){
 	 
 	});
 
+	
+
 	function dataSubmit(equipmentid,formData){
 		 // alert(round);
 	  	$.ajax({
@@ -25,9 +27,8 @@ $(document).ready(function(){
 		   success: function(html){   
 		   		if(html){
 
-                	
+                	$("#data-info").html("Saving Data ...");
                     window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
-                    $("#data-info").html("Saving Data ...");
                 }else{
                 	
                 	$("#data-info").html("Loading Error ...");
@@ -41,17 +42,6 @@ $(document).ready(function(){
 		   }
 	  	});
 	}
-
-
-
-	$(".check-complete").click(function() {
-       var equipmentid = $(this).val();
-
-       // alert(equipmentid);
-            
-   	});
-
- 
 
 
    	$(".check-complete").click(function(e) {
@@ -78,6 +68,11 @@ $(document).ready(function(){
             });
         });
     });
+
+ //    if(document.getElementById('isAgeSelected').checked) {
+	//   $(":input:not([name=tloEnable], [name=filename], [name=notifyUsers])")
+ //        .prop("disabled", true);
+	// }
 
 
 

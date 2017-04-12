@@ -234,18 +234,6 @@ class PTRound extends MY_Controller {
 
                     $update = $this->db->insert('pt_equipment_results', $insertequipmentdata);
 
-                    //echo "<pre>";print_r($cd3_abs);echo "</pre>";die();
-
-                    // $this->db->set('cd3_absolute', $cd3_abs);
-                    // $this->db->set('cd3_percent', $cd3_per);
-                    // $this->db->set('cd4_absolute', $cd4_abs);
-                    // $this->db->set('cd4_percent', $cd4_per);
-                    // $this->db->set('other_absolute', $other_abs);
-                    // $this->db->set('other_percent', $other_per);
-
-                    // $this->db->where('sample_id', $submission_id);
-
-                    
                     $counter2 ++;
                 }
                 $this->session->set_flashdata('success', "Successfully updated data");
@@ -263,8 +251,9 @@ class PTRound extends MY_Controller {
         $datas=[];
         $tab = 0;
         $zero = '0';
+        
         $samples = $this->M_PTRound->getSamples($round_uuid,$participant_uuid);
-        //echo "<pre>";print_r($participant_id);echo "</pre>";die();
+        $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
         $participant_id = $user->p_id;
 
@@ -278,8 +267,7 @@ class PTRound extends MY_Controller {
 
         foreach ($equipments as $key => $equipment) {
             $tab++;
-            $equipment_tabs .= "
-                ";
+            $equipment_tabs .= "";
 
             $equipment_tabs .= "<li class='nav-item'>";
             if($tab == 1){
@@ -331,19 +319,31 @@ class PTRound extends MY_Controller {
             <div class='card-header'>
                 
 
-                <div class='form-group row'>
-                    <div class='col-md-6'>
+            <div class='form-group row'>
+                <div class='col-md-6'>
 
-                    <label class='checkbox-inline'>
-                    <strong>RESULTS FOR ". $equipment->equipment_name ."</strong>
-                    </label>
+                <label class='checkbox-inline'>
+                <strong>RESULTS FOR ". $equipment->equipment_name ."</strong>
+                </label>
 
-                    </div>
-                    <div class='col-md-6'>
+                </div>
+                <div class='col-md-6'>
                     
-                        <label class='checkbox-inline' for='check-complete'>
-                            <input type='checkbox' class='check-complete' name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete
-                        </label>
+            <label class='checkbox-inline' for='check-complete'>";
+
+            $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+
+            //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+
+            if($getCheck == 1){
+                $disabled = "disabled='' ";
+                $equipment_tabs .= "<input type='checkbox' data-type = '". $equipment->equipment_name ."' class='check-complete' checked='checked' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
+            }else{
+                $disabled = "";
+                $equipment_tabs .= "<input type='checkbox' class='check-complete' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
+            }
+
+            $equipment_tabs .= "</label>
                     </div>
                 </div>
 
@@ -409,7 +409,7 @@ class PTRound extends MY_Controller {
 
                         $equipment_tabs .= "</th>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."' class='page-signup-form-control form-control' $disabled placeholder='' value = '";
                                 
                         //echo "<pre>";print_r($datas[$counter2]->equipment_id);echo "</pre>";die();
                             if($datas){
@@ -425,7 +425,7 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= $value ."' name = 'cd3_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."' class='page-signup-form-control form-control' $disabled placeholder='' value = '";
 
                         if($datas){
                                 if($equipment->id == $datas[$counter2]->equipment_id){
@@ -440,7 +440,7 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= $value."' name = 'cd3_per_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."'  class='page-signup-form-control form-control' $disabled placeholder='' value = '";
 
                         if($datas){
                                 if($equipment->id == $datas[$counter2]->equipment_id){
@@ -455,7 +455,7 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= $value."'  name = 'cd4_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."'  class='page-signup-form-control form-control' $disabled placeholder='' value = '";
 
                         if($datas){
                                 if($equipment->id == $datas[$counter2]->equipment_id){
@@ -470,7 +470,7 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= $value."' name = 'cd4_per_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."'  class='page-signup-form-control form-control' $disabled placeholder='' value = '";
 
                         if($datas){
                                 if($equipment->id == $datas[$counter2]->equipment_id){
@@ -485,7 +485,7 @@ class PTRound extends MY_Controller {
                         $equipment_tabs .= $value."' name = 'other_abs_$counter2'>
                             </td>
                             <td>
-                                <input type='text' class='page-signup-form-control form-control' placeholder='' value = '";
+                                <input type='text' data-type='". $equipment->equipment_name ."'  class='page-signup-form-control form-control' $disabled placeholder='' value = '";
 
                         if($datas){
                                 if($equipment->id == $datas[$counter2]->equipment_id){
@@ -507,7 +507,7 @@ class PTRound extends MY_Controller {
                                         </div>
 
 
-                                        <button type='submit' class='btn btn-block btn-lg btn-primary m-t-3 submit'>
+                                        <button $disabled type='submit' class='btn btn-block btn-lg btn-primary m-t-3 submit'>
                                             Save
                                         </button>
 
