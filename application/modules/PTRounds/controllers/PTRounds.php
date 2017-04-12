@@ -839,11 +839,11 @@ class PTRounds extends DashboardController{
                 'round_uuid'    =>  $pt_round->uuid
             ];
             $body = $this->load->view('Template/email/assessment_link_v', $data, TRUE);
-            $result = $this->mailer->sendMail('john.otaalo@strathmore.edu', 'PT Round Assessment Link', $body, $recepients);
+            $result = $this->mailer->sendMail('john.otaalo@strathmore.edu', 'PT Round Evaluation Link', $body, $recepients);
             if($result == true){
-                $this->session->set_flashdata('success', 'Successfully sent the assessment link(s)');
+                $this->session->set_flashdata('success', 'Successfully sent the evaluation link(s)');
             }else{
-                $this->session->set_flashdata('error', 'There was an error sending the assessment link(s). Please contact the system administrator for further guidance');
+                $this->session->set_flashdata('error', 'There was an error sending the evaluation link(s). Please contact the system administrator for further guidance');
             }
 
             redirect('PTRounds/create/facilities/' . $pt_round_uuid);

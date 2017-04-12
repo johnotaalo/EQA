@@ -18,7 +18,7 @@
 		<div class="card-header">
 			Participant Responses
 			<div class="pull-right">
-				<button class = "btn btn-primary" id="assessmentbutton">Assessment Outcome</button>
+				<button class = "btn btn-primary" id="assessmentbutton">Evaluation Outcome</button>
 				<button class = 'btn btn-danger'><i class = "fa fa-file-pdf-o"></i> Download PDF</button>
 			</div>
 		</div>
@@ -73,7 +73,7 @@
 				</tbody>
 			</table>
 			<form id = "assessement-outcome-form" class = "form-horizontal" method = "POST" action = "<?= @base_url('PTRounds/addReadinessAssessmentOutcome/' . $result->readiness_id); ?>">
-				<legend>Assessment Outcome</legend>
+				<legend>Evaluation Outcome</legend>
 				<div class="form-group">
 					<label class="control-label col-sm-6" for="status">Allow Participant to participate in this round?</label>
 					<input type="radio" name="verdict" value = "1" id = "verdict-yes" <?php if($result->readiness_verdict == 1){ echo "checked";}?>> <label for="verdict-yes">Yes</label>
