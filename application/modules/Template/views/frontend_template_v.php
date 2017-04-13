@@ -44,9 +44,6 @@
                                 <span>Landing Template</span>
                             </a>
 
-                            <div>
-                                
-                            </div>
 
                             <ul id="main-menu" class="main-menu">
                                 <li><a data-scroll-nav="0" href="#header">Home</a></li>

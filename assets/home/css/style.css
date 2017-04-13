@@ -753,6 +753,7 @@ Version: 1.0
 .blank-area {
     width: 100%;
     height: 230px;
+    background-color: blue;
     background-image: url(../img/blank-bg.png);
     background-position: center;
     -webkit-background-size: cover;

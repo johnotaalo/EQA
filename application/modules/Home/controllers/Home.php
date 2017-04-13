@@ -8,6 +8,11 @@ class Home extends MY_Controller {
 		$this->load->model('home_m');
 	}
 	
+	// public function index()
+	// {
+	// 	$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v')->frontEndTemplate();
+	// }
+
 	public function index()
 	{
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v2')->frontEndTemplate2();
