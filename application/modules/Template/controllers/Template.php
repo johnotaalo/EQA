@@ -103,6 +103,23 @@ class Template extends MX_Controller {
 		$this->load->view('Template/frontend_template_v', $data);
 	}
 
+	function frontEndTemplate2(){
+		$data['metadata'] = $this->metaData;
+
+		$data['page_css'] = $this->assets->css;
+		$data['page_js'] = $this->assets->js;
+
+		$data['pagetitle'] = $this->pageTitle;
+		$data['pagedescription'] = $this->pageDescription;
+
+		$data['partial'] = $this->contentView;
+		$data['partialData'] = $this->contentViewData;
+
+		$data['javascript_file'] = $this->assets->javascript_file;
+		$data['javascript_data'] = $this->assets->javascript_data;
+		$this->load->view('Template/frontend_template_v2', $data);
+	}
+
 	function createSideBar($selected = null){
 
 		$class = $this->router->class;
