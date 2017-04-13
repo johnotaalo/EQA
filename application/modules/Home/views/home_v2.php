@@ -206,7 +206,7 @@
     </div> -->
     
 
-    <div class="blank-area"></div>
+    <!-- <div class="blank-area"></div> -->
     
 
     <!-- <div class="search-area inner-padding">
