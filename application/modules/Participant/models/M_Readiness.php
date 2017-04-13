@@ -20,7 +20,7 @@ class M_Readiness extends CI_Model {
 
     public function findRoundByIdentifier($identifier, $value){
         $this->db->where($identifier, $value);
-        $query = $this->db->get('pt_round', 1);
+        $query = $this->db->get('pt_round_v', 1);
 
         return $query->row();
     }

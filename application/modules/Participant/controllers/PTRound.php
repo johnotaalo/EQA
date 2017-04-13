@@ -28,7 +28,7 @@ class PTRound extends MY_Controller {
             foreach ($rounds as $round) {
                 $created = date('dS F, Y', strtotime($round->date_of_entry));
                 $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
-                $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('Participant/PTRound/Tracking/' . $round->uuid)."'><i class = 'fa fa-truck'></i>&nbsp;Panel Tracking</a>";
+                $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('Participant/PTRound/Report/' . $round->uuid)."'><i class = 'fa fa-line-chart'></i>&nbsp;Report</a>";
                 $status = ($round->status == "active") ? '<span class = "tag tag-success">Active</span>' : '<span class = "tag tag-danger">Inactive</span>';
                 if ($round->type == "ongoing") {
                     $ongoing .= "<tr>
@@ -91,21 +91,21 @@ class PTRound extends MY_Controller {
         $this->template->setPageTitle('PT Forms')->setPartial('pt_form_v',$data)->adminTemplate();
     }
 
-    public function Tracking($round_uuid){
+    public function Report($round_uuid){
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+        $round = $this->M_Readiness->findRoundByIdentifier('uuid',$round_uuid);
+        // echo "<pre>";print_r($round);echo "</pre>";die();
         $data = [
                 'pt_uuid'    =>  $round_uuid,
                 'user'    =>  $user,
-                'participant_report' => 'participant_report',
-                'data_submission' => 'data_submission',
-                'equipment_information' => 'equipment_information'
+                'round'    =>  $round
             ];
         $this->assets
             ->addJs('dashboard/js/libs/jquery.validate.js')
             ->addJs("plugin/sweetalert/sweetalert.min.js");
         $this->assets->setJavascript('Participant/participant_login_js');
         $this->assets->addCss('css/signin.css');
-        $this->template->setPageTitle('PT Forms')->setPartial('pt_tracking_v',$data)->adminTemplate();
+        $this->template->setPageTitle('PT Forms')->setPartial('pt_report_v',$data)->adminTemplate();
     }
 
 
@@ -194,7 +194,6 @@ class PTRound extends MY_Controller {
                             } catch (Exception $e) {
                                 echo $e->getMessage();
                             }
-
                             $counter2 ++;
                         }
 

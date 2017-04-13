@@ -1332,7 +1332,8 @@ Version: 1.0
 
 .footer-area {
     width: 100%;
-    background-image: url(../img/map-bg.png);
+    /*background-image: url(../img/map-bg.png);*/
+    background-color:  #e3e3e4;
     background-position: center;
     -webkit-background-size: cover;
     background-size: cover;
