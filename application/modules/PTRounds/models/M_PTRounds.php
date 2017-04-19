@@ -72,6 +72,7 @@ class M_PTRounds extends MY_Model{
 
     public function getDataSubmission($round){
         $this->db->where('round_id', $round);
+        $this->db->where('smart_status', 1);
 
         $query = $this->db->get('pt_data_submission',1);
 
@@ -81,7 +82,9 @@ class M_PTRounds extends MY_Model{
     public function getFacilityParticipants($round_uuid){
         $this->db->from('data_entry_v dev');
         $this->db->join('pt_ready_participants prp', 'prp.p_id = dev.participant_id');
+        $this->db->join('pt_data_submission pds', 'pds.round_id = dev.round_id');
         $this->db->where('dev.round_uuid', $round_uuid);
+        $this->db->where('pds.smart_status', 1);
         $this->db->group_by('dev.round_uuid, dev.participant_id');
         $this->db->order_by('prp.facility_code');
         
