@@ -112,7 +112,7 @@ class PTRound extends MY_Controller {
                 $pid = $participant->p_id;
                 $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
 
-                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a>';
+                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a>';
 
                 $getRound = $this->M_PPTRound->getDataSubmission($round_id,$pid);
 

@@ -530,253 +530,253 @@ class PTRounds extends DashboardController{
 
 
 
-// public function createTabs($round_uuid, $participant_uuid){
+public function createTabs($round_uuid, $participant_uuid){
 
-//         $equipments = $this->M_PTRound->Equipments();
+        $equipments = $this->M_PTRound->Equipments();
         
-//         $datas=[];
-//         $tab = 0;
-//         $zero = '0';
+        $datas=[];
+        $tab = 0;
+        $zero = '0';
         
-//         $samples = $this->M_PTRound->getSamples($round_uuid,$participant_uuid);
-//         $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
-//         $user = $this->M_Readiness->findUserByIdentifier('uuid', $participant_uuid);
-//         $participant_id = $user->p_id;
+        $samples = $this->M_PTRound->getSamples($round_uuid,$participant_uuid);
+        $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $participant_uuid);
+        $participant_id = $user->p_id;
 
         
 
-//         // echo "<pre>";print_r($datas[0]->cd3_absolute);echo "</pre>";die();
+        // echo "<pre>";print_r($datas[0]->cd3_absolute);echo "</pre>";die();
         
-//         $equipment_tabs = '';
+        $equipment_tabs = '';
 
-//         $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
+        $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
 
-//         foreach ($equipments as $key => $equipment) {
-//             $tab++;
-//             $equipment_tabs .= "";
+        foreach ($equipments as $key => $equipment) {
+            $tab++;
+            $equipment_tabs .= "";
 
-//             $equipment_tabs .= "<li class='nav-item'>";
-//             if($tab == 1){
-//                 $equipment_tabs .= "<a class='nav-link active' data-toggle='tab'";
-//             }else{
-//                 $equipment_tabs .= "<a class='nav-link' data-toggle='tab'";
-//             }
+            $equipment_tabs .= "<li class='nav-item'>";
+            if($tab == 1){
+                $equipment_tabs .= "<a class='nav-link active' data-toggle='tab'";
+            }else{
+                $equipment_tabs .= "<a class='nav-link' data-toggle='tab'";
+            }
 
-//             $equipmentname = $equipment->equipment_name;
-//             $equipmentname = str_replace(' ', '_', $equipmentname);
+            $equipmentname = $equipment->equipment_name;
+            $equipmentname = str_replace(' ', '_', $equipmentname);
             
-//             $equipment_tabs .= " href='#".$equipmentname."' role='tab' aria-controls='home'><i class='icon-calculator'></i>&nbsp;";
-//             $equipment_tabs .= $equipment->equipment_name;
-//             $equipment_tabs .= "&nbsp;";
-//             // $equipment_tabs .= "<span class='tag tag-success'>Complete</span>";
-//             $equipment_tabs .= "</a>
-//                                 </li>";
-//         }
+            $equipment_tabs .= " href='#".$equipmentname."' role='tab' aria-controls='home'><i class='icon-calculator'></i>&nbsp;";
+            $equipment_tabs .= $equipment->equipment_name;
+            $equipment_tabs .= "&nbsp;";
+            // $equipment_tabs .= "<span class='tag tag-success'>Complete</span>";
+            $equipment_tabs .= "</a>
+                                </li>";
+        }
 
-//         $equipment_tabs .= "</ul>
-//                             <div class='tab-content'>";
+        $equipment_tabs .= "</ul>
+                            <div class='tab-content'>";
 
-//         $counter = 0;
-//         $counter3 = 0;
+        $counter = 0;
+        $counter3 = 0;
 
-//         foreach ($equipments as $key => $equipment) {
-//             $counter++;
+        foreach ($equipments as $key => $equipment) {
+            $counter++;
             
 
-//             $equipmentname = $equipment->equipment_name;
-//             $equipmentname = str_replace(' ', '_', $equipmentname);
+            $equipmentname = $equipment->equipment_name;
+            $equipmentname = str_replace(' ', '_', $equipmentname);
 
-//             if($counter == 1){
-//                 $equipment_tabs .= "<div class='tab-pane active' id='". $equipmentname ."' role='tabpanel'>";
-//             }else{
-//                 $equipment_tabs .= "<div class='tab-pane' id='". $equipmentname ."' role='tabpanel'>";
-//             }
-//     // echo "<pre>";print_r($participant_id);echo "</pre>";die();        
-//             $this->db->where('round_uuid',$round_uuid);
-//             $this->db->where('participant_id',$participant_id);
-//             $this->db->where('equipment_id',$equipment->id);
+            if($counter == 1){
+                $equipment_tabs .= "<div class='tab-pane active' id='". $equipmentname ."' role='tabpanel'>";
+            }else{
+                $equipment_tabs .= "<div class='tab-pane' id='". $equipmentname ."' role='tabpanel'>";
+            }
+    // echo "<pre>";print_r($participant_id);echo "</pre>";die();        
+            $this->db->where('round_uuid',$round_uuid);
+            $this->db->where('participant_id',$participant_id);
+            $this->db->where('equipment_id',$equipment->id);
 
-//             $datas = $this->db->get('data_entry_v')->result();
+            $datas = $this->db->get('data_entry_v')->result();
 
 
-//             $equipment_tabs .= "<div class='row'>
-//         <div class='col-sm-12'>
-//         <div class='card'>
-//             <div class='card-header'>
+            $equipment_tabs .= "<div class='row'>
+        <div class='col-sm-12'>
+        <div class='card'>
+            <div class='card-header'>
                 
 
-//             <div class='form-group row'>
-//                 <div class='col-md-6'>
+            <div class='form-group row'>
+                <div class='col-md-6'>
 
-//                 <label class='checkbox-inline'>
-//                 <strong>RESULTS FOR ". $equipment->equipment_name ."</strong>
-//                 </label>
+                <label class='checkbox-inline'>
+                <strong>RESULTS FOR ". $equipment->equipment_name ."</strong>
+                </label>
 
-//                 </div>
-//                 <div class='col-md-6'>
+                </div>
+                <div class='col-md-6'>
                     
-//             <label class='checkbox-inline' for='check-complete'>";
+            <label class='checkbox-inline' for='check-complete'>";
 
-//             // if($datas){
-//             //     $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
-//             // }else{
-//             //     $getCheck = 0; 
-//             // }
-//             //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+            // if($datas){
+            //     $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+            // }else{
+            //     $getCheck = 0; 
+            // }
+            //echo "<pre>";print_r($getCheck);echo "</pre>";die();
 
-//             $equipment_tabs .= "</label>
-//                     </div>
-//                 </div>
+            $equipment_tabs .= "</label>
+                    </div>
+                </div>
 
 
-//             </div>
-//             <div class='card-block'>
+            </div>
+            <div class='card-block'>
             
-//                 <div class='row'>
-//                     <table  style='text-align: center;' class='table table-bordered'>
-//                         <tr>
-//                             <th style='text-align: center; width:20%;' rowspan='3'>
-//                                 PANEL
-//                             </th>
-//                             <th style='text-align: center;' colspan='7'>
-//                                 RESULT
-//                             </th>
-//                         </tr>
-//                         <tr>
-//                             <th style='text-align: center;' colspan='2'>
-//                                 CD3
-//                             </th>
-//                             <th style='text-align: center;' colspan='2'>
-//                                 CD4
-//                             </th>
-//                             <th style='text-align: center;' colspan='2'>
-//                                 Other (Specify)
-//                             </th>
-//                         </tr>
-//                         <tr>
-//                             <th style='text-align: center;'>
-//                                 Absolute
-//                             </th>
-//                             <th style='text-align: center;'>
-//                                 Percent
-//                             </th>
-//                             <th style='text-align: center;'>
-//                                 Absolute
-//                             </th>
-//                             <th style='text-align: center;'>
-//                                 Percent
-//                             </th>
-//                             <th style='text-align: center;'>
-//                                 Absolute
-//                             </th>
-//                             <th style='text-align: center;'>
-//                                 Percent
-//                             </th>
-//                         </tr>";
+                <div class='row'>
+                    <table  style='text-align: center;' class='table table-bordered'>
+                        <tr>
+                            <th style='text-align: center; width:20%;' rowspan='3'>
+                                PANEL
+                            </th>
+                            <th style='text-align: center;' colspan='7'>
+                                RESULT
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;' colspan='2'>
+                                CD3
+                            </th>
+                            <th style='text-align: center;' colspan='2'>
+                                CD4
+                            </th>
+                            <th style='text-align: center;' colspan='2'>
+                                Other (Specify)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                            <th style='text-align: center;'>
+                                Absolute
+                            </th>
+                            <th style='text-align: center;'>
+                                Percent
+                            </th>
+                        </tr>";
 
-//                     $counter2 = 0;
-//                     foreach ($samples as $key => $sample) {
+                    $counter2 = 0;
+                    foreach ($samples as $key => $sample) {
                         
-//                     //echo "<pre>";print_r($datas);echo "</pre>";die();
+                    //echo "<pre>";print_r($datas);echo "</pre>";die();
 
-//                         $value = 0;
-//                         $equipment_tabs .= "<tr> <th style='text-align: center;'>";
-//                         $equipment_tabs .= $sample->sample_name;
+                        $value = 0;
+                        $equipment_tabs .= "<tr> <th style='text-align: center;'>";
+                        $equipment_tabs .= $sample->sample_name;
 
-//                         $equipment_tabs .= "</th> <td>";
+                        $equipment_tabs .= "</th> <td>";
                                 
-//                         //echo "<pre>";print_r($datas[$counter2]->equipment_id);echo "</pre>";die();
-//                             if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->cd3_absolute;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                             }else{
-//                                 $value = 0;
-//                             }
+                        //echo "<pre>";print_r($datas[$counter2]->equipment_id);echo "</pre>";die();
+                            if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd3_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                            }else{
+                                $value = 0;
+                            }
 
-//                         $equipment_tabs .= $value ." </td> <td>";
+                        $equipment_tabs .= $value ." </td> <td>";
 
-//                         if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->cd3_percent;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                         }else{
-//                             $value = 0;
-//                         }
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd3_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
-//                         $equipment_tabs .= $value." </td> <td>";
+                        $equipment_tabs .= $value." </td> <td>";
 
-//                         if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->cd4_absolute;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                         }else{
-//                             $value = 0;
-//                         }
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd4_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
-//                         $equipment_tabs .= $value."</td> <td>";
+                        $equipment_tabs .= $value."</td> <td>";
 
-//                         if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->cd4_percent;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                         }else{
-//                             $value = 0;
-//                         }
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->cd4_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
-//                         $equipment_tabs .= $value."</td> <td>";
+                        $equipment_tabs .= $value."</td> <td>";
 
-//                         if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->other_absolute;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                         }else{
-//                             $value = 0;
-//                         }
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->other_absolute;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
-//                         $equipment_tabs .= $value."</td> <td>";
+                        $equipment_tabs .= $value."</td> <td>";
 
-//                         if($datas){
-//                                 if($equipment->id == $datas[$counter2]->equipment_id){
-//                                     $value = $datas[$counter2]->other_percent;
-//                                 }else{
-//                                     $value = 0;
-//                                 }
-//                         }else{
-//                             $value = 0;
-//                         }
+                        if($datas){
+                                if($equipment->id == $datas[$counter2]->equipment_id){
+                                    $value = $datas[$counter2]->other_percent;
+                                }else{
+                                    $value = 0;
+                                }
+                        }else{
+                            $value = 0;
+                        }
 
-//                         $equipment_tabs .= $value."</td> </tr>";
-//                         $counter2++;
-//                     }
+                        $equipment_tabs .= $value."</td> </tr>";
+                        $counter2++;
+                    }
 
-//                     $equipment_tabs .= "</table>
-//                                         </div>
+                    $equipment_tabs .= "</table>
+                                        </div>
 
-//                                         </div>   
-//                                         </div>
-//                                         </div>
-//                                         </div>
-//                                         </div>";
+                                        </div>   
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>";
 
-//                     $equipment_tabs .= "";
-//         }
+                    $equipment_tabs .= "";
+        }
 
-//         $equipment_tabs .= "</div>";
+        $equipment_tabs .= "</div>";
 
-//         return $equipment_tabs;
+        return $equipment_tabs;
 
-//     }
+    }
 
 
 
@@ -802,7 +802,7 @@ class PTRounds extends DashboardController{
         $participant_uuid = $user->uuid;
 
         // $equipment_tabs = $this->load->module('QAReviewer/PTRound')->createTabs($round_uuid,$participant_uuid);
-        // $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid);
+        $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid);
 
         $data = [
                 'pt_uuid'    =>  $round_uuid,
