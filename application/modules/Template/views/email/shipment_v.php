@@ -312,27 +312,21 @@ a {
 								
                 <tr>
                   <td class="content-block">
-                    <h4>This is a notification of an impending EQA round for flow cytometry from the NHRL Proficiency Testing programme.</h4>
+                    <h4>This to notify you that your flow cytometry EQA panel from the NHRL proficiency testing programme is en route to your facility. Please expect delivery within 1-2 working days.</h4>
                   </td>
                 </tr>
-								<tr>
-									<td class="content-block">
-										Kindly let us know if you will be able to participate by filling the readiness assessment checklist using the link below:
-									</td>
-								</tr>
 
-								<tr>
-									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-										<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry readiness checklist</a>
-									</td>
-								</tr>
                 <tr>
                   <td class="content-block">
-                    Please complete by 
-                    <b><?= @$pt_round_no; ?></b> .
-                    Failure to comply will result in exclusion from the round
+                    <h4>Kindly acknowledge receipt and the condition of the panel immediately it is delivered using the link below:</h4>
                   </td>
                 </tr>
+
+				<tr>
+					<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+						<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry receipt</a>
+					</td>
+				</tr>
                 <tr>
                   <td class="content-block">
                     We appreciate your support. In case of any clarification, please do not hesitate to contact us at <a style="font-weight: bold;">nhrlCD4eqa@nphls.or.ke</a>
@@ -360,22 +354,22 @@ a {
                   </td>
                 </tr>
 
-								<!-- <tr>
-									<td class="content-block">
-										&mdash; NHRL
-									</td>
-								</tr> -->
-							</table>
-						</td>
-					</tr>
-				</table>
-				<div class="footer">
-					<table width="100%">
-						<tr>
-							<td class="aligncenter content-block"><a href="<?= @base_url(); ?>">NHRL EQA</a></td>
-						</tr>
+						<!-- <tr>
+							<td class="content-block">
+								&mdash; NHRL
+							</td>
+						</tr> -->
 					</table>
-				</div></div>
+				</td>
+			</tr>
+		</table>
+		<div class="footer">
+			<table width="100%">
+				<tr>
+					<td class="aligncenter content-block"><a href="<?= @base_url(); ?>">NHRL EQA</a></td>
+				</tr>
+			</table>
+		</div></div>
 		</td>
 		<td></td>
 	</tr>

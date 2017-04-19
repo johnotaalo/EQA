@@ -38,6 +38,7 @@ class Participant extends MY_Controller {
 
 			$encoded_token = urlencode($token);
 			$verification_url = $this->config->item('server_url') . 'Auth/verify/' . $emailaddress . '/' . $encoded_token;
+
 			$this->db->insert('participants', $participant_insert);
 			$id = $this->db->insert_id();
 
@@ -52,9 +53,15 @@ class Participant extends MY_Controller {
 
 			$this->db->insert_batch('participant_equipment', $equipment_insert);
 
+			$picgok = @$this->config->item('server_url') . 'assets/frontend/images/files/gok.png';
+			$picministry = @$this->config->item('server_url') . 'assets/frontend/images/files/ministry.png';
+
 			$data = [
 				'participant_name'	=>	$surname . " " . $firstname,
-				'url'				=>	$verification_url
+				'url'				=>	$verification_url,
+				'picgok' 			=> $picgok,
+				'picministry' 		=> $picministry
+
 			];
 
 			$body = $this->load->view('Template/email/signup_v', $data, TRUE);

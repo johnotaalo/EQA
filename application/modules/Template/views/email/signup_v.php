@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -305,39 +306,70 @@ a {
 							<table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <h4>Hello <?= @$participant_name; ?>,</h4>
+                    <!-- <h4>Hello <?= @$participant_name; ?>,</h4> -->
+                    <h4>Dear Participant,</h4>
                   </td>
                 </tr>
 								<tr>
 									<td class="content-block">
-										First of all, Welcome to EQA by NHRL.
+										Congratulations, your registration to the NHRL proficiency testing program flow cytometry module was successful.
 									</td>
 								</tr>
 								<tr>
 									<td class="content-block">
-										Please follow the link below to activate your email
+										If you wish to log in right now, please click the box below:
+									</td>
+								</tr>
+
+								<tr>
+									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+										<a href="<?= @$url; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry log in</a>
 									</td>
 								</tr>
                 <tr>
                   <td class="content-block">
-                    If you have any questions, please contact NHRL via (+254712345678)
+                    We appreciate your support. In case of any clarification, please do not hesitate to contact us at <a style="font-weight: bold;">nhrlCD4eqa@nphls.or.ke</a>
                   </td>
                 </tr>
+                <tr>
+                  <td class="content-block">
+                    Kind Regards,
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    Coordination Team,
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    NHRL Proficiency Testing Programme
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                      <img height="50px" width="50px" src="<?= @$this->config->item('server_url'); ?>assets/frontend/images/files/gok.png" alt="Ministry of Health">
+                      <img height="60px" width="180px" src="<?= @$this->config->item('server_url'); ?>assets/frontend/images/files/ministry.png" alt="National Public Health Laboratories and National HIV Reference Laboratory">
+                  </td>
+                </tr>
+                <!-- <tr>
+                  <td class="content-block"> -->
+                   
+                  <!-- </td>
+                </tr> -->
 
-								<tr>
-									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-										<a href="<?= @$url; ?>" class="btn-primary" itemprop="url">Activate Now!</a>
-									</td>
-								</tr>
-								<tr>
+
+
+								<!-- <tr>
 									<td class="content-block">
 										&mdash; NHRL
 									</td>
-								</tr>
+								</tr> -->
 							</table>
 						</td>
 					</tr>
 				</table>
+        
 				<div class="footer">
 					<table width="100%">
 						<tr>
