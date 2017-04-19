@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="<?= @$assets_url; ?>home/css/style.css">
     <link rel="stylesheet" href="<?= @$assets_url; ?>home/css/responsive.css">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" href="<?= @$assets_url; ?>home/img/favicon.png">
+    <!-- <link rel="shortcut icon" type="image/png" href="<?= @$assets_url; ?>home/img/favicon.png"> -->
     <?= @$page_css; ?>
 </head>
 
@@ -71,7 +71,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#home" class="smoothscroll">Home</a></li>
-                        <li><a href="#expert" class="smoothscroll">About us</a></li>
+                        <li><a href="#about-us" class="smoothscroll">About us</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Library</a>
                             <ul class="dropdown-menu">

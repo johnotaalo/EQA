@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <div class="item">
+            <!-- <div class="item">
                 <img src="<?= @$this->config->item('assets_url'); ?>frontend/images/files/sliders/banner/ORIGINAL.PNG" alt="responsive img">
                 <div class="hero-caption">
                     <div class="hero-caption-inner">
@@ -25,11 +25,10 @@
                             <h1>ABOUT US</h1>
                             <p>The National Public Health Lab is a division under the Ministry of Health mandated to offer quality assurance services for all clinical laboratory testing in Kenya. NHRL, a unit under NPHL, oversees all QA activities in HIV related testing. Part of QA entails proficiency testing, which offers an objective means of assessing the accuracy, reliability and comparability of lab results. Facilities are encouraged to enroll for the PT program to help us monitor and improve the quality of their lab results. To enroll, please click <a href="<?= @base_url('Auth/signup'); ?>">here</a></p>
 
-                            <!-- <a href="#" class="btn btn-default btn-outline" role="button">DISCOVER MORE</a> -->
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
    
@@ -88,27 +87,25 @@
    
 
 
-    <!-- <div class="about-area inner-padding">
+    <div class="about-area inner-padding" id="about-us">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-md-6 foo">
                     <div class="about-left">
-                        <img src="<?= @$assets_url; ?>home/img/about-1.png" alt="responsive img">
+                        <img src="<?= @$assets_url; ?>home/img/about-1.jpg" alt="responsive img">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div class="section-title-2">
-                        <h2 class="title-2">We Are Third EYE</h2>
+                        <h2 class="title-2">ABOUT US</h2>
                     </div>
                     <div class="about-content">
-                        <p><span class="text-bold">THIRDEYE</span> is the best theme for elit, sed do eiusmod tempor dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt uteiusmod tempor incididunt labore consectetur et lorna aliqua. Ut enim ad minim veniam, quis nostrud oris quis nostrud oris .Commodo nostrud oris consequat Duis aute irure dolo.</p>
-
-                        <p>Lorem is a dummy text do eiusmod tempor dolor sit amet, eiusmod tempor dolor sit amet, onsectetur adip iscing elit, sed do eiusmod tempor quis nostrud incididunt tempor quis nostrud incididunt ut labore et lorna aliqua Ut enim eiusmod .</p>
+                        <p><span class="text-bold">The National Public Health Lab</span> is a division under the Ministry of Health mandated to offer quality assurance services for all clinical laboratory testing in Kenya. NHRL, a unit under NPHL, oversees all QA activities in HIV related testing. Part of QA entails proficiency testing, which offers an objective means of assessing the accuracy, reliability and comparability of lab results. Facilities are encouraged to enroll for the PT program to help us monitor and improve the quality of their lab results. To enroll, please click <a href="<?= @base_url('Auth/signup'); ?>">here</a></p>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
    
 
     <!-- <div class="choose-area inner-padding" id="thirdeye">
@@ -533,8 +530,8 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="section-title-1">
-                            <h2 class="title-1">Get In Touch</h2>
-                            <p>NEED ANYTHING CLARIFIED ? </p>
+                            <h2 class="title-1">Need Help ?</h2>
+                            <!-- <p>NEED ANYTHING CLARIFIED ? </p> -->
                         </div>
                     </div>
                 </div>
