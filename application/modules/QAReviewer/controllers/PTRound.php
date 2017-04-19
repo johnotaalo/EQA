@@ -262,7 +262,7 @@ class PTRound extends MY_Controller {
             <div class='card-block'>
             
                 <div class='row'>
-                    <table class='table table-bordered'>
+                    <table  style='text-align: center;' class='table table-bordered'>
                         <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
