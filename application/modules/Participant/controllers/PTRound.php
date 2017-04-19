@@ -104,7 +104,9 @@ class PTRound extends MY_Controller {
             ->addJs('dashboard/js/libs/jquery.validate.js')
             ->addJs("plugin/sweetalert/sweetalert.min.js");
         $this->assets->setJavascript('Participant/participant_login_js');
-        $this->assets->addCss('css/signin.css');
+        $this->assets
+                ->addCss("plugin/sweetalert/sweetalert.css")
+                ->addCss('css/signin.css');
         $this->template->setPageTitle('PT Forms')->setPartial('pt_report_v',$data)->adminTemplate();
     }
 
