@@ -69,4 +69,23 @@ class M_PTRounds extends MY_Model{
 
         return $this->db->get()->result();
     }
+
+    public function getDataSubmission($round){
+        $this->db->where('round_id', $round);
+
+        $query = $this->db->get('pt_data_submission',1);
+
+        return $query->row();
+    }
+
+    public function getFacilityParticipants($round_uuid){
+        $this->db->from('data_entry_v dev');
+        $this->db->join('pt_ready_participants prp', 'prp.p_id = dev.participant_id');
+        $this->db->where('dev.round_uuid', $round_uuid);
+        $this->db->group_by('dev.round_uuid, dev.participant_id');
+        $this->db->order_by('prp.facility_code');
+        
+
+        return $this->db->get()->result();
+    }
 }

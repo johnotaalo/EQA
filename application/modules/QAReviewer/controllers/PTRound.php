@@ -168,12 +168,12 @@ class PTRound extends MY_Controller {
         $data = [];
         $title = "Ready Participants";
 
-        $equipments = $this->M_PTRound->Equipments();
+        
 
         $user = $this->M_Readiness->findUserByIdentifier('username', $participant_id);
         $participant_uuid = $user->uuid;
 
-        $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid,$equipments);
+        $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid);
 
         $data = [
                 'pt_uuid'    =>  $round_uuid,
@@ -193,7 +193,9 @@ class PTRound extends MY_Controller {
     }
 
 
-    public function createTabs($round_uuid, $participant_uuid, $equipments){
+    public function createTabs($round_uuid, $participant_uuid){
+
+        $equipments = $this->M_PTRound->Equipments();
         
         $datas=[];
         $tab = 0;
@@ -259,7 +261,6 @@ class PTRound extends MY_Controller {
 
             $datas = $this->db->get('data_entry_v')->result();
 
-
             $equipment_tabs .= "<div class='row'>
         <div class='col-sm-12'>
         <div class='card'>
@@ -278,11 +279,11 @@ class PTRound extends MY_Controller {
                     
             <label class='checkbox-inline' for='check-complete'>";
 
-            // if($datas){
-            //     $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
-            // }else{
-            //     $getCheck = 0; 
-            // }
+            if($datas){
+                $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+            }else{
+                $getCheck = 0; 
+            }
             //echo "<pre>";print_r($getCheck);echo "</pre>";die();
 
             $equipment_tabs .= "</label>
@@ -338,7 +339,7 @@ class PTRound extends MY_Controller {
                     $counter2 = 0;
                     foreach ($samples as $key => $sample) {
                         
-                    //echo "<pre>";print_r($datas);echo "</pre>";die();
+                    // echo "<pre>";print_r($datas);echo "</pre>";die();
 
                         $value = 0;
                         $equipment_tabs .= "<tr> <th style='text-align: center;'>";
