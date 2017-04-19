@@ -84,6 +84,7 @@ class PTRound extends MY_Controller {
     }
 
 
+
     function createFacilityParticipantsTable($round_uuid,$facility_id){
 
         $template = $this->config->item('default');
@@ -108,10 +109,24 @@ class PTRound extends MY_Controller {
             foreach($facility_participants as $participant){
                 $counter ++;
                 $participantid = $participant->participant_id;
+                $pid = $participant->p_id;
+                $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
 
                 $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a>';
 
-                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$participantid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                $getRound = $this->M_PPTRound->getDataSubmission($round_id,$pid);
+
+                $smart_stat = 0;
+                foreach ($getRound as $stat) {
+                    $smart_stat += $stat->status;
+                }
+
+                // echo "<pre>";print_r($smart_stat);echo "</pre>";die();
+
+            if($smart_stat == 3){
+                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+            }
+
                 
                 $tabledata[] = [
                     $counter,
@@ -126,6 +141,25 @@ class PTRound extends MY_Controller {
         $this->table->set_template($template);
 
         return $this->table->generate($tabledata);
+    }
+
+
+    function MarkSubmissions($round_uuid,$round_id, $pid){
+
+        $this->db->set('smart_status', 1);
+        
+        $this->db->where('round_id', $round_id);
+        $this->db->where('participant_id', $pid);
+        //$this->db->update('equipment');
+
+        if($this->db->update('pt_data_submission')){
+            $this->session->set_flashdata('success', "Successfully sent PT submission to the NHRL");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem sending the details. Please try again");
+        }
+
+        redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
+
     }
 
 
@@ -244,13 +278,11 @@ class PTRound extends MY_Controller {
                     
             <label class='checkbox-inline' for='check-complete'>";
 
-            if($datas){
-                $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
-            }else{
-                $getCheck = 0; 
-            }
-            
-
+            // if($datas){
+            //     $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+            // }else{
+            //     $getCheck = 0; 
+            // }
             //echo "<pre>";print_r($getCheck);echo "</pre>";die();
 
             $equipment_tabs .= "</label>
