@@ -35,14 +35,14 @@ class PTRound extends MY_Controller {
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view} {$panel_tracking}</td>
+                    <td>{$view}</td>
                     </tr>";
                 }else{
                     $prevfut .= "<tr>
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view} {$panel_tracking}</td>
+                    <td>{$view}</td>
                     </tr>";
                 }
             }
@@ -61,7 +61,6 @@ class PTRound extends MY_Controller {
         
 
         $participant_id = $user->uuid;
-        $facility_code = $user->facility_code;
 
         $equipments = $this->M_PTRound->Equipments();
 

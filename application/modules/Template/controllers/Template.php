@@ -172,6 +172,12 @@ class Template extends MX_Controller {
 				'text'	=>	'PT Rounds',
 				'link'	=>	'Participant/PTRound/',
 				'users'	=>	['participant']
+			],
+			'qarounds'	=>	[
+				'icon'	=>	'icon-chemistry',
+				'text'	=>	'PT Rounds',
+				'link'	=>	'QAReviewer/PTRound/',
+				'users'	=>	['qareviewer']
 			]
 		];
 

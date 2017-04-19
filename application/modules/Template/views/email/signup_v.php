@@ -348,8 +348,7 @@ a {
                 </tr>
                 <tr>
                   <td class="content-block">
-                      <img height="50px" width="50px" src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fd%2Fda%2FCoat-of-arms-DETAILED-rgb.png&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGovernment_of_Kenya&docid=J9Ms1ieqsbOcHM&tbnid=kiWz92nVIGFpZM%3A&vet=10ahUKEwjun_DYjbHTAhVqx1QKHVy0B1EQMwgxKAAwAA..i&w=740&h=696&safe=strict&client=firefox-b-ab&bih=659&biw=1366&q=government%20of%20kenya&ved=0ahUKEwjun_DYjbHTAhVqx1QKHVy0B1EQMwgxKAAwAA&iact=mrc&uact=8" alt="Ministry of Health">
-                      <!-- <img height="50px" width="50px" src="<?= @$this->config->item('server_url'); ?>assets/frontend/images/files/gok.png" alt="Ministry of Health"> -->
+                      <img height="50px" width="50px" src="<?= @$this->config->item('server_url'); ?>assets/frontend/images/files/gok.png" alt="Ministry of Health">
                       <img height="60px" width="180px" src="<?= @$this->config->item('server_url'); ?>assets/frontend/images/files/ministry.png" alt="National Public Health Laboratories and National HIV Reference Laboratory">
                   </td>
                 </tr>

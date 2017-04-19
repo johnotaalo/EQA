@@ -328,7 +328,7 @@ a {
 								</tr>
                 <tr>
                   <td class="content-block">
-                    Please complete by 
+                    Please complete by 26 May 2017
                     <b><?= @$pt_round_no; ?></b> .
                     Failure to comply will result in exclusion from the round
                   </td>
