@@ -92,7 +92,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6 foo">
                     <div class="about-left">
-                        <img src="<?= @$assets_url; ?>home/img/about-1.jpg" alt="responsive img">
+                        <img style="width:450px;" src="<?= @$assets_url; ?>home/img/about-1.jpg" alt="responsive img">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
@@ -351,18 +351,21 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-4">
                     <div class="fun-fact-item" data-sr='enter'>
-                        <h2 class="counter">307</h2>
+                        <p>Over</p>
+                        <h2 class="counter">300</h2>
                         <p>CD4 Facilities</p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-4">
                     <div class="fun-fact-item" data-sr='enter'>
-                        <h2 class="counter">276</h2>
+                        <p>Over</p>
+                        <h2 class="counter">250</h2>
                         <p>Rounds Done</p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-4">
                     <div class="fun-fact-item" data-sr='enter'>
+                        <p>Over</p>
                         <h2 class="counter">350</h2>
                         <p>Participants</p>
                     </div>
