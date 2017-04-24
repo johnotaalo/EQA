@@ -1,8 +1,12 @@
 <div class="row">
 	<div class="col-sm-12">
 
+	<div class = 'alert alert-warning'>
+        <h5>Refresh the page will cause a loss of some data, and would require another login attempt</h5>
+    </div>
+
 	    <div class="card">
-	        <div class="card-header">
+	        <!-- <div class="card-header">
 	            <strong>Participant Details</strong>
 	        </div>
 	        <div class="card-block">
@@ -47,11 +51,10 @@
                		<h5><?php if($user->telephone && $user->alt_telephone) { $user->telephone .' / '. $user->alt_telephone; } else if($user->telephone) { $user->telephone; }else if($user->alt_telephone){$user->alt_telephone;}else{ echo 'N/A'; }?></h5>
 	            </div>
             </div>
-            <!--/row-->
 
 	            
 	        </div>
-	    </div>
+	    </div> -->
 	</div>
 
 	<div class="col-sm-12">

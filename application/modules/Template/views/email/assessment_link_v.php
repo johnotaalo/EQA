@@ -328,8 +328,7 @@ a {
 								</tr>
                 <tr>
                   <td class="content-block">
-                    Please complete by 26 May 2017
-                    <b><?= @$pt_round_no; ?></b> .
+                    Please complete by <b><?= @date('dS F, Y', strtotime($due_date)); ?></b> .
                     Failure to comply will result in exclusion from the round
                   </td>
                 </tr>

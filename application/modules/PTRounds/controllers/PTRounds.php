@@ -1206,7 +1206,8 @@ public function createTabs($round_uuid, $participant_uuid){
 
             $data = [
                 'pt_round_no'   =>  $pt_round->pt_round_no,
-                'round_uuid'    =>  $pt_round->uuid
+                'round_uuid'    =>  $pt_round->uuid,
+                'due_date'  => $pt_round->to
             ];
             $body = $this->load->view('Template/email/assessment_link_v', $data, TRUE);
             $result = $this->mailer->sendMail('john.otaalo@strathmore.edu', 'PT Round Evaluation Link', $body, $recepients);

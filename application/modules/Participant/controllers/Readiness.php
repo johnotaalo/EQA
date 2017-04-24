@@ -2,16 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Readiness extends MY_Controller {
-private static $pt_uuid;
 	public function __construct(){
 		parent::__construct();
 
-
 		$this->load->model('M_Readiness');
+
 	}
 
 	public function authenticate($pt_uuid)
-	{
+	{	
 		$data['pt_uuid']	=	$pt_uuid;
 		$this->assets
 			->addJs('dashboard/js/libs/jquery.validate.js')
@@ -21,10 +20,62 @@ private static $pt_uuid;
 		$this->template->setPageTitle('Readiness Form')->setPartial('login_v', $data)->authTemplate();
 	}
 
+	
+	
+	private function set_session($session_data){
+		foreach ($session_data as $key => $value) {
+			$this->session->set_flashdata($key,$value); 
+		}	    
+    }
+
+	public function logout()
+    {
+        $this->session->sess_destroy();
+        redirect('Home', 'refresh');
+    }
+
+	public function checkLogin($pt_uuid){
+		// echo "<pre>";print_r($this->session->flashdata());echo "</pre>";
+		if(empty($this->session->flashdata())){
+			redirect('Participant/Readiness/authenticate/'.$pt_uuid,'refresh');
+		}
+	}
+
+	public function readinessChecklist($pt_uuid){
+		$this->checkLogin($pt_uuid);
+		// echo "<pre>";print_r("PT UUID ".$pt_uuid);echo "</pre>";die();
+
+		$data = [];
+
+		$user_details = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->flashdata('uuid'));
+		$questions_data = $this->getQuestions();
+		//echo "<pre>";print_r($data['pt_uuid']);echo "</pre>";die();
+        $data = [
+            'user'  =>  $user_details,
+            'questionnair'  =>  $questions_data,
+            'pt_uuid'  =>  $pt_uuid
+        ];
+
+        $title = "Readiness Form";
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('Participant/readiness_form_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('readiness_form_v', $data)
+                ->readinessTemplate();
+	}
+
 	public function authentication(){
+		$ptround = $this->input->post('ptround');
+
 		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
 		// echo "<pre>";print_r($user);echo "</pre>";die();
-		$ptround = $this->input->post('ptround');
+		
 		if ($user) {
 			
 			if($user->status == 1){
@@ -66,63 +117,9 @@ private static $pt_uuid;
 	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
 			}
 		}else{
-			$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
-			redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
-		}
-		
-		
-		
-	}
-	
-	private function set_session($session_data){
-		foreach ($session_data as $key => $value) {
-
-			$this->session->set_flashdata($key,$value); 
-		}
-		    
-    }
-
-	public function logout()
-    {
-        $this->session->sess_destroy();
-        redirect('Home', 'refresh');
-    }
-
-    public function checkLogin($pt_uuid){
-		if($this->session->flashdata('is_logged_in') != true){
-			//echo "<pre>";print_r("Reached00");echo "</pre>";die();
-			redirect('Participant/Readiness/authenticate/'.$pt_uuid,'refresh');
-		}
-	}
-
-	public function readinessChecklist($pt_uuid){
-
-		$this->checkLogin($pt_uuid);
-		// echo "<pre>";print_r("PT UUID ".$pt_uuid);echo "</pre>";die();
-
-		$data = [];
-
-		$user_details = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->flashdata('uuid'));
-		$questions_data = $this->getQuestions();
-		//echo "<pre>";print_r($data['pt_uuid']);echo "</pre>";die();
-        $data = [
-            'user'  =>  $user_details,
-            'questionnair'  =>  $questions_data,
-            'pt_uuid'  =>  $pt_uuid
-        ];
-
-        $title = "Readiness Form";
-
-        $this->assets
-                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
-                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                ->addJs('dashboard/js/libs/jquery.validate.js')
-                ->addJs('dashboard/js/libs/select2.min.js');
-        $this->assets->setJavascript('Participant/readiness_form_js');
-        $this->template
-                ->setPageTitle($title)
-                ->setPartial('readiness_form_v', $data)
-                ->readinessTemplate();
+			$this->session->set_flashdata('error', 'To get the readiness form, click on the email address link for the PT Round');
+			redirect('/', 'refresh');
+		}	
 	}
 
 	function getQuestions(){
@@ -199,6 +196,8 @@ private static $pt_uuid;
 
 		return $question_view;
 	}
+
+	
 
 	public function submitReadiness(){
 		$response_array = [];
