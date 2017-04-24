@@ -1,7 +1,7 @@
 <?php if($dashboard_data->rounds == 1 && $dashboard_data->current != "" ){?>
 <div class="alert alert-warning" role = "alert">
 	<?php if($dashboard_data->current == "enroute"){ ?>
-		Hello. A panel has been sent to you from NHRL. Please be sure to confirm upon receiving them. If you have received it, <a href="<?= @base_url('Participant/PanelTracking/confirm/' . $dashboard_data->readiness->panel_tracking_uuid); ?>" target = "_blank">click here</a> to confirm receipt.
+		Hello. A panel has been sent to you from NHRL. Please be sure to confirm upon receiving them. If you have received it, <a href="<?= @base_url('Participant/PanelTracking/confirm/' . $dashboard_data->readiness->panel_tracking_uuid); ?>" target = "_blank">click here</a> to confirm receipt, in order to participate in the Round.
 	<?php } elseif($dashboard_data->current == "readiness"){ ?>
 		Hello. Please fill in the evaulation for that has been sent to your email (<?= @$participant->participant_email; ?>). If you haven't received the evaluation, <a href="#">click here</a> to receive it.
 	<?php } elseif($dashboard_data->current == "pt_round_submission"){?>
@@ -16,7 +16,13 @@
 					Current PT Round: (<?= @$dashboard_data->pt_round->pt_round_no;?>) Calendar
 				</div>
 				<div class="col-sm-4">
-					<a href = "<?= @base_url('Participant/PTRound/Round/' . $dashboard_data->pt_round->uuid); ?>" class = "btn btn-primary pull-right">Open Round</a>
+				<?php
+					if($acceptance){
+				?>
+						<a href = "<?= @base_url('Participant/PTRound/Round/' . $dashboard_data->pt_round->uuid); ?>" class = "btn btn-primary pull-right">Open Round</a>
+				<?php
+					}
+				?>
 				</div>
 			</div>
 			<div class="card-block">

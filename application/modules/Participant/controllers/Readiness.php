@@ -154,7 +154,8 @@ private static $pt_uuid;
 				    $questions->question_no = str_replace('.','_',$questions->question_no);
 				    $question_view .=   '</label>
 				                		<div class="col-md-6">
-				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection..."></textarea>
+				                    	<span class="help-block text-danger">Please enter a maximum of 500 words</span>
+				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" maxlength="500" class="form-control" placeholder="Please provide reason for any No selection..."></textarea>
 				                		</div>
 				            			</div>
 				        				</div>';

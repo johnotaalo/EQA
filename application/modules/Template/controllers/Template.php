@@ -178,6 +178,12 @@ class Template extends MX_Controller {
 				'text'	=>	'PT Rounds',
 				'link'	=>	'QAReviewer/PTRound/',
 				'users'	=>	['qareviewer']
+			],
+			'users'		=>	[
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'User Accounts',
+				'link'	=>	'QAReviewer/PTRound/userlist',
+				'users'	=>	['qareviewer']
 			]
 		];
 

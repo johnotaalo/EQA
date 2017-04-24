@@ -5,22 +5,30 @@ class Dashboard extends DashboardController {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('dashboard_m');
+		$this->load->model('Participant/M_PTRound');
 	}
 	
 	public function index()
-	{
-		$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing'])->row();
+	{	
 		$data = [];
+		
 
 		$type = $this->session->userdata('type');
 		$this->assets->addCss('css/main.css');
 		$this->assets->addJs('js/main.js');
 
-		$view = "admin_dashboard";
+		// $view = "admin_dashboard";
+		
 		if($type == 'participant'){
+			$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+
+			$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+			// echo "<pre>";print_r($locking);echo "</pre>";die();
+
 			$this->load->model('participant/M_Participant');
 			$view = "dashboard_v";
 			$data = [
+				'acceptance'   		=> $locking->acceptance,
 				'dashboard_data'	=>	$this->getParticipantDashboardData($this->session->userdata('uuid')),
 				'participant'		=>	$this->M_Participant->findParticipantByIdentifier('uuid', $this->session->userdata('uuid'))
 			];

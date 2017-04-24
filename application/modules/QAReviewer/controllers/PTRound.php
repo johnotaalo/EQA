@@ -23,6 +23,104 @@ class PTRound extends MY_Controller {
             $this->template->setPageTitle('EQA Dashboard')->setPartial("pt_view",$data)->adminTemplate();
     }
 
+    public function userlist(){
+        $data = [];
+        $title = "Facility Participants";
+
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+        //echo '<pre>';print_r($user);echo "</pre>";die();
+
+        $data = [
+            'table_view'    =>  $this->createFacilityParticipantsTableView($user->facility_code)
+        ];
+
+       
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
+        // $this->assets->setJavascript('QAReviewer/participants_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('QAReviewer/facility_participants_v', $data)
+                ->adminTemplate();
+    }
+
+
+    function createFacilityParticipantsTableView($facility_code){
+
+        $template = $this->config->item('default');
+
+        $change_state = '';
+
+        $facility_participants = $this->M_PPTRound->getFacilityParticipantsView($facility_code);
+        // echo '<pre>';print_r($facility_participants);echo "</pre>";die();
+
+        $heading = [
+            "No.",
+            "Participant ID",
+            "Participant",
+            "Phone Number",
+            "Actions"
+        ];
+        $tabledata = [];
+
+
+        if($facility_participants){
+            $counter = 0;
+            foreach($facility_participants as $participant){
+                $counter ++;
+
+                
+
+                if($participant->status == 0){
+                    $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/activate/$participant->username/$participant->uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Activate</a> ';
+                }else{
+                    $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/deactivate/$participant->username/$participant->uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;Deactivate</a> ';
+                }
+
+                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/message/$participant->uuid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
+
+                $tabledata[] = [
+                    $counter,
+                    $participant->username,
+                    $participant->lastname.' '.$participant->firstname,
+                    $participant->phone,
+                    $change_state
+                ];
+            }
+        }
+        $this->table->set_heading($heading);
+        $this->table->set_template($template);
+
+        return $this->table->generate($tabledata);
+    }
+
+    function ChangeStatus($type,$username,$participant_uuid){
+        switch ($type) {
+            case 'activate':
+               $this->db->set('status', 1);
+                break;
+            
+            case 'deactivate':
+                $this->db->set('status', 0);
+                break;
+        }
+
+        
+        $this->db->where('uuid', $participant_uuid);
+
+        if($this->db->update('participants')){
+            $this->session->set_flashdata('success', "Successfully updated Participant ID: ".$username);
+        }else{
+            $this->session->set_flashdata('error', "There was a problem updating the Participant ID: ".$username);
+        }
+
+        redirect('QAReviewer/PTRound/userlist/', 'refresh');
+
+    }
+
+    
+
     function createPTRoundTable(){
         $rounds = $this->db->get('pt_round_v')->result();
         $ongoing = $prevfut = '';
@@ -112,20 +210,20 @@ class PTRound extends MY_Controller {
                 $pid = $participant->p_id;
                 $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
 
-                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a>';
+                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
 
-                $getRound = $this->M_PPTRound->getDataSubmission($round_id,$pid);
+                // $getRound = $this->M_PPTRound->getDataSubmission($round_id,$pid);
 
-                $smart_stat = 0;
-                foreach ($getRound as $stat) {
-                    $smart_stat += $stat->status;
-                }
+                // $smart_stat = 0;
+                // foreach ($getRound as $stat) {
+                //     $smart_stat += $stat->status;
+                // }
 
                 // echo "<pre>";print_r($smart_stat);echo "</pre>";die();
 
-            if($smart_stat == 3){
-                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
-            }
+            // if($smart_stat == 3){
+                $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> ';
+            // }
 
                 
                 $tabledata[] = [
@@ -161,8 +259,6 @@ class PTRound extends MY_Controller {
         redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
 
     }
-
-
 
     function ParticipantDetails($round_uuid,$participant_id){
         $data = [];

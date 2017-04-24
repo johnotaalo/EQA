@@ -500,15 +500,17 @@ class PTRounds extends DashboardController{
             foreach($facility_participants as $participant){
                 $counter ++;
                 $participantid = $participant->participant_id;
-                $pid = $participant->p_id;
+                $pid = $this->M_Readiness->findUserByIdentifier('p_id', $participantid)->username;
                 $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
+
+                // echo '<pre>';print_r($pid);echo "</pre>";die();
 
                 $change_state = ' <a href = ' . base_url("PTRounds/PTRounds/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a>';
 
                 
                 $tabledata[] = [
                     $counter,
-                    $participantid,
+                    $pid,
                     $participant->participant_lname.' '.$participant->participant_fname,
                     $participant->participant_phonenumber,
                     $change_state
@@ -520,14 +522,6 @@ class PTRounds extends DashboardController{
 
         return $this->table->generate($tabledata);
     }
-
-
-
-
-
-
-
-
 
 
 public function createTabs($round_uuid, $participant_uuid){
@@ -780,30 +774,18 @@ public function createTabs($round_uuid, $participant_uuid){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     function ParticipantDetails($round_uuid,$participant_id){
         $data = [];
         $title = "Ready Participants";
 
 
-        $user = $this->M_Readiness->findUserByIdentifier('username', $participant_id);
+        $user = $this->M_Readiness->findUserByIdentifier('p_id', $participant_id);
+        // echo "<pre>";print_r($user);echo "</pre>";die();
+
         $participant_uuid = $user->uuid;
 
         // $equipment_tabs = $this->load->module('QAReviewer/PTRound')->createTabs($round_uuid,$participant_uuid);
         $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid);
-
         $data = [
                 'pt_uuid'    =>  $round_uuid,
                 'participant'    =>  $participant_id,

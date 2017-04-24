@@ -22,6 +22,15 @@ class M_PPTRound extends CI_Model {
         return $datas;
     }
 
+    public function getFacilityParticipantsView($facility_code){
+
+        $this->db->where('facility_code', $facility_code);
+        $this->db->where('user_type', 'participant');
+        $query = $this->db->get('participant_readiness_v')->result();
+
+        return $query;
+    }
+
 
 }
 

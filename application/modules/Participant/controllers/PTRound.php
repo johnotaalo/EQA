@@ -8,6 +8,7 @@ class PTRound extends MY_Controller {
 
         $this->load->model('Participant/M_PTRound');
         $this->load->model('Participant/M_Readiness');
+        $this->load->model('Participant/M_Readiness');
         $this->load->library('Mailer');
     }
 
@@ -27,7 +28,22 @@ class PTRound extends MY_Controller {
         if ($rounds) {
             foreach ($rounds as $round) {
                 $created = date('dS F, Y', strtotime($round->date_of_entry));
-                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
+
+
+                $ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+                $locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+
+                if($locking->acceptance){
+
+                    $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
+
+                }else{
+
+                    $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PanelTracking/confirm/' . $locking->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;Confirm Receipt</a>";
+
+                }
+
+
                 $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('Participant/PTRound/Report/' . $round->uuid)."'><i class = 'fa fa-line-chart'></i>&nbsp;Report</a>";
                 $status = ($round->status == "active") ? '<span class = "tag tag-success">Active</span>' : '<span class = "tag tag-danger">Inactive</span>';
                 if ($round->type == "ongoing") {
@@ -72,7 +88,6 @@ class PTRound extends MY_Controller {
                 'participant'    =>  $participant_id,
                 'equipment_tabs'    =>  $equipment_tabs,
                 'data_submission' => 'data_submission'
-
             ];
               
         $this->assets
@@ -110,33 +125,33 @@ class PTRound extends MY_Controller {
     }
 
 
-    public function EquipmentComplete($equipmentId,$round){
-        // echo "<pre>";print_r("Reached with ".$equipmentId);echo "</pre>";die();
+    // public function EquipmentComplete($equipmentId,$round){
+    //     // echo "<pre>";print_r("Reached with ".$equipmentId);echo "</pre>";die();
 
-        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+    //     $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
-        $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
-        $participant_id = $user->p_id;
+    //     $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
+    //     $participant_id = $user->p_id;
 
-        $this->db->set('status', 1);
-        $this->db->where('round_id', $round_id);
-        $this->db->where('participant_id', $participant_id);
-        $this->db->where('equipment_id', $equipmentId);
+    //     $this->db->set('status', 1);
+    //     $this->db->where('round_id', $round_id);
+    //     $this->db->where('participant_id', $participant_id);
+    //     $this->db->where('equipment_id', $equipmentId);
 
-        if($this->db->update('pt_data_submission')){
-            $data = [
-                 'response' =>  1,
-                 'message' => "Successfully marked equipment as complete"
-            ];
-        }else{
-            $data = [
-                 'response' =>  0,
-                 'message' => "Marking as complete failed, please try again..."
-            ];
-        }
+    //     if($this->db->update('pt_data_submission')){
+    //         $data = [
+    //              'response' =>  1,
+    //              'message' => "Successfully marked equipment as complete"
+    //         ];
+    //     }else{
+    //         $data = [
+    //              'response' =>  0,
+    //              'message' => "Marking as complete failed, please try again..."
+    //         ];
+    //     }
 
-        return $this->output->set_content_type('application/json')->set_output(json_encode($data));
-    }
+    //     return $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    // }
 
 
     public function dataSubmission($equipmentid,$round){
@@ -341,10 +356,10 @@ class PTRound extends MY_Controller {
 
             if($getCheck == 1){
                 $disabled = "disabled='' ";
-                $equipment_tabs .= "<input type='checkbox' data-type = '". $equipment->equipment_name ."' class='check-complete' checked='checked' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
+                // $equipment_tabs .= "<input type='checkbox' data-type = '". $equipment->equipment_name ."' class='check-complete' checked='checked' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
             }else{
                 $disabled = "";
-                $equipment_tabs .= "<input type='checkbox' class='check-complete' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
+                // $equipment_tabs .= "<input type='checkbox' class='check-complete' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
             }
 
             $equipment_tabs .= "</label>

@@ -324,7 +324,7 @@ a {
 
 				<tr>
 					<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-						<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry receipt</a>
+						<a href="<?= @$this->config->item('server_url'); ?>Participant/PanelTracking/confirm/<?= @$panel_tracking_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry receipt</a>
 					</td>
 				</tr>
                 <tr>

@@ -7,6 +7,7 @@ class PanelTracking extends DashboardController {
 
 		$this->load->model('PTRounds/M_PanelTracking');
 		$this->load->module('Export');
+		$this->load->library('Mailer');
 	}
 
 	public function details($pt_uuid)
@@ -426,11 +427,20 @@ class PanelTracking extends DashboardController {
 
 				$this->db->where('pt_round_uuid', $pt_round_uuid);
 				$this->db->where('status_code', 1);
-				$this->db->select('readiness_id');
+				$this->db->select('readiness_id,participant_email,panel_tracking_uuid');
 				$ready_facilities = $this->db->get('pt_ready_participants')->result();
 				foreach ($ready_facilities as $facility) {
+					//echo "<pre>";print_r($ready_facilities);echo "</pre>";die();
 					$this->db->where('pt_readiness_id', $facility->readiness_id);
 					$this->db->update('pt_panel_tracking', $insert_data);
+
+
+					$data = [
+						'panel_tracking_uuid' => $facility->panel_tracking_uuid
+					];
+
+					$body = $this->load->view('Template/email/shipment_v', $data, TRUE);
+					$sent = $this->mailer->sendMail($facility->participant_email, "Shipment Sent", $body);
 				}
 
 				// $this->dispatchList($pt_round_uuid);

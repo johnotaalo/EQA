@@ -86,7 +86,7 @@ class M_PTRounds extends MY_Model{
         $this->db->where('dev.round_uuid', $round_uuid);
         $this->db->where('pds.smart_status', 1);
         $this->db->group_by('dev.round_uuid, dev.participant_id');
-        $this->db->order_by('prp.facility_code');
+        $this->db->order_by('prp.facility_code','asc');
         
 
         return $this->db->get()->result();

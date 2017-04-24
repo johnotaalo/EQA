@@ -544,9 +544,8 @@
                             <li>
                                 <div class="footer-content">
                                     <h4>HEADQUATER</h4>
-                                    <p>Kenyatta Hospital,</p>
-                                    <p> Nairobi</p>
-                                    <p>(+254) 714 135 480</p>
+                                    <p>Kenyatta Hospital Grounds,</p>
+                                    <p>Physical Address: Hospital Road,Upper Hill,Nairobi 00202, Kenya</p>
                                 </div>
                             </li>
                             <!-- <li>
