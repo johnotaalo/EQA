@@ -179,6 +179,96 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav pull-right hidden-md-down">
+
+
+
+			<li class="nav-item dropdown">
+                    <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon-envelope-letter"></i>
+                        <span class="tag tag-pill tag-success">7</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+
+                        <div class="dropdown-header text-xs-center">
+                            <strong>You have 4 messages</strong>
+                        </div>
+
+                        <a href="#" class="dropdown-item">
+                            <div class="message">
+                                <div class="py-1 mr-1 float-xs-left">
+                                    <div class="avatar">
+                                        <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status tag-success"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small class="text-muted">John Doe</small>
+                                    <small class="text-muted float-xs-right mt-q">Just now</small>
+                                </div>
+                                <div class="text-truncate font-weight-bold">
+                                    <span class="fa fa-exclamation text-danger"></span>Important message</div>
+                                <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <div class="message">
+                                <div class="py-1 mr-1 float-xs-left">
+                                    <div class="avatar">
+                                        <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status tag-warning"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small class="text-muted">John Doe</small>
+                                    <small class="text-muted float-xs-right mt-q">5 minutes ago</small>
+                                </div>
+                                <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                                <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <div class="message">
+                                <div class="py-1 mr-1 float-xs-left">
+                                    <div class="avatar">
+                                        <img src="img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status tag-danger"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small class="text-muted">John Doe</small>
+                                    <small class="text-muted float-xs-right mt-q">1:52 PM</small>
+                                </div>
+                                <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                                <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                            </div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <div class="message">
+                                <div class="py-1 mr-1 float-xs-left">
+                                    <div class="avatar">
+                                        <img src="img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status tag-info"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small class="text-muted">John Doe</small>
+                                    <small class="text-muted float-xs-right mt-q">4:03 PM</small>
+                                </div>
+                                <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                                <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                            </div>
+                        </a>
+
+                        <a href="<?= @base_url('Dashboard/viewMessages'); ?>" class="dropdown-item text-xs-center">
+                            <strong>View all messages</strong>
+                        </a>
+                    </div>
+                </li>
+
+
+
+
+
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						<img style = "width: 30px;height:30px;" src="<?php if($user_details->avatar){ echo $user_details->avatar; }else{ echo 'https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png'; }?>" class="img-avatar" alt="<?= @$user_details->email_address; ?>">
@@ -192,9 +282,10 @@
 						<a class="dropdown-item" href="<?= @base_url('Auth/logout'); ?>"><i class="fa fa-lock"></i> Logout</a>
 					</div>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">☰</a>
-				</li>
+				<!-- <li class="nav-item"> -->
+					<!-- <a class="nav-link" href="#">☰</a> -->
+					&nbsp;&nbsp;&nbsp;
+				<!-- </li> -->
 			</ul>
 		</div>
 	</header>

@@ -148,13 +148,14 @@
                                 </div>
                         
                             </div>
-                    <div class = "row">
-                        <div style = "margin-top: 10px;">
-                            <button id = "saveChanges" class = "btn btn-primary btn-block" type = "submit">
-                                <i class = "icon-pencil"></i> Save Changes
-                            </button>
+                            <div class = "row">
+                                <div style = "margin-top: 10px;">
+                                    <button id = "saveChanges" class = "btn btn-primary btn-block" type = "submit">
+                                        <i class = "icon-pencil"></i> Save Changes
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
