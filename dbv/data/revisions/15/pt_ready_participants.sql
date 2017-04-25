@@ -10,6 +10,7 @@ VIEW `pt_ready_participants` AS
         `pr`.`pt_round_no` AS `pt_round_uuid`,
         `p`.`id` AS `p_id`,
         `p`.`participant_id` AS `participant_id`,
+        `p`.`uuid` AS `participant_uuid`,
         `p`.`participant_fname` AS `participant_fname`,
         `p`.`participant_lname` AS `participant_lname`,
         `p`.`participant_phonenumber` AS `participant_phonenumber`,

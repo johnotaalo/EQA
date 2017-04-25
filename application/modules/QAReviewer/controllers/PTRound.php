@@ -78,7 +78,7 @@ class PTRound extends MY_Controller {
                     $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/deactivate/$participant->username/$participant->uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;Deactivate</a> ';
                 }
 
-                $change_state .= ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/message/$participant->uuid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
+                
 
                 $tabledata[] = [
                     $counter,
@@ -173,14 +173,19 @@ class PTRound extends MY_Controller {
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
                 ->addJs("dashboard/js/libs/toastr.min.js");
         $this->assets->setJavascript('QAReviewer/notifications_js');
         $this->template
+                ->setModal("QAReviewer/message_v", "Send Message")
                 ->setPageTitle($title)
                 ->setPartial('QAReviewer/facility_participants_v', $data)
                 ->adminTemplate();
 
     }
+
+
+    
 
 
 
@@ -208,6 +213,7 @@ class PTRound extends MY_Controller {
             foreach($facility_participants as $participant){
                 $counter ++;
                 $participantid = $participant->participant_id;
+                 //echo "<pre>";print_r($participant);echo "</pre>";die();
 
                 $pid = $participant->p_id;
                 
@@ -220,13 +226,15 @@ class PTRound extends MY_Controller {
                 $getCheck = $this->M_PPTRound->getDataSubmission($round_id,$pid)->status;
                 //echo "<pre>";print_r($getCheck);echo "</pre>";die();
                 if($getCheck){
-                    $change_state .= '<a class = "btn btn-warning btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
                     // <button type="button" class="btn btn-primary" id="showtoast">Show Toast</button>
                 }else{
 
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> 
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> 
                     ';
                 }
+
+                $change_state .= ' <a id='. $participant->participant_uuid .' href = ' . base_url("QAReviewer/PTRound/Message/$round_uuid/$participant->participant_uuid") . ' class = "btn btn-warning btn-sm btn-send-message"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
 
                 
                 $tabledata[] = [
@@ -242,6 +250,70 @@ class PTRound extends MY_Controller {
         $this->table->set_template($template);
 
         return $this->table->generate($tabledata);
+    }
+
+    function Message($round_uuid,$participant_uuid){
+        $data = [];
+        $title = "Message";
+
+        $data = [
+               'round_uuid' => $round_uuid,
+               'participant_uuid' => $participant_uuid
+            ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('QAReviewer/notifications_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('QAReviewer/message_v', $data)
+                ->adminTemplate();
+    }
+
+
+    function sendMessage($round_uuid,$particapant_uuid){
+        if($this->input->post()){
+            $subject = $this->input->post('subject');
+            $message = $this->input->post('message');
+
+            $insertdata = [
+                'participant_uuid'    =>  $particapant_uuid,
+                'subject'     =>  $subject,
+                'message'     =>  $message
+            ];
+
+
+            if($this->db->insert('messages', $insertdata)){
+                $this->session->set_flashdata('success', "Successfully sent the message");
+
+                $this->db->where('uuid', $particapant_uuid);
+                $user = $this->db->get('participants')->row();
+
+                if($user){
+                    $data = [
+                        'names'  =>  $user->participant_lname ." ". $user->participant_fname
+                    ];
+
+                    $body = $this->load->view('Template/email/message_v', $data, TRUE);
+                    $this->load->library('Mailer');
+                    $sent = $this->mailer->sendMail($user->participant_email, $subject, $body);
+                    if ($sent == FALSE) {
+                        log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
+                    }
+                }
+
+            }else{
+                $this->session->set_flashdata('error', "There was a problem sending the message. Please try again");
+            }
+
+            // $user_id = $this->db->insert_id();
+
+            
+            redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
+        }
     }
 
 
