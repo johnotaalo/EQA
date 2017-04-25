@@ -15,6 +15,8 @@ class Dashboard extends DashboardController {
 	public function index()
 	{	
 		$data = [];
+
+		
 		
 
 		$type = $this->session->userdata('type');
@@ -27,7 +29,7 @@ class Dashboard extends DashboardController {
 			$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
 
 			$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
-			// echo "<pre>";print_r($locking);echo "</pre>";die();
+			
 
 			$this->load->model('participant/M_Participant');
 			$view = "dashboard_v";
@@ -46,14 +48,16 @@ class Dashboard extends DashboardController {
 			$view = "admin_dashboard";
 			$data = [
                 'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
+                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
                 'new_equipments'    =>  $this->dashboard_m->newEquipments()
             ];
 		}else if($type == "qareviewer"){
             $view = "qa_dashboard";
             $data = [
-            
             ];
         }
+
+        // echo "<pre>";print_r($data);echo "</pre>";die();
 		$this->template->setPageTitle('EQA Dashboard')->setPartial($view,$data)->adminTemplate();
 	}
 
