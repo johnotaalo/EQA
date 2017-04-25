@@ -304,22 +304,39 @@ a {
             <td class="content-wrap">
               <meta itemprop="name" content="Confirm Email"/>
               <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td class="content-block">
-                    <!-- <h4>Hello <?= @$participant_name; ?>,</h4> -->
-                    <h4>Dear Participant <?= @$names; ?>,</h4>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="content-block">
-                    A message has been sent to your Participant inbox
-                  </td>
-                </tr>
-                <tr>
-                  <td class="content-block">
-                    If you wish to view it, log in right now by clicking the box below:
-                  </td>
-                </tr>
+              <?php if($to == 'nhrlCD4eqa@nphls.or.ke'){ ?>
+                    <tr>
+                      <td class="content-block">
+                          <h4>Dear NHRL, </h4>
+                      </td>
+                    </tr>
+                
+                    <tr>
+                      <td class="content-block">
+                        <?= @$subject; ?>
+                      </td>
+                    </tr>
+
+                <?php }else{ ?>
+                    <tr>
+                      <td class="content-block">
+                        <h4>Dear <?= @$names; ?>,</h4>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="content-block">
+                        A message has been sent to your inbox
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="content-block">
+                        If you wish to view it, log in right now by clicking the box below:
+                      </td>
+                    </tr>
+
+                <?php } ?>
+                
 
                 <tr>
                   <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">

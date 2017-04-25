@@ -11,6 +11,9 @@ ADD COLUMN `deleted` INT NOT NULL DEFAULT 0 AFTER `date_sent`;
 ALTER TABLE `eqa`.`messages` 
 CHANGE COLUMN `from` `from` VARCHAR(255) NOT NULL DEFAULT 'No Name' ;
 
+ALTER TABLE `eqa`.`messages` 
+CHANGE COLUMN `participant_uuid` `to_uuid` VARCHAR(255) NOT NULL ;
+
 
 
 CREATE 
@@ -23,7 +26,7 @@ VIEW `messages_v` AS
         `m`.`uuid` AS `uuid`,
         `m`.`from` AS `from`,
         `m`.`email` AS `email`,
-        `m`.`participant_uuid` AS `participant_uuid`,
+        `m`.`to_uuid` AS `to`,
         `m`.`subject` AS `subject`,
         `m`.`message` AS `message`,
         `m`.`status` AS `status`,

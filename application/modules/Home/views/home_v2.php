@@ -596,7 +596,7 @@
                                                 <div class="form-group">
                                                     <label for="fname">Write here</label>
                                                     <div class="input-group">
-                                                        <textarea rows="5" class="form-control2 form-message" placeholder="Write here" id="msg" name="msg"></textarea>
+                                                        <textarea rows="5" class="form-control2 form-message" placeholder="Write here" id="msg" name="message"></textarea>
                                                     </div>
                                                 </div>
                                             </li>
