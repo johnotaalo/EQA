@@ -17,7 +17,7 @@ class M_PPTRound extends CI_Model {
     	$this->db->where('round_id',$round);
         $this->db->where('participant_id',$participant);
 
-        $datas = $this->db->get('pt_data_submission')->result();
+        $datas = $this->db->get('pt_data_submission')->row();
 
         return $datas;
     }

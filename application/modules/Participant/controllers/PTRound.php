@@ -356,6 +356,7 @@ class PTRound extends MY_Controller {
 
             if($getCheck == 1){
                 $disabled = "disabled='' ";
+                $equipment_tabs .= "<p><strong><span class='text-danger'>Further entry disabled. The Supervisor has submitted your data for review by the NHRL</span></strong></p>";
                 // $equipment_tabs .= "<input type='checkbox' data-type = '". $equipment->equipment_name ."' class='check-complete' checked='checked' $disabled name='check-complete' value='". $equipment->id ."'>&nbsp;&nbsp; Mark Equipment as Complete";
             }else{
                 $disabled = "";

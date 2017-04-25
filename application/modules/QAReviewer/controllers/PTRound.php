@@ -172,8 +172,9 @@ class PTRound extends MY_Controller {
        
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
-                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
-        // $this->assets->setJavascript('QAReviewer/participants_js');
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs("dashboard/js/libs/toastr.min.js");
+        $this->assets->setJavascript('QAReviewer/notifications_js');
         $this->template
                 ->setPageTitle($title)
                 ->setPartial('QAReviewer/facility_participants_v', $data)
@@ -207,23 +208,25 @@ class PTRound extends MY_Controller {
             foreach($facility_participants as $participant){
                 $counter ++;
                 $participantid = $participant->participant_id;
+
                 $pid = $participant->p_id;
+                
                 $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
 
+                
                 $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
+                
 
-                // $getRound = $this->M_PPTRound->getDataSubmission($round_id,$pid);
+                $getCheck = $this->M_PPTRound->getDataSubmission($round_id,$pid)->status;
+                //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+                if($getCheck){
+                    $change_state .= '<a class = "btn btn-warning btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                    // <button type="button" class="btn btn-primary" id="showtoast">Show Toast</button>
+                }else{
 
-                // $smart_stat = 0;
-                // foreach ($getRound as $stat) {
-                //     $smart_stat += $stat->status;
-                // }
-
-                // echo "<pre>";print_r($smart_stat);echo "</pre>";die();
-
-            // if($smart_stat == 3){
-                $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> ';
-            // }
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-warning btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> 
+                    ';
+                }
 
                 
                 $tabledata[] = [
@@ -244,7 +247,7 @@ class PTRound extends MY_Controller {
 
     function MarkSubmissions($round_uuid,$round_id, $pid){
 
-        $this->db->set('smart_status', 1);
+        $this->db->set('status', 1);
         
         $this->db->where('round_id', $round_id);
         $this->db->where('participant_id', $pid);

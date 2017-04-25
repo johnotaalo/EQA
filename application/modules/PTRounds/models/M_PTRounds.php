@@ -72,7 +72,7 @@ class M_PTRounds extends MY_Model{
 
     public function getDataSubmission($round){
         $this->db->where('round_id', $round);
-        $this->db->where('smart_status', 1);
+        $this->db->where('status', 1);
 
         $query = $this->db->get('pt_data_submission',1);
 
