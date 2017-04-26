@@ -51,7 +51,7 @@ class PTRound extends MY_Controller {
 
                             }else{
 
-                                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PanelTracking/confirm/' . $locking->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;Confirm Receipt</a>";
+                                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PanelTracking/confirm/' . $checklocking->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;Confirm Receipt</a>";
 
                             }
                         }
