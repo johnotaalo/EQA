@@ -183,7 +183,7 @@
 
 
 
-			<li class="nav-item dropdown">
+			<!-- <li class="nav-item dropdown">
                     <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="icon-envelope-letter"></i>
                         <span class="tag tag-pill tag-warning"><?= @$m_count; ?></span>
@@ -200,7 +200,7 @@
                             <strong>View all messages</strong>
                         </a>
                     </div>
-                </li>
+                </li> -->
 
 
 

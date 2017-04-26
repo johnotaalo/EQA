@@ -283,6 +283,8 @@ class PTRound extends MY_Controller {
         }
     }
 
+    
+
 
     public function createTabs($round_uuid, $participant_uuid){
         
@@ -297,7 +299,7 @@ class PTRound extends MY_Controller {
 
         
         $equipments = $this->M_PTRound->Equipments();
-        // 
+        
         
         $equipment_tabs = '';
 
@@ -335,7 +337,6 @@ class PTRound extends MY_Controller {
         foreach ($equipments as $key => $equipment) {
             $counter++;
 
-            // if(lotcounter)
             
 
             $equipmentname = $equipment->equipment_name;
@@ -365,6 +366,8 @@ class PTRound extends MY_Controller {
                 $qa_m_count = 0;
             }
 
+            // echo "<pre>";print_r($new_m_count);echo "</pre>";die();
+
             $equipment_tabs .= "<div class='row'>
         <div class='col-sm-12'>
         <div class='card'>
@@ -380,7 +383,7 @@ class PTRound extends MY_Controller {
 
                 </div>
                 <div class='col-md-6'>
-                    <a class='nav-link nav-link'  href='".base_url('QAReviewer/PTRound/QAMessage/'.$round_id.'/'.$participant_id.'/'.$equipment->id)."' role='button'>
+                    <a class='nav-link nav-link'  href='".base_url('Participant/PTRound/QAMessage/'.$round_id.'/'.$participant_id.'/'.$equipment->id)."' role='button'>
                     Message(s) from QA on ". $equipment->equipment_name ."
                         <i class='icon-envelope-letter'></i>
                         <span class='tag tag-pill tag-danger'>". $new_m_count ."</span>
@@ -621,17 +624,71 @@ class PTRound extends MY_Controller {
 
     }
 
+
     public function QAMessage($round_id,$part_id,$equip_id){
-        echo "<pre>";print_r($round_id);echo "</pre>";
-        echo "<pre>";print_r($part_id);echo "</pre>";
-        echo "<pre>";print_r($equip_id);echo "</pre>";die();
+        $message_view = '';
+
+        $messages = $this->M_PTRound->getDataLog($round_id,$part_id,$equip_id);
+         // echo "<pre>";print_r($messages);echo "</pre>";die();
+
+        $counter = 1;
+        foreach ($messages as $key => $message) {
+            $message_view .= "<div class='container-fluid pt-2'>
+                                <div class='animated fadeIn'>
+                                    <div class='row'>
+                                        <div class='col-sm-12'>
+                                            <div class='card'>
+                                                <div class='card-header'>
+                                                    <strong> Message ";
+            $message_view .= $counter;
+
+            $message_view .= "</strong>
+                            </div>
+                            <div class='card-block'>
+                                <div class='row'>
+
+                                    <div class='col-sm-2'>
+
+                                        <div class='form-group'>
+                                            <label for='name'>Verdict</label>
+                                            <p>";
+
+            $message_view .= $message->verdict;
+
+            $message_view .= "</p>
+                                        </div>
+
+                                    </div>
+                                    <div class='col-sm-8'>
+
+                                        <div class='form-group'>
+                                            <label for='ccnumber'>Message</label>
+                                            <p>";
+
+            $message_view .= $message->comments;
+
+            $message_view .= "</p>
+                                </div>
+
+                                </div>
+                                <div class='col-sm-2'>
+
+                                    <div class='form-group'>
+                                        <label for='ccnumber'>Date Sent</label>
+                                        <p>";
+            $message_view .= date('dS F, Y', strtotime($message->date_of_log));
+
+            $message_view .= "</p></div></div></div></div></div></div></div></div></div>";
+
+            $counter++;
+
+        }
 
         $data = [];
-        $title = "Message";
+        $title = "QA/Supervisor Message";
 
         $data = [
-               'round_uuid' => $round_uuid,
-               'participant_uuid' => $participant_uuid
+              'message_view' => $message_view 
             ];
 
         $this->assets
@@ -639,12 +696,14 @@ class PTRound extends MY_Controller {
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
                 ->addJs('dashboard/js/libs/jquery.validate.js')
                 ->addJs('dashboard/js/libs/select2.min.js');
-        $this->assets->setJavascript('QAReviewer/notifications_js');
+        // $this->assets->setJavascript('Participant/notifications_js');
         $this->template
                 ->setPageTitle($title)
-                ->setPartial('QAReviewer/message_v', $data)
+                ->setPartial('Participant/qa_messages', $data)
                 ->adminTemplate();
     }
+
+    
     
 
 }

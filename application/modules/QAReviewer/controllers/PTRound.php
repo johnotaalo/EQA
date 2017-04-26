@@ -234,7 +234,7 @@ class PTRound extends MY_Controller {
                     ';
                 }
 
-                $change_state .= ' <a id='. $participant->participant_uuid .' href = ' . base_url("QAReviewer/PTRound/Message/$round_uuid/$participant->participant_uuid") . ' class = "btn btn-warning btn-sm btn-send-message"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
+                // $change_state .= ' <a id='. $participant->participant_uuid .' href = ' . base_url("QAReviewer/PTRound/Message/$round_uuid/$participant->participant_uuid") . ' class = "btn btn-warning btn-sm btn-send-message"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
 
                 
                 $tabledata[] = [
@@ -645,7 +645,7 @@ class PTRound extends MY_Controller {
         // echo "<pre>";print_r($equip_id);echo "</pre>";die();
 
         $verdict = $this->input->post('verdict');
-        $comments = $this->input->post('message');
+        $comments = $this->input->post('comments');
 
             $insertdata = [
                 'round_id'          =>  $pt_id,

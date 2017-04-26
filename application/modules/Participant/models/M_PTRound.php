@@ -65,6 +65,16 @@ class M_PTRound extends CI_Model {
 
     	return $query->row();
     }
+
+    public function getDataLog($round_id,$part_id,$equip_id){
+        $this->db->where('round_id', $round_id);
+        $this->db->where('participant_id', $part_id);
+        $this->db->where('equipment_id', $equip_id);
+        $this->db->order_by('id','desc');
+        $query = $this->db->get('pt_data_log');
+
+        return $query->result();
+    }
 }
 
 /* End of file M_Participant.php */
