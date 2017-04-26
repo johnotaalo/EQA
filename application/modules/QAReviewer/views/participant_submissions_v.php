@@ -1,5 +1,7 @@
 <strong><center>METHODOLOGY</center></strong>
 
+
+
 <?php if($this->session->flashdata('success')){ ?>
         <div id="data-info" class = 'alert alert-success'>
             <?= @$this->session->flashdata('success'); ?>
@@ -16,7 +18,13 @@
     </div>
     <div class="col-md-12 mb-2 pull-right"><a href = "<?= @base_url('QAReviewer/PTRound/Round/'.$pt_uuid); ?> "> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Ready Participants</button></a><br /><br /></div>
 		<div class="col-md-12 mb-2">
+    <!-- Modal -->
+
     
 			<?= @$equipment_tabs; ?>
 
     </div> 
+
+
+
+

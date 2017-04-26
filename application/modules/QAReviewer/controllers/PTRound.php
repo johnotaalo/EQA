@@ -20,7 +20,7 @@ class PTRound extends MY_Controller {
                 'pt_rounds'    =>  $this->createPTRoundTable()
             ];
 
-            $this->template->setPageTitle('EQA Dashboard')->setPartial("pt_view",$data)->adminTemplate();
+            $this->template->setPageTitle('PT Rounds')->setPartial("pt_view",$data)->adminTemplate();
     }
 
     public function userlist(){
@@ -356,11 +356,12 @@ class PTRound extends MY_Controller {
                 'equipment_tabs'    =>  $equipment_tabs,
 
             ];
-
-         $this->assets
+        $this->assets
+                ->addCss("plugin/bootstrap-3.3.7/css/bootstrap.min.css");
+        $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
-        // $this->assets->setJavascript('QAReviewer/participants_js');
+        $this->assets->setJavascript('QAReviewer/data_submission_js');
         $this->template
                 ->setPageTitle($title)
                 ->setPartial('QAReviewer/participant_submissions_v', $data)
@@ -440,7 +441,6 @@ class PTRound extends MY_Controller {
         <div class='col-sm-12'>
         <div class='card'>
             <div class='card-header'>
-                
 
             <div class='form-group row'>
                 <div class='col-md-6'>
@@ -593,26 +593,101 @@ class PTRound extends MY_Controller {
                             $value = 0;
                         }
 
-                        $equipment_tabs .= $value."</td> </tr>";
+                        $equipment_tabs .= $value."</td> </tr> ";
                         $counter2++;
                     }
 
-                    $equipment_tabs .= "</table>
+                    $equipment_tabs .= "<tr><td colspan='8'>
+                            <form action='".base_url("QAReviewer/PTRound/sendVerdict/$round_id/$participant_id/$equipment->id")."' method='POST'>
+
+                              <div style='text-align: center; width:40%;' class='form-group'> <label>Verdict</label>
+                                  <select name='verdict' class='form-control' required>
+                                    <option selected='selected' value=''>Select your verdict</option>
+                                    <option value='Accepted'>Accepted</option>
+                                    <option value='Rejected'>Rejected</option>
+                                </select>
+                              </div>
+
+
+                              <div style='text-align: center; width:80%;' class='form-group'>
+                                <label>Comments</label>
+                                <textarea maxlength='500' name='comments' class='form-control' rows='3'></textarea>
+                              </div>
+
+                              <div>
+                              <button type='submit' class='btn btn-primary'>Submit</button>
+                              </div>
+                            </form>
+                    </td></tr>
+                                        </table>
                                         </div>
 
                                         </div>   
                                         </div>
                                         </div>
                                         </div>
+
                                         </div>";
 
-                    $equipment_tabs .= "";
+                    
         }
 
         $equipment_tabs .= "</div>";
 
+
+
         return $equipment_tabs;
 
+    }
+
+
+    public function sendVerdict($pt_id,$part_id,$equip_id){
+        // echo "<pre>";print_r($equip_id);echo "</pre>";die();
+
+        $verdict = $this->input->post('verdict');
+        $comments = $this->input->post('message');
+
+            $insertdata = [
+                'round_id'          =>  $pt_id,
+                'participant_id'    =>  $part_id,
+                'equipment_id'      =>  $equip_id,
+                'verdict'           =>  $verdict,
+                'comments'          =>  $comments
+            ];
+
+
+            if($this->db->insert('pt_data_log', $insertdata)){
+                $this->session->set_flashdata('success', "Successfully sent the message");
+
+
+                $user_id = $this->M_Readiness->findUserByIdentifier('p_id', $part_id)->username;
+
+                $pt_uuid = $this->M_Readiness->findRoundByIdentifier('id', $pt_id)->uuid;
+
+                // $this->db->where('uuid', $particapant_uuid);
+                // $user = $this->db->get('participants')->row();
+
+                // if($user){
+                //     $data = [
+                //         'names'  =>  $user->participant_lname ." ". $user->participant_fname
+                //     ];
+
+                //     $body = $this->load->view('Template/email/message_v', $data, TRUE);
+                //     $this->load->library('Mailer');
+                //     $sent = $this->mailer->sendMail($user->participant_email, $subject, $body);
+                //     if ($sent == FALSE) {
+                //         log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
+                //     }
+                // }
+
+            }else{
+                $this->session->set_flashdata('error', "There was a problem sending the message. Please try again");
+            }
+
+            // $user_id = $this->db->insert_id();
+
+            
+            redirect('QAReviewer/PTRound/ParticipantDetails/'.$pt_uuid.'/'.$user_id, 'refresh');
     }
 
 }
