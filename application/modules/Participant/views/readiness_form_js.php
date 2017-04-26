@@ -1,6 +1,8 @@
 <script>   
     $(document).ready(function(){
 
+    	
+
     	$('#ptround-form').validate({
 			rules: {
 				question_1: {

@@ -38,4 +38,15 @@ class Auth_m extends CI_Model {
 
         return $query->row();
     }
+
+    public function getNewMessages($identifier,$value){
+        $this->db->where($identifier, $value);
+        $this->db->where('status', 0);
+        $this->db->order_by('date_sent', 'desc');
+        $query = $this->db->get('messages_v', 4);
+
+        return $query->result();
+    }
+
+
 }

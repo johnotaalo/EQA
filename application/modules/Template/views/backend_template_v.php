@@ -1,4 +1,4 @@
-<?php $assets_url = $this->config->item('assets_url') . 'dashboard/';  ?>
+<?php $assets_url = $this->config->item('assets_url') . 'dashboard/'; ?>
 <!DOCTYPE html>
 <html lang = "en">
 <head>
@@ -179,6 +179,32 @@
 				</li>
 			</ul>
 			<ul class="nav navbar-nav pull-right hidden-md-down">
+
+
+
+			<li class="nav-item dropdown">
+                    <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon-envelope-letter"></i>
+                        <span class="tag tag-pill tag-success"><?= @$m_count; ?></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+
+                        <div class="dropdown-header text-xs-center">
+                            <strong>You have <?= @$m_count; ?> new message(s)</strong>
+                        </div>
+
+                        <?= @$new_messages; ?>
+
+                        <a href="<?= @base_url('Dashboard/viewMessages'); ?>" class="dropdown-item text-xs-center">
+                            <strong>View all messages</strong>
+                        </a>
+                    </div>
+                </li>
+
+
+
+
+
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						<img style = "width: 30px;height:30px;" src="<?php if($user_details->avatar){ echo $user_details->avatar; }else{ echo 'https://www.kirkleescollege.ac.uk/wp-content/uploads/2015/09/default-avatar.png'; }?>" class="img-avatar" alt="<?= @$user_details->email_address; ?>">
@@ -192,9 +218,10 @@
 						<a class="dropdown-item" href="<?= @base_url('Auth/logout'); ?>"><i class="fa fa-lock"></i> Logout</a>
 					</div>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">☰</a>
-				</li>
+				<!-- <li class="nav-item"> -->
+					<!-- <a class="nav-link" href="#">☰</a> -->
+					&nbsp;&nbsp;&nbsp;
+				<!-- </li> -->
 			</ul>
 		</div>
 	</header>

@@ -1,4 +1,5 @@
-<a href = "<?= @base_url('Users/Participants/listing'); ?>"><i class = "fa fa-arrow-left"></i>  Back to Participants</a>
+<a href = "<?= @base_url('Users/Participants/listing'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Participants</button></a><br /><br />
+
 <div class = "row">
     <div class="col-md-12">
         <div class = "card">

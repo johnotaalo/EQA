@@ -1,3 +1,9 @@
+<!-- <div class="card"> -->
+    <!-- <div class="card-header">
+        <strong>Notifications</strong>
+    </div> -->
+
+
 <div class="row">
     <div class="col-sm-6 col-lg-4">
         <div class="card">
@@ -107,3 +113,5 @@
     </div>
 
 </div>
+
+<!-- </div> -->

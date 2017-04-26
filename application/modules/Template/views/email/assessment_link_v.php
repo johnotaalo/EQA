@@ -1,3 +1,4 @@
+<?php $assets_url = $this->config->item('assets_url'); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -305,35 +306,64 @@ a {
 							<table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <h4>Hello From NHRL,</h4>
+                    <h4>Dear Participant,</h4>
+                  </td>
+                </tr>
+								
+                <tr>
+                  <td class="content-block">
+                    <h4>This is a notification of an impending EQA round for flow cytometry from the NHRL Proficiency Testing programme.</h4>
                   </td>
                 </tr>
 								<tr>
 									<td class="content-block">
-										Please confirm your readiness for pt round <b><?= @$pt_round_no; ?></b> by clicking the link below.
+										Kindly let us know if you will be able to participate by filling the readiness assessment checklist using the link below:
 									</td>
 								</tr>
+
 								<tr>
-									<td class="content-block">
-										We need you to fill the assessment form so that we may be able to know the readiness of your facility to participate in this round. You will be required to login with the account you created earlier from the EQA platform.
+									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+										<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry readiness checklist</a>
 									</td>
 								</tr>
                 <tr>
                   <td class="content-block">
-                    If you have any questions, please contact NHRL via (+254712345678)
+                    Please complete by <b><?= @date('dS F, Y', strtotime($due_date)); ?></b> .
+                    Failure to comply will result in exclusion from the round
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    We appreciate your support. In case of any clarification, please do not hesitate to contact us at <a style="font-weight: bold;">nhrlCD4eqa@nphls.or.ke</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    Kind Regards,
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    Coordination Team,
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                    NHRL Proficiency Testing Programme
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block">
+                      <img height="50px" width="50px" src="<?= @$this->config->item('server_url') . 'assets/frontend/images/files/gok.png';?>" alt="Ministry of Health">
+                      <img height="60px" width="180px" src="<?= @$this->config->item('server_url') . 'assets/frontend/images/files/ministry.png';?>" alt="National Public Health Laboratories and National HIV Reference Laboratory">
                   </td>
                 </tr>
 
-								<tr>
-									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-										<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">Fill in Assessment Form Here!</a>
-									</td>
-								</tr>
-								<tr>
+								<!-- <tr>
 									<td class="content-block">
 										&mdash; NHRL
 									</td>
-								</tr>
+								</tr> -->
 							</table>
 						</td>
 					</tr>

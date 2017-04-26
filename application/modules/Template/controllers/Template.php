@@ -17,16 +17,58 @@ class Template extends MX_Controller {
 		$this->asset_url = $this->config->item('assets_url');
 		$this->load->library('Assets', $this->config);
 	}
+
+	function viewNewMessages($participant_uuid){
+
+		$new_messages = '';
+
+		$this->load->model('Auth/auth_m');
+		$message_details = $this->auth_m->getNewMessages('participant_uuid', $participant_uuid);
+
+		if($message_details){
+			foreach ($message_details as $key => $value) {
+				// echo "</pre>";print_r($value->from);echo "</pre>";die();
+				$new_messages .= "<a href='Dashboard/myMessage/";
+				$new_messages .= $value->uuid;
+				$new_messages .= "' class='dropdown-item'><div class='message'><div><small class='text-muted'>";
+                $new_messages .= $value->from;
+                $new_messages .= "</small><small class='text-muted float-xs-right mt-q'>";
+                $new_messages .= $value->date_sent;
+                $new_messages .= "</small></div><div class='text-truncate font-weight-bold'>Subject: ";
+                $new_messages .= $value->subject;
+                $new_messages .= "</div><div class='small text-muted text-truncate'>";
+                $new_messages .= $value->message;
+                $new_messages .= "</div></div></a>";
+			}
+		}
+		// echo "</pre>";print_r($message_details);echo "</pre>";die();
+
+
+		return $new_messages;
+	}
+
+
 	function adminTemplate(){
 		$data['page_css'] = $this->assets->css;
 		$data['page_js'] = $this->assets->js;
 
 		$this->load->model('Auth/auth_m');
 		$user_details = $this->auth_m->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+
+		
+
+		$this->db->where('participant_uuid',$user_details->uuid);
+		$this->db->where('status', 0);
+		$new_m_count = $this->db->count_all_results('messages_v');
+
+
 		if($user_details){
 			$data['javascript_file'] = $this->assets->javascript_file;
 			$data['javascript_data'] = $this->assets->javascript_data;
 			$data['user_details'] = $user_details;
+			$data['m_count'] = $new_m_count;
+			 // echo "</pre>";print_r($this->viewNewMessages($this->session->userdata('uuid')));echo "</pre>";die();
+			$data['new_messages'] = $this->viewNewMessages($this->session->userdata('uuid'));
 			$data['menu'] = $this->createSideBar();
 			$data['pagetitle'] = $this->pageTitle;
 			$data['pagedescription'] = $this->pageDescription;
@@ -103,6 +145,23 @@ class Template extends MX_Controller {
 		$this->load->view('Template/frontend_template_v', $data);
 	}
 
+	function frontEndTemplate2(){
+		$data['metadata'] = $this->metaData;
+
+		$data['page_css'] = $this->assets->css;
+		$data['page_js'] = $this->assets->js;
+
+		$data['pagetitle'] = $this->pageTitle;
+		$data['pagedescription'] = $this->pageDescription;
+
+		$data['partial'] = $this->contentView;
+		$data['partialData'] = $this->contentViewData;
+
+		$data['javascript_file'] = $this->assets->javascript_file;
+		$data['javascript_data'] = $this->assets->javascript_data;
+		$this->load->view('Template/frontend_template_v2', $data);
+	}
+
 	function createSideBar($selected = null){
 
 		$class = $this->router->class;
@@ -155,6 +214,18 @@ class Template extends MX_Controller {
 				'text'	=>	'PT Rounds',
 				'link'	=>	'Participant/PTRound/',
 				'users'	=>	['participant']
+			],
+			'qarounds'	=>	[
+				'icon'	=>	'icon-chemistry',
+				'text'	=>	'PT Rounds',
+				'link'	=>	'QAReviewer/PTRound/',
+				'users'	=>	['qareviewer']
+			],
+			'users'		=>	[
+				'icon'	=>	'icon-user-follow',
+				'text'	=>	'User Accounts',
+				'link'	=>	'QAReviewer/PTRound/userlist',
+				'users'	=>	['qareviewer']
 			]
 		];
 

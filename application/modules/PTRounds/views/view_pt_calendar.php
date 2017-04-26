@@ -9,6 +9,9 @@
 </style>
 <div class="row">
 	<div class="col-md-12">
+	<a href = "<?= @base_url('PTRounds/create/calendar/'); ?><?= @$pt_round; ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Round Details</button></a><br /><br />
+
+
 		<div class = "card">
 			<div class = "card-header">
 				<i class="fa fa-calendar"></i>

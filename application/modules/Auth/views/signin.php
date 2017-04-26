@@ -81,5 +81,7 @@
       <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signup-link">
         Not a member? <a href="<?= @base_url('Auth/signup'); ?>" class=""><u>Register now</u></a>
       </div>
+      <div class="text-xs-center m-t-2 font-weight-bold font-size-14" id="px-demo-signup-link"><a href="<?= @base_url('Home'); ?>" class=""><u>Home</u></a>
+      </div>
     </div>
   </div>

@@ -4,23 +4,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Dashboard extends DashboardController {
 	public function __construct(){
 		parent::__construct();
+
+		$this->load->library('table');
+        $this->load->config('table');
 		$this->load->model('dashboard_m');
+		$this->load->model('Participant/M_PTRound');
+
 	}
 	
 	public function index()
-	{
-		$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing'])->row();
+	{	
 		$data = [];
+
+		
+		
 
 		$type = $this->session->userdata('type');
 		$this->assets->addCss('css/main.css');
 		$this->assets->addJs('js/main.js');
 
-		$view = "admin_dashboard";
+		// $view = "admin_dashboard";
+		
 		if($type == 'participant'){
+			$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+
+			$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+			
+
 			$this->load->model('participant/M_Participant');
 			$view = "dashboard_v";
 			$data = [
+				'acceptance'   		=> $locking->acceptance,
 				'dashboard_data'	=>	$this->getParticipantDashboardData($this->session->userdata('uuid')),
 				'participant'		=>	$this->M_Participant->findParticipantByIdentifier('uuid', $this->session->userdata('uuid'))
 			];
@@ -34,18 +48,151 @@ class Dashboard extends DashboardController {
 			$view = "admin_dashboard";
 			$data = [
                 'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
+                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
                 'new_equipments'    =>  $this->dashboard_m->newEquipments()
             ];
 		}else if($type == "qareviewer"){
             $view = "qa_dashboard";
             $data = [
-            
             ];
         }
+
+        // echo "<pre>";print_r($data);echo "</pre>";die();
 		$this->template->setPageTitle('EQA Dashboard')->setPartial($view,$data)->adminTemplate();
 	}
 
-	private function getParticipantDashboardData($participant_uuid){
+	
+
+
+	public function viewMessages(){
+		$data = [];
+        $title = "My Messages";
+        // $equipment_count = $this->db->count_all('equipment');
+
+        
+        	$data = [
+                'table_view'    =>  $this->createMessagesTable()
+            ];
+        
+
+        $this->assets
+                ->addCss("plugin/sweetalert/sweetalert.css");
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs("plugin/sweetalert/sweetalert.min.js");
+        $this->assets->setJavascript('Dashboard/message_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('Dashboard/messages_v', $data)
+                ->adminTemplate();
+	}
+
+
+	private function createMessagesTable(){
+		$participant_uuid = $this->session->userdata('uuid');
+        $template = $this->config->item('default');
+        $change_state = "";
+
+
+
+        $heading = [
+            "No.",
+            "From",
+            "Subject",
+            "Status",
+            "Actions"
+        ];
+        $tabledata = [];
+
+
+        $this->db->where('participant_uuid',$participant_uuid);
+        $this->db->where('deleted',0);
+        $messages = $this->db->get('messages_v')->result();
+
+
+        if($messages){
+            $counter = 0;
+            foreach($messages as $message){
+                $counter ++;
+                $uuid = $message->uuid;
+
+
+                $change_state = ' <a href = ' . base_url("Dashboard/myMessage/$uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Open</a>';
+
+                if($message->status == 1){
+                    $status = "<label class = 'tag tag-danger tag-sm'>Read</label>";
+                    $change_state .= ' <a style="color:#fff !important;" id='.$message->uuid.' class = "btn btn-danger btn-sm btn-delete"><i class = "icon-note"></i>&nbsp;Delete</a>'; 
+                }else{
+                	$status = "<label class = 'tag tag-info tag-sm'>New</label>";
+                }
+     
+                $tabledata[] = [
+                    $counter,
+                    $message->from.' : '.$message->email,
+                    $message->subject,
+                    $status,
+                    $change_state
+                ];
+            }
+        }
+        $this->table->set_heading($heading);
+        $this->table->set_template($template);
+
+        return $this->table->generate($tabledata);
+    }
+
+    function myMessage($message_uuid){
+    	$this->db->where('uuid', $message_uuid);
+        $message = $this->db->get('messages_v')->row();
+        //echo '<pre>';print_r($message);echo '</pre>';die();
+
+        if($message){
+        	$this->db->set('status', 1);
+
+            $this->db->where('uuid', $message_uuid);
+
+            if($this->db->update('messages')){
+                $this->session->set_flashdata('success', "Message marked as read");
+            }
+        }
+        
+        $data = [
+            'from'          =>  $message->from,
+            'email'        =>  $message->email,
+            'subject'        =>  $message->subject,
+            'message'              =>  $message->message,
+            'date_sent'          =>  $message->date_sent
+        ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js");
+        $this->template
+                ->setPartial('Dashboard/my_message', $data)
+                ->setPageTitle('My Message')
+                ->adminTemplate();
+    }
+
+    function RemoveMessage($message_uuid){
+    	// echo "<pre>";print_r($message_uuid);echo "</pre>";die();
+    	$this->db->set('deleted', 1);
+
+            $this->db->where('uuid', $message_uuid);
+
+            if($this->db->update('messages')){
+                $this->session->set_flashdata('success', "Successfully removed the message");
+                echo "success";
+            }else{
+                $this->session->set_flashdata('error', "There was a problem removing the message. Please try again");
+                echo "fail";
+            }
+
+            // redirect('Dashboard/viewMessages/');
+    }
+
+
+    private function getParticipantDashboardData($participant_uuid){
 		$dashboard_data = new StdClass();
 		$dashboard_data->current = "";
 		$this->db->where('type', 'ongoing');
@@ -142,6 +289,13 @@ class Dashboard extends DashboardController {
 		
 		return $calendar_legend;
 	}
+
+
+
+
+
+
+
 }
 
 /* End of file Home.php */

@@ -62,6 +62,10 @@
 			rules: {
 				surname: "required",
 				firstname: "required",
+				sex: "required",
+				age: "required",
+				education: "required",
+				experience: "required",
 				email_address: {
                     required: true,
                     email: true,
@@ -93,6 +97,10 @@
 			messages : {
 				surname: "Please enter your Surname",
 				firstname: "Please enter your First Name",
+				sex: "Please select your gender",
+				age: "Please select your age criteria",
+				education: "Please select your highest qualification",
+				experience: "Please select your years of experience in flow cytometry",
 				email_address: {
                     required: "Email Address cannot be empty",
                     email: "This is not an email",

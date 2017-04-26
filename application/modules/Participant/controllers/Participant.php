@@ -19,6 +19,11 @@ class Participant extends MY_Controller {
 			$firstname = $this->input->post('firstname');
 			$emailaddress = $this->input->post('email_address');
 			$phonenumber = $this->input->post('phonenumber');
+
+			$sex = $this->input->post('sex');
+			$age = $this->input->post('age');
+			$education = $this->input->post('education');
+			$experience = $this->input->post('experience');
 			
 			$usertype = $this->input->post('usertype');
 			$password = $this->input->post('password');
@@ -30,14 +35,19 @@ class Participant extends MY_Controller {
 				'participant_fname'			=>	$firstname,
 				'participant_phonenumber'	=>	$phonenumber,
 				'participant_email'			=>	$emailaddress,
+				'participant_sex'			=>	$sex,
+				'participant_age'			=>	$age,
+				'participant_education'	    =>	$education,
+				'participant_experience'	=>	$experience,
 				'participant_password'		=>	$this->hash->hashPassword($password),
 				'confirm_token'				=>	$token,
-				'user_type'				=>	$usertype,
+				'user_type'				    =>	$usertype,
 				'participant_facility'		=>	$facility
 			];
 
 			$encoded_token = urlencode($token);
 			$verification_url = $this->config->item('server_url') . 'Auth/verify/' . $emailaddress . '/' . $encoded_token;
+
 			$this->db->insert('participants', $participant_insert);
 			$id = $this->db->insert_id();
 
@@ -52,9 +62,15 @@ class Participant extends MY_Controller {
 
 			$this->db->insert_batch('participant_equipment', $equipment_insert);
 
+			$picgok = @$this->config->item('server_url') . 'assets/frontend/images/files/gok.png';
+			$picministry = @$this->config->item('server_url') . 'assets/frontend/images/files/ministry.png';
+
 			$data = [
 				'participant_name'	=>	$surname . " " . $firstname,
-				'url'				=>	$verification_url
+				'url'				=>	$verification_url,
+				'picgok' 			=> $picgok,
+				'picministry' 		=> $picministry
+
 			];
 
 			$body = $this->load->view('Template/email/signup_v', $data, TRUE);

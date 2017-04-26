@@ -2,16 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Readiness extends MY_Controller {
-private static $pt_uuid;
 	public function __construct(){
 		parent::__construct();
 
-
 		$this->load->model('M_Readiness');
+
 	}
 
 	public function authenticate($pt_uuid)
-	{
+	{	
 		$data['pt_uuid']	=	$pt_uuid;
 		$this->assets
 			->addJs('dashboard/js/libs/jquery.validate.js')
@@ -21,64 +20,12 @@ private static $pt_uuid;
 		$this->template->setPageTitle('Readiness Form')->setPartial('login_v', $data)->authTemplate();
 	}
 
-	public function authentication(){
-		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
-		// echo "<pre>";print_r($user);echo "</pre>";die();
-		$ptround = $this->input->post('ptround');
-		if ($user) {
-			
-			if($user->status == 1){
-				if($user->approved == 1){
-			$this->load->library('Hash');
-
-					if (password_verify($this->input->post('password'), $user->password)) {
-						
-						$session_data = [
-							'uuid'				=>	$user->uuid,
-							'username'			=>	$user->username,
-							'firstname'			=>	$user->firstname,
-							'lastname'			=>	$user->lastname,
-							'phone'				=>	$user->phone,
-							'emailaddress'		=>	$user->email_address,
-							'facilityid'		=>	$user->facility_code,
-							'facilityname'		=>	$user->facility_name,
-							'facilityphone'		=>	$user->telephone,
-							'facilityaltphone'	=>	$user->alt_telephone,
-							'is_logged_in'		=>	true
-						];
-
-
-
-						$this->set_session($session_data);
-
-						$this->readinessChecklist($ptround);
-					}else{
-						$this->session->set_flashdata('error', "Username or Password is incorrect. Please try again");
-	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
-					}
-				}else{
-					$this->session->set_flashdata('error', "Your account is not approved. Please contact the administrator");
-	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
-				}
-			}else{
-	            $this->session->set_flashdata('error', "Your account is not activated. Please your email account to activate");
-	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
-			}
-		}else{
-			$this->session->set_flashdata('error', 'Username or Password is incorrect. Please try again');
-			redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
-		}
-		
-		
-		
-	}
+	
 	
 	private function set_session($session_data){
 		foreach ($session_data as $key => $value) {
-
 			$this->session->set_flashdata($key,$value); 
-		}
-		    
+		}	    
     }
 
 	public function logout()
@@ -87,15 +34,14 @@ private static $pt_uuid;
         redirect('Home', 'refresh');
     }
 
-    public function checkLogin($pt_uuid){
-		if($this->session->flashdata('is_logged_in') != true){
-			//echo "<pre>";print_r("Reached00");echo "</pre>";die();
+	public function checkLogin($pt_uuid){
+		// echo "<pre>";print_r($this->session->flashdata());echo "</pre>";
+		if(empty($this->session->flashdata())){
 			redirect('Participant/Readiness/authenticate/'.$pt_uuid,'refresh');
 		}
 	}
 
 	public function readinessChecklist($pt_uuid){
-
 		$this->checkLogin($pt_uuid);
 		// echo "<pre>";print_r("PT UUID ".$pt_uuid);echo "</pre>";die();
 
@@ -122,6 +68,58 @@ private static $pt_uuid;
                 ->setPageTitle($title)
                 ->setPartial('readiness_form_v', $data)
                 ->readinessTemplate();
+	}
+
+	public function authentication(){
+		$ptround = $this->input->post('ptround');
+
+		$user = $this->M_Readiness->findParticipant($this->input->post('username'));
+		// echo "<pre>";print_r($user);echo "</pre>";die();
+		
+		if ($user) {
+			
+			if($user->status == 1){
+				if($user->approved == 1){
+			$this->load->library('Hash');
+
+					if (password_verify($this->input->post('password'), $user->password)) {
+						
+						$session_data = [
+							'uuid'				=>	$user->uuid,
+							'username'			=>	$user->username,
+							'firstname'			=>	$user->firstname,
+							'lastname'			=>	$user->lastname,
+							'phone'				=>	$user->phone,
+							'emailaddress'		=>	$user->email_address,
+							'facilityid'		=>	$user->facility_id,
+							'facilitycode'		=>	$user->facility_code,
+							'facilityname'		=>	$user->facility_name,
+							'facilityphone'		=>	$user->telephone,
+							'facilityaltphone'	=>	$user->alt_telephone,
+							'is_logged_in'		=>	true
+						];
+
+
+
+						$this->set_session($session_data);
+
+						$this->readinessChecklist($ptround);
+					}else{
+						$this->session->set_flashdata('error', "Username or Password is incorrect. Please try again");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
+					}
+				}else{
+					$this->session->set_flashdata('error', "Your account is not approved. Please contact the administrator");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
+				}
+			}else{
+	            $this->session->set_flashdata('error', "Your account is not activated. Please your email account to activate");
+	        	redirect('Participant/Readiness/authenticate/'.$ptround, 'refresh');
+			}
+		}else{
+			$this->session->set_flashdata('error', 'To get the readiness form, click on the email address link for the PT Round');
+			redirect('/', 'refresh');
+		}	
 	}
 
 	function getQuestions(){
@@ -153,7 +151,8 @@ private static $pt_uuid;
 				    $questions->question_no = str_replace('.','_',$questions->question_no);
 				    $question_view .=   '</label>
 				                		<div class="col-md-6">
-				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" class="form-control" placeholder="Please provide reason for any No selection..."></textarea>
+				                    	<span class="help-block text-danger">Please enter a maximum of 500 words</span>
+				                    	<textarea id="question_'.$questions->question_no.'" name="question_'.$questions->question_no.'" rows="8" maxlength="500" class="form-control" placeholder="Please provide reason for any No selection..."></textarea>
 				                		</div>
 				            			</div>
 				        				</div>';
@@ -197,6 +196,8 @@ private static $pt_uuid;
 
 		return $question_view;
 	}
+
+	
 
 	public function submitReadiness(){
 		$response_array = [];

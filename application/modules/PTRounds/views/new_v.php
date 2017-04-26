@@ -6,6 +6,9 @@
         background: gainsboro;
     }
 </style>
+<a href = "<?= @base_url('PTRounds/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Rounds</button></a><br /><br />
+
+
 <?php if($this->session->flashdata('error')){?>
     <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

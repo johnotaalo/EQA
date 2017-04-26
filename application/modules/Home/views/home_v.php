@@ -19,7 +19,7 @@
 											<div class="description">
 												Monitoring and improving the quality of HIV results generated from your lab
 											</div>
-											<a class="btn colorful large hover-transparent-colorful" href="<?= @base_url('Auth/signin'); ?>">Lets Go</a>
+											<a class="btn colorful large hover-transparent-colorful" href="<?= @base_url('Auth/signin'); ?>">Log in</a>
 										</div><!-- .banner-center-box end -->
 									</div><!-- .col-md-10 end -->
 								</div><!-- .row end -->

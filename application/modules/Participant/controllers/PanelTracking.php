@@ -44,7 +44,8 @@ class PanelTracking extends DashboardController{
 					'participant_received_date'	=>	date('Y-m-d', strtotime($this->input->post('participant_received_date'))),
 					'panel_condition'			=>	$this->input->post('tubes_condition'),
 					'panel_condition_comment'	=>	$this->input->post('condition_comment'),
-					'panel_received_entered'	=>	date('Y-m-d H:i:s')
+					'panel_received_entered'	=>	date('Y-m-d H:i:s'),
+					'acceptance'	=>	1
 				];
 
 				$this->db->where('uuid', $panel_tracking_uuid);
