@@ -14,7 +14,7 @@
 
 
   	<div class = 'alert alert-warning'>
-	    Please submit this form to NHRL through e-mail or hand delivery <span class="text-danger">before April 24th, 2017</span>
+	    Please submit this form to NHRL through e-mail or hand delivery <span class="text-danger"><?= @date('dS F, Y', strtotime($pt_round_to)); ?></span>
     </div>
 
 		<div class="col-md-12 mb-2">
