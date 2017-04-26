@@ -48,7 +48,6 @@
               <option value="">Sex</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-              <option value="Other">Other</option>
             </select>
           </fieldset>
 
@@ -56,15 +55,11 @@
             <div class="page-signup-icon text-muted"><i class="fa fa-user-plus"></i></div>
             <select name = "age" class="page-signup-form-control form-control">
               <option value="">Age</option>
-              <option value="0 - 20">0 - 20</option>
-              <option value="21 - 30">21 - 30</option>
-              <option value="31 - 40">31 - 40</option>
-              <option value="41 - 50">41 - 50</option>
-              <option value="51 - 60">51 - 60</option>
-              <option value="61 - 70">61 - 70</option>
-              <option value="71 - 80">71 - 80</option>
-              <option value="81 - 90">81 - 90</option>
-              <option value="91 +">91 +</option>
+              <option value="18 - 25">18 - 25</option>
+              <option value="26 - 29">26 - 29</option>
+              <option value="30 - 35">30 - 35</option>
+              <option value="36 - 40">36 - 40</option>
+              <option value="over 40">over 40</option>
             </select>
           </fieldset>
 
@@ -85,12 +80,13 @@
             <div class="page-signup-icon text-muted"><i class="fa fa-hospital-o"></i></div>
             <select name = "experience" class="page-signup-form-control form-control">
               <option value="">Years of Experience in Flow Cytometry</option>
-              <option value="0">No Experience</option>
-              <option value="1">upto 1 year</option>
-              <option value="3">upto 3 year</option>
-              <option value="5">upto 5 year</option>
-              <option value="10">upto 10 year</option>
-              <option value="10 +">over 10 years</option>
+              <option value="six_months_less">Less than 6 Months</option>
+              <option value="one_year_less">6 Months to Less than a year</option>
+              <option value="one_year">1 year</option>
+              <option value="two_years">2 year</option>
+              <option value="three_years">3 Years</option>
+              <option value="fours_years">4 Years</option>
+              <option value="over_fours_years">Over 4 Years</option>
             </select>
           </fieldset>
 

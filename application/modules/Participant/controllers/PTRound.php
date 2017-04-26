@@ -29,19 +29,38 @@ class PTRound extends MY_Controller {
             foreach ($rounds as $round) {
                 $created = date('dS F, Y', strtotime($round->date_of_entry));
 
+                $this->db->where('status','active');
+                $get = $this->db->get('pt_round_v')->row();
 
-                $ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
-                $locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+                // echo "<pre>";print_r($get);echo "</pre>";die();
 
-                if($locking->acceptance){
-
-                    $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
-
+                if($get == null){
+                    $locking = 0;
                 }else{
+                    $ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+            
+                    if($ongoing_pt){
+                        $checklocking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
 
-                    $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PanelTracking/confirm/' . $locking->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;Confirm Receipt</a>";
+                        if($checklocking == null){
+                            $view = "";
+                        }else{
+                            if($checklocking->acceptance){
 
+                                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
+
+                            }else{
+
+                                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PanelTracking/confirm/' . $locking->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;Confirm Receipt</a>";
+
+                            }
+                        }
+                    }else{
+                        $view = "";
+                    }
                 }
+
+                
 
 
                 $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('Participant/PTRound/Report/' . $round->uuid)."'><i class = 'fa fa-line-chart'></i>&nbsp;Report</a>";

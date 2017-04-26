@@ -53,7 +53,7 @@ class PTRound extends MY_Controller {
         $change_state = '';
 
         $facility_participants = $this->M_PPTRound->getFacilityParticipantsView($facility_code);
-        // echo '<pre>';print_r($facility_participants);echo "</pre>";die();
+        
 
         $heading = [
             "No.",
@@ -69,10 +69,10 @@ class PTRound extends MY_Controller {
             $counter = 0;
             foreach($facility_participants as $participant){
                 $counter ++;
-
+// echo '<pre>';print_r($participant->approved);echo "</pre>";die();
                 
 
-                if($participant->status == 0){
+                if($participant->approved == 2){
                     $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/activate/$participant->username/$participant->uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Activate</a> ';
                 }else{
                     $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/deactivate/$participant->username/$participant->uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;Deactivate</a> ';
@@ -98,11 +98,11 @@ class PTRound extends MY_Controller {
     function ChangeStatus($type,$username,$participant_uuid){
         switch ($type) {
             case 'activate':
-               $this->db->set('status', 1);
+               $this->db->set('approved', 1);
                 break;
             
             case 'deactivate':
-                $this->db->set('status', 0);
+                $this->db->set('approved', 0);
                 break;
         }
 
@@ -223,18 +223,24 @@ class PTRound extends MY_Controller {
                 $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
                 
 
-                $getCheck = $this->M_PPTRound->getDataSubmission($round_id,$pid)->status;
-                //echo "<pre>";print_r($getCheck);echo "</pre>";die();
-                if($getCheck){
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
-                    // <button type="button" class="btn btn-primary" id="showtoast">Show Toast</button>
-                }else{
+                $Check = $this->M_PPTRound->getDataSubmission($round_id,$pid);
 
+                if($Check){
+                    $getCheck = $Check->status;
+                }else{
+                    $getCheck = 2;
+                }
+                //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+                if($getCheck == 1){
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                }else if($getCheck == 2){
+                    $change_state = '';
+                    
+                }else{
                     $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> 
                     ';
-                }
 
-                // $change_state .= ' <a id='. $participant->participant_uuid .' href = ' . base_url("QAReviewer/PTRound/Message/$round_uuid/$participant->participant_uuid") . ' class = "btn btn-warning btn-sm btn-send-message"><i class = "icon-note"></i>&nbsp;Send Message</a> ';
+                }
 
                 
                 $tabledata[] = [

@@ -34,7 +34,13 @@ class Dashboard extends DashboardController {
 				$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
 		
 				if($ongoing_pt){
-					$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'))->acceptance;
+					$checklocking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+
+					if($checklocking == null){
+						$locking = 0;
+					}else{
+						$locking = $checklocking->acceptance;
+					}
 				}else{
 					$locking = 0;
 				}
@@ -254,15 +260,19 @@ class Dashboard extends DashboardController {
 				$participant_readiness = $this->db->get('pt_ready_participants')->row();
 				$dashboard_data->readiness = $participant_readiness;
 
-				if($participant_readiness->status_code == 2){
-					$dashboard_data->current = "enroute";
-				}elseif($participant_readiness->status_code == 3){
-					if($participant_readiness->panel_condition == 1){
-						$dashboard_data->current = "pt_round_submission";
-					}else{
-						$dashboard_data->current = "bad_panel";
+				if($participant_readiness){
+					if($participant_readiness->status_code == 2){
+						$dashboard_data->current = "enroute";
+					}elseif($participant_readiness->status_code == 3){
+						if($participant_readiness->panel_condition == 1){
+							$dashboard_data->current = "pt_round_submission";
+						}else{
+							$dashboard_data->current = "bad_panel";
+						}
 					}
 				}
+
+				
 			}else{
 				$dashboard_data->current = "readiness";
 			}

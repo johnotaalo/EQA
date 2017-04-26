@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 
 	<div class = 'alert alert-warning'>
-        <h5>Refresh the page will cause a loss of some data, and would require another login attempt</h5>
+        <h5>Refreshing the page will cause a loss of some data, and would require another login attempt</h5>
     </div>
 
 	    <div class="card">
