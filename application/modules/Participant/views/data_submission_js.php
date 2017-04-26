@@ -3,14 +3,11 @@
 $(document).ready(function(){
 
 	var round = $(".ptround").val();
-
-
 	$("form").submit(function(e){
 		 e.preventDefault();
 	  var form = $(this);
 	  var id = form.attr('id');
-	  var formData = $('#'+id).serialize();
-		// alert(formData);
+	  var formData = new FormData(this);
 
 		dataSubmit(id, formData);
 	 
@@ -24,6 +21,8 @@ $(document).ready(function(){
 		   	type: "POST",
 		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+equipmentid+ '/' +round,
 			data: formData,
+            processData: false,
+            contentType: false,
 		   success: function(html){   
 		   		if(html){
 
