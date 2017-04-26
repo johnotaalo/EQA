@@ -178,8 +178,6 @@ class PTRound extends MY_Controller {
 
 
     public function dataSubmission($equipmentid,$round){
-        
-
         if($this->input->post()){
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
@@ -193,108 +191,128 @@ class PTRound extends MY_Controller {
             $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
 
             $lot_number = $this->input->post('lot_number');
-            // echo "<pre>";print_r($submission->lot_number);echo "</pre>";die();
-            if(!($submission)){
 
-                $insertsampledata = [
-                        'round_id'    =>  $round_id,
-                        'participant_id'    =>  $participant_id,
-                        'equipment_id'    =>  $equipmentid,
-                        'lot_number'    =>  $lot_number,
-                        'status'    =>  0
-                    ];
-
-                if($this->db->insert('pt_data_submission', $insertsampledata)){
-                    $submission_id = $this->db->insert_id();
-
-                        foreach ($samples as $key => $sample) {
-
-                            $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
-                            $cd3_per = $this->input->post('cd3_per_'.$counter2);
-                            $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
-                            $cd4_per = $this->input->post('cd4_per_'.$counter2);
-                            $other_abs = $this->input->post('other_abs_'.$counter2);
-                            $other_per = $this->input->post('other_per_'.$counter2);
-
-                            $insertequipmentdata = [
-                            'sample_id'    =>  $submission_id,
-                            'cd3_absolute'    =>  $cd3_abs,
-                            'cd3_percent'    =>  $cd3_per,
-                            'cd4_absolute'    =>  $cd4_abs,
-                            'cd4_percent'    =>  $cd4_per,
-                            'other_absolute'    =>  $other_abs,
-                            'other_percent'    =>  $other_per
-                            ];
-
-                            try {
-                                if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
-                                    $this->session->set_flashdata('success', "Successfully saved new data");
-                                }else{
-                                    $this->session->set_flashdata('error', "There was a problem saving the new data. Please try again");
-                                }
-                                
-                            } catch (Exception $e) {
-                                echo $e->getMessage();
-                            }
-                            $counter2 ++;
-                        }
-
+            // Uploading file
+            $file_upload_errors = [];
+            $file_path = NULL;
+            if($_FILES){
+                $config['upload_path'] = './uploads/participant_data/';
+                $config['allowed_types'] = 'gif|jpg|png|xlsx|xls|pdf|csv';
+                $config['max_size'] = 10000000;
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('data_uploaded_form')) {
+                    $file_upload_errors = $this->upload->display_errors();
                 }else{
-                    // echo "submission_error";
-                    $this->session->set_flashdata('error', "A problem was encountered while saving data. Please try again...");
+                    $data =$this->upload->data();
+                    $file_path = substr($config['upload_path'], 1) . $data['file_name'];
                 }
+            }
+            if(!$file_upload_errors){
+                if(!($submission)){
 
-                echo "submission_save";
-                $this->session->set_flashdata('success', "Successfully saved new data");
+                    $insertsampledata = [
+                            'round_id'    =>  $round_id,
+                            'participant_id'    =>  $participant_id,
+                            'equipment_id'    =>  $equipmentid,
+                            'lot_number'    =>  $lot_number,
+                            'status'    =>  0,
+                            'doc_path'  =>  $file_path
+                        ];
 
-            }else{
+                    if($this->db->insert('pt_data_submission', $insertsampledata)){
+                        $submission_id = $this->db->insert_id();
 
-                
+                            foreach ($samples as $key => $sample) {
 
-                $submission_id = $submission->id;
+                                $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
+                                $cd3_per = $this->input->post('cd3_per_'.$counter2);
+                                $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
+                                $cd4_per = $this->input->post('cd4_per_'.$counter2);
+                                $other_abs = $this->input->post('other_abs_'.$counter2);
+                                $other_per = $this->input->post('other_per_'.$counter2);
 
-                // $this->db->where('round_uuid',$round_uuid);
-                // $this->db->where('participant_id',$participant_id);
-                // $this->db->where('equipment_id',$equipment->id);
+                                $insertequipmentdata = [
+                                'sample_id'    =>  $submission_id,
+                                'cd3_absolute'    =>  $cd3_abs,
+                                'cd3_percent'    =>  $cd3_per,
+                                'cd4_absolute'    =>  $cd4_abs,
+                                'cd4_percent'    =>  $cd4_per,
+                                'other_absolute'    =>  $other_abs,
+                                'other_percent'    =>  $other_per
+                                ];
 
-                // $datas = $this->db->get('data_entry_v')->result();
+                                try {
+                                    if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
+                                        $this->session->set_flashdata('success', "Successfully saved new data");
+                                    }else{
+                                        $this->session->set_flashdata('error', "There was a problem saving the new data. Please try again");
+                                    }
+                                    
+                                } catch (Exception $e) {
+                                    echo $e->getMessage();
+                                }
+                                $counter2 ++;
+                            }
 
-                    $this->db->where('sample_id', $submission_id);
-                    $this->db->delete('pt_equipment_results');
-                
-                foreach ($samples as $key => $sample) {     
-
-                    $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
-                    $cd3_per = $this->input->post('cd3_per_'.$counter2);
-                    $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
-                    $cd4_per = $this->input->post('cd4_per_'.$counter2);
-                    $other_abs = $this->input->post('other_abs_'.$counter2);
-                    $other_per = $this->input->post('other_per_'.$counter2);
-
-                    $insertequipmentdata = [
-                            'sample_id'    =>  $submission_id,
-                            'cd3_absolute'    =>  $cd3_abs,
-                            'cd3_percent'    =>  $cd3_per,
-                            'cd4_absolute'    =>  $cd4_abs,
-                            'cd4_percent'    =>  $cd4_per,
-                            'other_absolute'    =>  $other_abs,
-                            'other_percent'    =>  $other_per
-                            ];
-
-                    if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
-                        if($lot_number != $submission->lot_number){
-                            //echo "<pre>";print_r("reached");echo "</pre>";die();
-
-                            $this->db->set('lot_number', $lot_number);
-                            $this->db->where('id', $submission_id);
-                            $this->db->update('pt_data_submission');
-                        }
+                    }else{
+                        // echo "submission_error";
+                        $this->session->set_flashdata('error', "A problem was encountered while saving data. Please try again...");
                     }
 
-                    $counter2 ++;
+                    echo "submission_save";
+                    $this->session->set_flashdata('success', "Successfully saved new data");
+
+                }else{
+
+                    
+
+                    $submission_id = $submission->id;
+
+                    // $this->db->where('round_uuid',$round_uuid);
+                    // $this->db->where('participant_id',$participant_id);
+                    // $this->db->where('equipment_id',$equipment->id);
+
+                    // $datas = $this->db->get('data_entry_v')->result();
+
+                        $this->db->where('sample_id', $submission_id);
+                        $this->db->delete('pt_equipment_results');
+                    
+                    foreach ($samples as $key => $sample) {     
+
+                        $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
+                        $cd3_per = $this->input->post('cd3_per_'.$counter2);
+                        $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
+                        $cd4_per = $this->input->post('cd4_per_'.$counter2);
+                        $other_abs = $this->input->post('other_abs_'.$counter2);
+                        $other_per = $this->input->post('other_per_'.$counter2);
+
+                        $insertequipmentdata = [
+                                'sample_id'    =>  $submission_id,
+                                'cd3_absolute'    =>  $cd3_abs,
+                                'cd3_percent'    =>  $cd3_per,
+                                'cd4_absolute'    =>  $cd4_abs,
+                                'cd4_percent'    =>  $cd4_per,
+                                'other_absolute'    =>  $other_abs,
+                                'other_percent'    =>  $other_per
+                                ];
+
+                        if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
+                            if($lot_number != $submission->lot_number){
+                                //echo "<pre>";print_r("reached");echo "</pre>";die();
+
+                                $this->db->set('lot_number', $lot_number);
+                                $this->db->where('id', $submission_id);
+                                $this->db->update('pt_data_submission');
+                            }
+                        }
+
+                        $counter2 ++;
+                    }
+                    $this->session->set_flashdata('success', "Successfully updated data");
+                    echo "submission_update";
                 }
-                $this->session->set_flashdata('success', "Successfully updated data");
-                echo "submission_update";
+            }else{
+                $this->session->set_flashdata('error', implode('<br/>', $file_upload_errors));
             }
         }else{
             //echo "no_post";
@@ -317,7 +335,7 @@ class PTRound extends MY_Controller {
         $participant_id = $user->p_id;
 
         
-        $equipments = $this->M_PTRound->Equipments();
+        $equipments = $this->M_PTRound->Equipments($participant_uuid);
         
         
         $equipment_tabs = '';
@@ -438,7 +456,7 @@ class PTRound extends MY_Controller {
 
             </div>
             <div class='card-block'>
-            <form method='POST' class='p-a-4' id='".$equipment->id."'>
+            <form method='POST' class='p-a-4' id='".$equipment->id."' entype = 'multipart/form-data'>
                 <input type='hidden' class='page-signup-form-control form-control ptround' value='".$round_uuid."'>
                 <div>
                 ";
@@ -507,8 +525,7 @@ class PTRound extends MY_Controller {
                             <th style='text-align: center;'>
                                 Percent
                             </th>
-                        </tr>";
-                    
+                        </tr>";                    
                     $counter2 = 0;
                     foreach ($samples as $key => $sample) {
                         
@@ -616,11 +633,34 @@ class PTRound extends MY_Controller {
                         $counter2++;
                     }
 
+                    $this->db->where('round_id', $round_id);
+                    $this->db->where('participant_id', $participant_id);
+                    $this->db->where('equipment_id', $equipment->id);
+                    $entry = $this->db->get('pt_data_submission')->row();
+                    if($entry){
+                        if($entry->doc_path){
+                            $uploader = "<div class = 'form-control'>
+                                <h5>File uploaded</h5>
+                                <a href = '".base_url($entry->doc_path)."'>Click to Download File</a>
+                            </div>";
+                        }else{
+                            $uploader = "<div class = 'form-group'>
+                                            <label class = 'control-label'>Please upload the data received from the machine</label>
+                                            <input type = 'file' name = 'data_uploaded_form' required = 'true' class = 'form-control'/>
+                                        </div>";
+                        }
+                    }else{
+                        $uploader = "<div class = 'form-group'>
+                                            <label class = 'control-label'>Please upload the data received from the machine</label>
+                                            <input type = 'file' name = 'data_uploaded_form' required = 'true' class = 'form-control'/>
+                                        </div>";
+                    }
+
 
                     $equipment_tabs .= "</table>
                                         </div>
 
-
+                                        {$uploader}
                                         <button $disabled type='submit' class='btn btn-block btn-lg btn-primary m-t-3 submit'>
                                             Save
                                         </button>

@@ -25,13 +25,22 @@ class M_PTRound extends CI_Model {
         return $query->row();
     }
 
-    public function Equipments(){
-    	// $this->db->where('facility_code', $facility_code);
-    	$this->db->where('equipment_status', 1);
-        // $this->db->order_by("name", "asc");
-        $query = $this->db->get('equipments_v')->result();
+    public function Equipments($participant_uuid){
+        $sql = "
+            SELECT e.id, e.uuid, e.equipment_name FROM participant_equipment pe
+            JOIN equipment e ON e.id = pe.equipment_id
+            JOIN participants p ON p.id = pe.participant_id
+            WHERE e.equipment_status = 1
+            AND p.uuid = '{$participant_uuid}'
+        ";
 
-        return $query;
+        $query = $this->db->query($sql);
+    	// $this->db->where('facility_code', $facility_code);
+    	// $this->db->where('equipment_status', 1);
+        // $this->db->order_by("name", "asc");
+        // $query = $this->db->get('equipments_v')->result();
+
+        return $query->result();
     }
 
     public function getSamples($round_uuid,$participant_id){
