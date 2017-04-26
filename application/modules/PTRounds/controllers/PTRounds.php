@@ -628,6 +628,27 @@ public function createTabs($round_uuid, $participant_uuid){
             
                 <div class='row'>
                     <table  style='text-align: center;' class='table table-bordered'>
+
+                    <tr><td style='style='text-align: center;' width:40%;' colspan='8'>
+
+                        <label style='text-align: center; width:40%;' for='lot_number'>Lot Number: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<div>".$datas[0]->lot_number." </div>" ;
+                    }else{
+                        $lot = "<div>0</div>";
+                    }
+                }else{
+                    $lot = "<div>0</div>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td></tr>
+
+                      
                         <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL

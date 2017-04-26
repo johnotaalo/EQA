@@ -32,13 +32,18 @@ class PTRound extends MY_Controller {
                 $this->db->where('status','active');
                 $get = $this->db->get('pt_round_v')->row();
 
-                // echo "<pre>";print_r($get);echo "</pre>";die();
+                
 
                 if($get == null){
                     $locking = 0;
                 }else{
-                    $ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
-            
+                    $ongoing_check = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row();
+
+                        if($ongoing_check){
+                            $ongoing_pt = $ongoing_check->uuid;
+                        }else{
+                            $ongoing_pt = 0;
+                        }
                     if($ongoing_pt){
                         $checklocking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
 
@@ -695,10 +700,19 @@ class PTRound extends MY_Controller {
             $message_view .= "<div class='container-fluid pt-2'>
                                 <div class='animated fadeIn'>
                                     <div class='row'>
-                                        <div class='col-sm-12'>
-                                            <div class='card'>
-                                                <div class='card-header'>
-                                                    <strong> Message ";
+                                        <div class='col-sm-12'>";
+
+            if($message->verdict == 'Accepted'){
+                $message_view .= "<div class='card card-outline-success'>";
+            }else if($message->verdict == 'Rejected'){
+                $message_view .= "<div class='card card-outline-danger'>";
+            }else{
+                $message_view .= "<div class='card'>";
+            }
+
+
+            $message_view .= "<div class='card-header'>
+                                        <strong> Message ";
             $message_view .= $counter;
 
             $message_view .= "</strong>

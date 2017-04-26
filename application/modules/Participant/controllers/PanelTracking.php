@@ -42,8 +42,14 @@ class PanelTracking extends DashboardController{
 			if($this->input->post('acceptance') == 1){
 				$update_data = [
 					'participant_received_date'	=>	date('Y-m-d', strtotime($this->input->post('participant_received_date'))),
-					'panel_condition'			=>	$this->input->post('tubes_condition'),
-					'panel_condition_comment'	=>	$this->input->post('condition_comment'),
+					'sample_tubes'			=>	$this->input->post('sample_tubes'),
+					'insufficient_volume'	=>	$this->input->post('insufficient_volume'),
+					'haemolysed_sample'	=>	$this->input->post('haemolysed_sample'),
+					'clotted_sample'	=>	$this->input->post('clotted_sample'),
+					'duplicate_sample'	=>	$this->input->post('duplicate_sample'),
+					'missing_sample'	=>	$this->input->post('missing_sample'),
+					'mismatch'	=>	$this->input->post('mismatch'),
+					'condition_comment'	=>	$this->input->post('condition_comment'),
 					'panel_received_entered'	=>	date('Y-m-d H:i:s'),
 					'acceptance'	=>	1
 				];

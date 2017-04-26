@@ -31,7 +31,13 @@ class Dashboard extends DashboardController {
 			if($get == null){
 				$locking = 0;
 			}else{
-				$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+				$ongoing_check = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row();
+
+				if($ongoing_check){
+					$ongoing_pt = $ongoing_check->uuid;
+				}else{
+					$ongoing_pt = 0;
+				}
 		
 				if($ongoing_pt){
 					$checklocking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
