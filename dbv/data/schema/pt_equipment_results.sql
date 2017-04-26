@@ -1,11 +1,10 @@
 CREATE TABLE `pt_equipment_results` (
   `sample_id` int(11) NOT NULL,
-  `cd3_absolute` varchar(255) DEFAULT NULL,
-  `cd3_percent` varchar(255) DEFAULT NULL,
-  `cd4_absolute` varchar(255) DEFAULT NULL,
-  `cd4_percent` varchar(255) DEFAULT NULL,
-  `other_absolute` varchar(255) DEFAULT NULL,
-  `other_percent` varchar(255) DEFAULT NULL,
-  `last_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`sample_id`)
+  `cd3_absolute` varchar(255) DEFAULT '0',
+  `cd3_percent` varchar(255) DEFAULT '0',
+  `cd4_absolute` varchar(255) DEFAULT '0',
+  `cd4_percent` varchar(255) DEFAULT '0',
+  `other_absolute` varchar(255) DEFAULT '0',
+  `other_percent` varchar(255) DEFAULT '0',
+  `last_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1

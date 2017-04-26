@@ -186,7 +186,7 @@
 			<li class="nav-item dropdown">
                     <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="icon-envelope-letter"></i>
-                        <span class="tag tag-pill tag-success"><?= @$m_count; ?></span>
+                        <span class="tag tag-pill tag-warning"><?= @$m_count; ?></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
 

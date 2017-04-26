@@ -30,14 +30,14 @@ BEGIN
 		WHEN 1 THEN "Complete"
 		ELSE "No Response"
 		END) as `status`,
-		(IF(pr.verdict IS NULL,(IF(prr.responses = 0, "Okay", IF(prr.responses > 0, "Not Okay", "No Response"))), pr.verdict)) as `smart_status`
+		(IF(pr.verdict IS NULL,(IF(prr.responses = "N/A", "Okay", IF(prr.responses > 0, "Not Okay", "No Response"))), pr.verdict)) as `smart_status`
 	FROM facility f
 	LEFT JOIN participants p ON p.participant_facility = f.id
 	LEFT JOIN participant_readiness pr ON pr.participant_id = p.uuid AND pr.pt_round_no = "', @pt_round_uuid,'"
 	LEFT JOIN 
 	(
 		SELECT a.readiness_id, IFNULL(b.responses, "N/A") as responses FROM participant_readiness_responses a
-		LEFT JOIN (SELECT readiness_id, count(response) as responses FROM participant_readiness_responses WHERE response = 0 GROUP BY readiness_id) b ON b.readiness_id = a.readiness_id
+		LEFT JOIN (SELECT readiness_id, count(response) as responses FROM participant_readiness_responses WHERE response = 0 AND response IS NOT NULL GROUP BY readiness_id) b ON b.readiness_id = a.readiness_id
 		GROUP BY a.readiness_id
 	) prr ON prr.readiness_id = pr.readiness_id
 	WHERE f.facility_code IN (SELECT facility_code FROM facility_equipment_mapping)
