@@ -282,11 +282,11 @@ class PTRound extends MY_Controller {
             $message = $this->input->post('message');
 
             $insertdata = [
-                'to_uuid'    =>  $particapant_uuid,
-                'from'     =>  'QA-Reviewer',
-                'email'     =>  $email,
-                'subject'     =>  $subject,
-                'message'     =>  $message
+                'to_uuid'       =>  $particapant_uuid,
+                'from'          =>  'QA-Reviewer',
+                'email'         =>  $email,
+                'subject'       =>  $subject,
+                'message'       =>  $message
             ];
 
 

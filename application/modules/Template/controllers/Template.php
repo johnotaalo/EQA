@@ -23,7 +23,7 @@ class Template extends MX_Controller {
 		$new_messages = '';
 
 		$this->load->model('Auth/auth_m');
-		$message_details = $this->auth_m->getNewMessages('participant_uuid', $participant_uuid);
+		$message_details = $this->auth_m->getNewMessages('to_uuid', $participant_uuid);
 
 		if($message_details){
 			foreach ($message_details as $key => $value) {
@@ -57,7 +57,7 @@ class Template extends MX_Controller {
 
 		
 
-		$this->db->where('participant_uuid',$user_details->uuid);
+		$this->db->where('to_uuid',$user_details->uuid);
 		$this->db->where('status', 0);
 		$new_m_count = $this->db->count_all_results('messages_v');
 
