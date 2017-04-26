@@ -23,15 +23,28 @@ class Dashboard extends DashboardController {
 		// $view = "admin_dashboard";
 		
 		if($type == 'participant'){
-			$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+			$this->db->where('status','active');
+			$get = $this->db->get('pt_round_v')->row();
 
-			$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'));
+			// echo "<pre>";print_r($get);echo "</pre>";die();
+
+			if($get == null){
+				$locking = 0;
+			}else{
+				$ongoing_pt = $this->db->get_where('pt_round_v', ['type'=>'ongoing','status' => 'active'])->row()->uuid;
+		
+				if($ongoing_pt){
+					$locking = $this->M_PTRound->allowPTRound($ongoing_pt, $this->session->userdata('uuid'))->acceptance;
+				}else{
+					$locking = 0;
+				}
+			}
 			
 
 			$this->load->model('participant/M_Participant');
 			$view = "dashboard_v";
 			$data = [
-				'acceptance'   		=> $locking->acceptance,
+				'acceptance'   		=> $locking,
 				'dashboard_data'	=>	$this->getParticipantDashboardData($this->session->userdata('uuid')),
 				'participant'		=>	$this->M_Participant->findParticipantByIdentifier('uuid', $this->session->userdata('uuid'))
 			];

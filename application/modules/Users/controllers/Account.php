@@ -71,6 +71,7 @@ class Account extends DashboardController{
             $insert_data = [];
             $table = "";
             switch ($user_type) {
+                case 'qareviewer':
                 case 'participant':
                     $insert_data = [
                         'participant_fname'         =>  $firstname,
