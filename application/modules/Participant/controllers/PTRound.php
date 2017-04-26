@@ -168,13 +168,16 @@ class PTRound extends MY_Controller {
              
             $counter2 = 0;
             $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
-            // echo "<pre>";print_r($submission);echo "</pre>";die();
+
+            $lot_number = $this->input->post('lot_number');
+            // echo "<pre>";print_r($submission->lot_number);echo "</pre>";die();
             if(!($submission)){
 
                 $insertsampledata = [
                         'round_id'    =>  $round_id,
                         'participant_id'    =>  $participant_id,
                         'equipment_id'    =>  $equipmentid,
+                        'lot_number'    =>  $lot_number,
                         'status'    =>  0
                     ];
 
@@ -223,7 +226,15 @@ class PTRound extends MY_Controller {
 
             }else{
 
+                
+
                 $submission_id = $submission->id;
+
+                // $this->db->where('round_uuid',$round_uuid);
+                // $this->db->where('participant_id',$participant_id);
+                // $this->db->where('equipment_id',$equipment->id);
+
+                // $datas = $this->db->get('data_entry_v')->result();
 
                     $this->db->where('sample_id', $submission_id);
                     $this->db->delete('pt_equipment_results');
@@ -247,7 +258,15 @@ class PTRound extends MY_Controller {
                             'other_percent'    =>  $other_per
                             ];
 
-                    $update = $this->db->insert('pt_equipment_results', $insertequipmentdata);
+                    if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
+                        if($lot_number != $submission->lot_number){
+                            //echo "<pre>";print_r("reached");echo "</pre>";die();
+
+                            $this->db->set('lot_number', $lot_number);
+                            $this->db->where('id', $submission_id);
+                            $this->db->update('pt_data_submission');
+                        }
+                    }
 
                     $counter2 ++;
                 }
@@ -307,9 +326,12 @@ class PTRound extends MY_Controller {
 
         $counter = 0;
         $counter3 = 0;
+        $lotcounter = 0;
 
         foreach ($equipments as $key => $equipment) {
             $counter++;
+
+            // if(lotcounter)
             
 
             $equipmentname = $equipment->equipment_name;
@@ -341,6 +363,9 @@ class PTRound extends MY_Controller {
                 </label>
 
                 </div>
+                <div>
+
+                </div>
                 <div class='col-md-6'>
                     
             <label class='checkbox-inline' for='check-complete'>";
@@ -352,7 +377,7 @@ class PTRound extends MY_Controller {
             }
             
 
-            // echo "<pre>";print_r($datas);echo "</pre>";
+            // echo "<pre>";print_r("<br/><br/><br/><br/><br/>Lot Number: ".$lotcounter);echo "</pre>";
 
             if($getCheck == 1){
                 $disabled = "disabled='' ";
@@ -372,16 +397,40 @@ class PTRound extends MY_Controller {
             <div class='card-block'>
             <form method='POST' class='p-a-4' id='".$equipment->id."'>
                 <input type='hidden' class='page-signup-form-control form-control ptround' value='".$round_uuid."'>
+                <div>
+                ";
 
+                $equipment_tabs .= "
+                </div>
 
 
                 <div class='row'>
                     <table class='table table-bordered'>
+
+                        <tr><td style='style='text-align: center;' width:40%;' colspan='8'>
+
+                        <label style='text-align: center; width:40%;' for='lot_number'>Lot Number: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Lot Number' value='".$datas[0]->lot_number."' required>" ;
+                    }else{
+                        $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Lot Number' required>";
+                    }
+                }else{
+                    $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' class='page-signup-form-control form-control' $disabled id='lot_".$equipment->id."' placeholder='Enter the Lot Number' required>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td></tr>
+
                         <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
                             </th>
-                            <th style='text-align: center;' colspan='7'>
+                            <th style='text-align: center;' colspan='6'>
                                 RESULT
                             </th>
                         </tr>
@@ -416,15 +465,15 @@ class PTRound extends MY_Controller {
                                 Percent
                             </th>
                         </tr>";
-
+                    
                     $counter2 = 0;
                     foreach ($samples as $key => $sample) {
                         
-                     //echo "<pre>";print_r($datas);echo "</pre>";
-
+                        
 // echo "<pre>";print_r($datas[$counter2]->cd3_absolute);echo "</pre>";die();
                         $value = 0;
-                        $equipment_tabs .= "<tr>
+                        $equipment_tabs .= "
+                                        <tr>
                                             <th style='text-align: center;'>";
                         $equipment_tabs .= $sample->sample_name;
 
@@ -524,6 +573,7 @@ class PTRound extends MY_Controller {
                         $counter2++;
                     }
 
+
                     $equipment_tabs .= "</table>
                                         </div>
 
@@ -541,6 +591,7 @@ class PTRound extends MY_Controller {
                                         </div>";
 
                     $equipment_tabs .= "";
+                    $lotcounter++;
         }
 
         $equipment_tabs .= "</div>";

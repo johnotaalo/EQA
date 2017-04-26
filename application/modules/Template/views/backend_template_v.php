@@ -13,6 +13,7 @@
 	<link href="<?= @$assets_url; ?>css/glyphicons.css" rel="stylesheet">
 	<link href="<?= @$assets_url; ?>css/glyphicons-filetypes.css" rel="stylesheet">
 	<link href="<?= @$assets_url; ?>css/glyphicons-social.css" rel="stylesheet">
+	
 
 	<?= @$page_css; ?>
 	<link href="<?= @$assets_url; ?>css/style.css" rel="stylesheet">
