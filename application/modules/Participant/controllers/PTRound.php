@@ -82,13 +82,17 @@ class PTRound extends MY_Controller {
 
         //echo "<pre>";print_r($equipments);echo "</pre>";die();
         $equipment_tabs = $this->createTabs($round_uuid,$participant_id);
+        $pt_round_to = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->to;
 
         $data = [
+                'pt_round_to' => $pt_round_to,
                 'pt_uuid'    =>  $round_uuid,
                 'participant'    =>  $participant_id,
                 'equipment_tabs'    =>  $equipment_tabs,
                 'data_submission' => 'data_submission'
             ];
+
+
               
         $this->assets
                 ->addCss("plugin/sweetalert/sweetalert.css")
