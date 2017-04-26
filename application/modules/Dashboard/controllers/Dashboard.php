@@ -16,9 +16,6 @@ class Dashboard extends DashboardController {
 	{	
 		$data = [];
 
-		
-		
-
 		$type = $this->session->userdata('type');
 		$this->assets->addCss('css/main.css');
 		$this->assets->addJs('js/main.js');
@@ -106,7 +103,7 @@ class Dashboard extends DashboardController {
         $tabledata = [];
 
 
-        $this->db->where('participant_uuid',$participant_uuid);
+        $this->db->where('to_uuid',$participant_uuid);
         $this->db->where('deleted',0);
         $messages = $this->db->get('messages_v')->result();
 

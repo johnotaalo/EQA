@@ -283,6 +283,8 @@ class PTRound extends MY_Controller {
         }
     }
 
+    
+
 
     public function createTabs($round_uuid, $participant_uuid){
         
@@ -297,7 +299,7 @@ class PTRound extends MY_Controller {
 
         
         $equipments = $this->M_PTRound->Equipments();
-        // 
+        
         
         $equipment_tabs = '';
 
@@ -335,7 +337,6 @@ class PTRound extends MY_Controller {
         foreach ($equipments as $key => $equipment) {
             $counter++;
 
-            // if(lotcounter)
             
 
             $equipmentname = $equipment->equipment_name;
@@ -353,6 +354,20 @@ class PTRound extends MY_Controller {
 
             $datas = $this->db->get('data_entry_v')->result();
 
+
+            $this->db->where('round_id',$round_id);
+            $this->db->where('participant_id',$participant_id);
+            $this->db->where('equipment_id',$equipment->id);
+            $new_m_count = $this->db->count_all_results('pt_data_log');
+
+            if($new_m_count){
+               $qa_m_count = $new_m_count; 
+            }else{
+                $qa_m_count = 0;
+            }
+
+            // echo "<pre>";print_r($new_m_count);echo "</pre>";die();
+
             $equipment_tabs .= "<div class='row'>
         <div class='col-sm-12'>
         <div class='card'>
@@ -367,9 +382,14 @@ class PTRound extends MY_Controller {
                 </label>
 
                 </div>
-                <div>
-
+                <div class='col-md-6'>
+                    <a class='nav-link nav-link'  href='".base_url('Participant/PTRound/QAMessage/'.$round_id.'/'.$participant_id.'/'.$equipment->id)."' role='button'>
+                    Message(s) from QA on ". $equipment->equipment_name ."
+                        <i class='icon-envelope-letter'></i>
+                        <span class='tag tag-pill tag-danger'>". $new_m_count ."</span>
+                    </a>
                 </div>
+                
                 <div class='col-md-6'>
                     
             <label class='checkbox-inline' for='check-complete'>";
@@ -604,134 +624,86 @@ class PTRound extends MY_Controller {
 
     }
 
-    // public function participantRepoSubmission(){
-    //     if($this->input->post()){
-    //     //echo "<pre>";print_r("PT UUID".$pt_round_no);echo "</pre>";die();
-    //         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-            
-    //         $pt_round_no = $this->input->post('ptround');
-    //         $participant = $user->uuid;
 
-    //         $instrument = $this->input->post('instrument');
-    //         $sdplatform = $this->input->post('sdplatform');
-    //         $analytes = $this->input->post('analytes');
-    //         $flourochromes = $this->input->post('flourochromes');
-    //         $antiflourochromes = $this->input->post('antiflourochromes');
+    public function QAMessage($round_id,$part_id,$equip_id){
+        $message_view = '';
 
-    //         $fl1 = $this->input->post('fl1');
-    //         $fl2 = $this->input->post('fl2');
-    //         $antibody3 = $this->input->post('antibody3');
-    //         $fl3 = $this->input->post('fl3');
-    //         $antibody4 = $this->input->post('antibody4');
-    //         $fl4 = $this->input->post('fl4');
+        $messages = $this->M_PTRound->getDataLog($round_id,$part_id,$equip_id);
+         // echo "<pre>";print_r($messages);echo "</pre>";die();
 
-    //         $lysemethod = $this->input->post('lysemethod');
-    //         $acb = $this->input->post('acb');
+        $counter = 1;
+        foreach ($messages as $key => $message) {
+            $message_view .= "<div class='container-fluid pt-2'>
+                                <div class='animated fadeIn'>
+                                    <div class='row'>
+                                        <div class='col-sm-12'>
+                                            <div class='card'>
+                                                <div class='card-header'>
+                                                    <strong> Message ";
+            $message_view .= $counter;
 
-    //         $ac1 = $this->input->post('ac1');
-    //         $p1 = $this->input->post('p1');
-    //         $ac2 = $this->input->post('ac2');
-    //         $p2 = $this->input->post('p2');
-    //         $ac3 = $this->input->post('ac3');
-    //         $p3 = $this->input->post('p3');
+            $message_view .= "</strong>
+                            </div>
+                            <div class='card-block'>
+                                <div class='row'>
 
+                                    <div class='col-sm-2'>
 
-    //         // Absolute Counts
+                                        <div class='form-group'>
+                                            <label for='name'>Verdict</label>
+                                            <p>";
 
-    //         $counts_panel1_rep_cd3 = $this->input->post('counts_panel1_rep_cd3');
-    //         $counts_panel1_rep_cd4 = $this->input->post('counts_panel1_rep_cd4');
-    //         $counts_panel2_rep_cd3 = $this->input->post('counts_panel2_rep_cd3');
-    //         $counts_panel2_rep_cd4 = $this->input->post('counts_panel2_rep_cd4');
-    //         $counts_panel3_rep_cd3 = $this->input->post('counts_panel3_rep_cd3');
-    //         $counts_panel3_rep_cd4 = $this->input->post('counts_panel3_rep_cd4');
+            $message_view .= $message->verdict;
 
-    //         $counts_panel1_mean_cd3 = $this->input->post('counts_panel1_mean_cd3');
-    //         $counts_panel1_mean_cd4 = $this->input->post('counts_panel1_mean_cd4');
-    //         $counts_panel2_mean_cd3 = $this->input->post('counts_panel2_mean_cd3');
-    //         $counts_panel2_mean_cd3 = $this->input->post('counts_panel2_mean_cd4');
-    //         $counts_panel3_mean_cd3 = $this->input->post('counts_panel3_mean_cd3');
-    //         $counts_panel3_mean_cd4 = $this->input->post('counts_panel3_mean_cd4');
+            $message_view .= "</p>
+                                        </div>
 
-    //         $counts_panel1_res_cd3 = $this->input->post('counts_panel1_res_cd3');
-    //         $counts_panel1_res_cd4 = $this->input->post('counts_panel1_res_cd4');
-    //         $counts_panel2_res_cd3 = $this->input->post('counts_panel2_res_cd3');
-    //         $counts_panel2_res_cd4 = $this->input->post('counts_panel2_res_cd4');
-    //         $counts_panel3_res_cd3 = $this->input->post('counts_panel3_res_cd3');
-    //         $counts_panel3_res_cd4 = $this->input->post('counts_panel3_res_cd4');
+                                    </div>
+                                    <div class='col-sm-8'>
 
-    //         $counts_panel1_sd_cd3 = $this->input->post('counts_panel1_sd_cd3');
-    //         $counts_panel1_sd_cd4 = $this->input->post('counts_panel1_sd_cd4');
-    //         $counts_panel2_sd_cd3 = $this->input->post('counts_panel2_sd_cd3');
-    //         $counts_panel2_sd_cd4 = $this->input->post('counts_panel2_sd_cd4');
-    //         $counts_panel3_sd_cd3 = $this->input->post('counts_panel3_sd_cd3');
-    //         $counts_panel3_sd_cd4 = $this->input->post('counts_panel3_sd_cd4');
+                                        <div class='form-group'>
+                                            <label for='ccnumber'>Message</label>
+                                            <p>";
 
-    //         $counts_panel1_sdi_cd3 = $this->input->post('counts_panel1_sdi_cd3');
-    //         $counts_panel1_sdi_cd4 = $this->input->post('counts_panel1_sdi_cd4');
-    //         $counts_panel2_sdi_cd3 = $this->input->post('counts_panel2_sdi_cd3');
-    //         $counts_panel2_sdi_cd4 = $this->input->post('counts_panel2_sdi_cd4');
-    //         $counts_panel3_sdi_cd3 = $this->input->post('counts_panel3_sdi_cd3');
-    //         $counts_panel3_sdi_cd4 = $this->input->post('counts_panel3_sdi_cd4');
+            $message_view .= $message->comments;
 
-    //         $counts_panel1_per_cd3 = $this->input->post('counts_panel1_per_cd3');
-    //         $counts_panel1_per_cd4 = $this->input->post('counts_panel1_per_cd4');
-    //         $counts_panel2_per_cd3 = $this->input->post('counts_panel2_per_cd3');
-    //         $counts_panel2_per_cd4 = $this->input->post('counts_panel2_per_cd4');
-    //         $counts_panel3_per_cd3 = $this->input->post('counts_panel3_per_cd3');
-    //         $counts_panel3_per_cd4 = $this->input->post('counts_panel3_per_cd4');
+            $message_view .= "</p>
+                                </div>
 
-    //         // Absolute Counts
+                                </div>
+                                <div class='col-sm-2'>
 
-    //         // Percentage
+                                    <div class='form-group'>
+                                        <label for='ccnumber'>Date Sent</label>
+                                        <p>";
+            $message_view .= date('dS F, Y', strtotime($message->date_of_log));
 
-    //         $percentage_panel1_rep_cd3 = $this->input->post('percentage_panel1_rep_cd3');
-    //         $percentage_panel1_rep_cd4 = $this->input->post('percentage_panel1_rep_cd4');
-    //         $percentage_panel2_rep_cd3 = $this->input->post('percentage_panel2_rep_cd3');
-    //         $percentage_panel2_rep_cd4 = $this->input->post('percentage_panel2_rep_cd4');
-    //         $percentage_panel3_rep_cd3 = $this->input->post('percentage_panel3_rep_cd3');
-    //         $percentage_panel3_rep_cd4 = $this->input->post('percentage_panel3_rep_cd4');
+            $message_view .= "</p></div></div></div></div></div></div></div></div></div>";
 
-    //         $percentage_panel1_mean_cd3 = $this->input->post('percentage_panel1_mean_cd3');
-    //         $percentage_panel1_mean_cd4 = $this->input->post('percentage_panel1_mean_cd4');
-    //         $percentage_panel2_mean_cd3 = $this->input->post('percentage_panel2_mean_cd3');
-    //         $percentage_panel2_mean_cd4 = $this->input->post('percentage_panel2_mean_cd4');
-    //         $percentage_panel3_mean_cd3 = $this->input->post('percentage_panel3_mean_cd3');
-    //         $percentage_panel3_mean_cd4 = $this->input->post('percentage_panel3_mean_cd4');
+            $counter++;
 
-    //         $percentage_panel1_res_cd3 = $this->input->post('percentage_panel1_res_cd3');
-    //         $percentage_panel1_res_cd4 = $this->input->post('percentage_panel1_res_cd4');
-    //         $percentage_panel2_res_cd3 = $this->input->post('percentage_panel2_res_cd3');
-    //         $percentage_panel2_res_cd4 = $this->input->post('percentage_panel2_res_cd4');
-    //         $percentage_panel3_res_cd3 = $this->input->post('percentage_panel3_res_cd3');
-    //         $percentage_panel3_res_cd4 = $this->input->post('percentage_panel3_res_cd4');
+        }
 
-    //         $percentage_panel1_sd_cd3 = $this->input->post('percentage_panel1_sd_cd3');
-    //         $percentage_panel1_sd_cd4 = $this->input->post('percentage_panel1_sd_cd4');
-    //         $percentage_panel2_sd_cd3 = $this->input->post('percentage_panel2_sd_cd3');
-    //         $percentage_panel2_sd_cd4 = $this->input->post('percentage_panel2_sd_cd4');
-    //         $percentage_panel3_sd_cd3 = $this->input->post('percentage_panel3_sd_cd3');
-    //         $percentage_panel3_sd_cd4 = $this->input->post('percentage_panel3_sd_cd4');
+        $data = [];
+        $title = "QA/Supervisor Message";
 
-    //         $percentage_panel1_sdi_cd3 = $this->input->post('percentage_panel1_sdi_cd3');
-    //         $percentage_panel1_sdi_cd4 = $this->input->post('percentage_panel1_sdi_cd4');
-    //         $percentage_panel2_sdi_cd3 = $this->input->post('percentage_panel2_sdi_cd3');
-    //         $percentage_panel2_sdi_cd4 = $this->input->post('percentage_panel2_sdi_cd4');
-    //         $percentage_panel3_sdi_cd3 = $this->input->post('percentage_panel3_sdi_cd3');
-    //         $percentage_panel3_sdi_cd4 = $this->input->post('percentage_panel3_sdi_cd4');
+        $data = [
+              'message_view' => $message_view 
+            ];
 
-    //         $percentage_panel1_per_cd3 = $this->input->post('percentage_panel1_per_cd3');
-    //         $percentage_panel1_per_cd4 = $this->input->post('percentage_panel1_per_cd4');
-    //         $percentage_panel2_per_cd3 = $this->input->post('percentage_panel2_per_cd3');
-    //         $percentage_panel2_per_cd4 = $this->input->post('percentage_panel2_per_cd4');
-    //         $percentage_panel3_per_cd3 = $this->input->post('percentage_panel3_per_cd3');
-    //         $percentage_panel3_per_cd4 = $this->input->post('percentage_panel3_per_cd4');
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        // $this->assets->setJavascript('Participant/notifications_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('Participant/qa_messages', $data)
+                ->adminTemplate();
+    }
 
-    //         // Percentage
-
-
-    //         //$this->db->insert('participant_readiness', $insertrounddata);
-    //     }
-    // }
+    
     
 
 }

@@ -9,6 +9,7 @@ CREATE TABLE `user` (
   `phonenumber` varchar(20) DEFAULT NULL,
   `user_type` varchar(50) NOT NULL,
   `avatar` text,
+  `approved` varchar(45) DEFAULT '1',
   `status` int(11) NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
