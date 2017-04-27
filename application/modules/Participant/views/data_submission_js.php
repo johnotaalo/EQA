@@ -31,7 +31,7 @@ $(document).ready(function(){
                 }else{
                 	
                 	$("#data-info").html("Loading Error ...");
-                	window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                	// window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }	
 		   },
 		   beforeSend:function()
