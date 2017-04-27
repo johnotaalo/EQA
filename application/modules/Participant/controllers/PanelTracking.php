@@ -49,7 +49,7 @@ class PanelTracking extends DashboardController{
 					'duplicate_sample'	=>	$this->input->post('duplicate_sample'),
 					'missing_sample'	=>	$this->input->post('missing_sample'),
 					'mismatch'	=>	$this->input->post('mismatch'),
-					'condition_comment'	=>	$this->input->post('condition_comment'),
+					'panel_condition_comment'	=>	$this->input->post('condition_comment'),
 					'panel_received_entered'	=>	date('Y-m-d H:i:s'),
 					'acceptance'	=>	1
 				];
