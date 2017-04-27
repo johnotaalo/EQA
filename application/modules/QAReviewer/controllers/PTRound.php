@@ -377,7 +377,7 @@ class PTRound extends MY_Controller {
 
     public function createTabs($round_uuid, $participant_uuid){
 
-        $equipments = $this->M_PTRound->Equipments();
+        $equipments = $this->M_PTRound->Equipments($participant_uuid);
         
         $datas=[];
         $tab = 0;
