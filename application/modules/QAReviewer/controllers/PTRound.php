@@ -303,9 +303,7 @@ class PTRound extends MY_Controller {
                 // $user = $this->db->get('participants')->row();
 
                 // if($user){
-                //     $data = [
-                //         'names'  =>  $user->participant_lname ." ". $user->participant_fname
-                //     ];
+                //     $data = [];
 
                 //     $body = $this->load->view('Template/email/message_v', $data, TRUE);
                 //     $this->load->library('Mailer');
@@ -350,13 +348,14 @@ class PTRound extends MY_Controller {
         $title = "Ready Participants";
 
         
-
+        $pt_round_to = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->to;
         $user = $this->M_Readiness->findUserByIdentifier('username', $participant_id);
         $participant_uuid = $user->uuid;
 
         $equipment_tabs = $this->createTabs($round_uuid,$participant_uuid);
 
         $data = [
+                'pt_round_to' => $pt_round_to,
                 'pt_uuid'    =>  $round_uuid,
                 'participant'    =>  $participant_id,
                 'equipment_tabs'    =>  $equipment_tabs,
@@ -691,25 +690,24 @@ class PTRound extends MY_Controller {
                 $this->session->set_flashdata('success', "Successfully sent the message");
 
 
-                $user_id = $this->M_Readiness->findUserByIdentifier('p_id', $part_id)->username;
+                $user = $this->M_Readiness->findUserByIdentifier('p_id', $part_id);
+                // echo "<pre>";print_r($user);echo "</pre>";die();
 
                 $pt_uuid = $this->M_Readiness->findRoundByIdentifier('id', $pt_id)->uuid;
 
                 // $this->db->where('uuid', $particapant_uuid);
                 // $user = $this->db->get('participants')->row();
 
-                // if($user){
-                //     $data = [
-                //         'names'  =>  $user->participant_lname ." ". $user->participant_fname
-                //     ];
+                if($user){
+                    $data = [];
 
-                //     $body = $this->load->view('Template/email/message_v', $data, TRUE);
-                //     $this->load->library('Mailer');
-                //     $sent = $this->mailer->sendMail($user->participant_email, $subject, $body);
-                //     if ($sent == FALSE) {
-                //         log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
-                //     }
-                // }
+                    $body = $this->load->view('Template/email/qa_results_review', $data, TRUE);
+                    $this->load->library('Mailer');
+                    $sent = $this->mailer->sendMail($user->email_address, "QA / Supervisor Results Review", $body);
+                    if ($sent == FALSE) {
+                        log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
+                    }
+                }
 
             }else{
                 $this->session->set_flashdata('error', "There was a problem sending the message. Please try again");
@@ -718,7 +716,7 @@ class PTRound extends MY_Controller {
             // $user_id = $this->db->insert_id();
 
             
-            redirect('QAReviewer/PTRound/ParticipantDetails/'.$pt_uuid.'/'.$user_id, 'refresh');
+            redirect('QAReviewer/PTRound/ParticipantDetails/'.$pt_uuid.'/'.$user->username, 'refresh');
     }
 
 }
