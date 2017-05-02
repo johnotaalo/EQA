@@ -2,6 +2,10 @@
 
 $(document).ready(function(){
 
+    $('input[name="expiry_date"]').datepicker({
+            todayHighlight: true
+        });
+
 	var round = $(".ptround").val();
 	$("form").submit(function(e){
 		 e.preventDefault();

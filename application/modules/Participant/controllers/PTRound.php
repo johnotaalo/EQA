@@ -119,11 +119,14 @@ class PTRound extends MY_Controller {
 
               
         $this->assets
+                ->addCss('plugin/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')
                 ->addCss("plugin/sweetalert/sweetalert.css")
                 ->addCss('css/signin.css');  
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                        ->addJs('dashboard/js/libs/moment.min.js')
+                ->addJs('plugin/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
                 ->addJs('dashboard/js/libs/jquery.validate.js')
                 ->addJs('dashboard/js/libs/select2.min.js')
                 ->addJs("plugin/sweetalert/sweetalert.min.js");
@@ -153,35 +156,6 @@ class PTRound extends MY_Controller {
     }
 
 
-    // public function EquipmentComplete($equipmentId,$round){
-    //     // echo "<pre>";print_r("Reached with ".$equipmentId);echo "</pre>";die();
-
-    //     $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-
-    //     $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
-    //     $participant_id = $user->p_id;
-
-    //     $this->db->set('status', 1);
-    //     $this->db->where('round_id', $round_id);
-    //     $this->db->where('participant_id', $participant_id);
-    //     $this->db->where('equipment_id', $equipmentId);
-
-    //     if($this->db->update('pt_data_submission')){
-    //         $data = [
-    //              'response' =>  1,
-    //              'message' => "Successfully marked equipment as complete"
-    //         ];
-    //     }else{
-    //         $data = [
-    //              'response' =>  0,
-    //              'message' => "Marking as complete failed, please try again..."
-    //         ];
-    //     }
-
-    //     return $this->output->set_content_type('application/json')->set_output(json_encode($data));
-    // }
-
-
     public function dataSubmission($equipmentid,$round){
         if($this->input->post()){
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
@@ -196,6 +170,8 @@ class PTRound extends MY_Controller {
             $submission = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipmentid);
 
             $lot_number = $this->input->post('lot_number');
+            $reagent_name = $this->input->post('reagent_name');
+            $expiry_date = $this->input->post('expiry_date');
 
             // Uploading file
             $file_upload_errors = [];
@@ -220,9 +196,13 @@ class PTRound extends MY_Controller {
                             'participant_id'    =>  $participant_id,
                             'equipment_id'    =>  $equipmentid,
                             'lot_number'    =>  $lot_number,
+                            'reagent_name'    =>  $reagent_name,
+                            'expiry_date'    =>  date('Y-m-d', strtotime($expiry_date)),
                             'status'    =>  0,
                             'doc_path'  =>  $file_path
                         ];
+
+
 
                     if($this->db->insert('pt_data_submission', $insertsampledata)){
                         $submission_id = $this->db->insert_id();
@@ -260,7 +240,7 @@ class PTRound extends MY_Controller {
                             }
 
                     }else{
-                        // echo "submission_error";
+                        //echo "submission_error";
                         $this->session->set_flashdata('error', "A problem was encountered while saving data. Please try again...");
                     }
 
@@ -317,7 +297,7 @@ class PTRound extends MY_Controller {
                     echo "submission_update";
                 }
             }else{
-                $this->session->set_flashdata('error', implode('<br/>', $file_upload_errors));
+                $this->session->set_flashdata('error', $file_upload_errors);
             }
         }else{
             //echo "no_post";
@@ -473,24 +453,85 @@ class PTRound extends MY_Controller {
                 <div class='row'>
                     <table class='table table-bordered'>
 
-                        <tr><td style='style='text-align: center;' width:40%;' colspan='8'>
 
-                        <label style='text-align: center; width:40%;' for='lot_number'>Lot Number: </label>";
+
+
+
+
+                        <tr>
+
+                        <td style='style='text-align: center;' colspan='2'>
+
+                        <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
 
                 if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Reagent Name is".$datas[$counter]->lot_number);echo "</pre>";
                     if($datas[0]->lot_number != ''){
-                        $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Lot Number' value='".$datas[0]->lot_number."' required>" ;
+                        $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Reagent Name' value='".$datas[0]->lot_number."' required>" ;
                     }else{
-                        $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Lot Number' required>";
+                        $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Reagent Name' required>";
                     }
                 }else{
-                    $lot = "<input style='text-align: center; width:40%;' type='text' name='lot_number' class='page-signup-form-control form-control' $disabled id='lot_".$equipment->id."' placeholder='Enter the Lot Number' required>";
+                    $lot = "<input style='text-align: center;' type='text' name='reagent_name' class='page-signup-form-control form-control' $disabled id='reagent_".$equipment->id."' placeholder='Enter the Reagent Name' required>";
                 }
                 $equipment_tabs .= $lot;
 
                             
-                      $equipment_tabs .= " </td></tr>
+                      $equipment_tabs .= " </td>
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Lot Number' value='".$datas[0]->lot_number."' required>" ;
+                    }else{
+                        $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Lot Number' required>";
+                    }
+                }else{
+                    $lot = "<input style='text-align: center;' type='text' name='lot_number' class='page-signup-form-control form-control' $disabled id='lot_".$equipment->id."' placeholder='Enter the Lot Number' required>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td>
+
+
+
+
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='lot_number'>Expiry date: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Expiry date is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Expiry date' value='".$datas[0]->lot_number."' required>" ;
+                    }else{
+                        $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control  form-control' value=". date('m/d/Y') ." $disabled placeholder='Enter the Expiry date' required>";
+                    }
+                }else{
+                    $lot = "<input style='text-align: center;' type='text' name='expiry_date' class='page-signup-form-control form-control' value=". date('m/d/Y') ." $disabled id='expiry_".$equipment->id."' placeholder='Enter the Expiry date' required>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td>
+
+
+
+
+
+                      </tr>
+
+
+
+
+
+
 
                         <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>

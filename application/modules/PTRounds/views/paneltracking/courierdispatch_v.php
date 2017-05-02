@@ -13,26 +13,26 @@
 	<div class="card-block">
 		<form method="POST" class="form-horizontal">
 			<div class="form-group row">
-				<label class="col-md-3 form-control-label" for="hf-email">Courier Company</label>
+				<label class="col-md-3 form-control-label" for="courier_company">Courier Company</label>
 				<div class="col-md-9">
 					<input type="text" name="courier_company" class = "form-control" value = "G4S Courier"/>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-md-3 form-control-label" for="hf-email">Courier Official</label>
+				<label class="col-md-3 form-control-label" for="courier_official">Courier Official</label>
 				<div class="col-md-9">
 					<input type="text" name="courier_official" class = "form-control" />
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-md-3 form-control-label" for="hf-email">Dispatch Date</label>
+				<label class="col-md-3 form-control-label" for="dispatch_date">Dispatch Date</label>
 				<div class="col-md-9">
 					<input type="text" name="dispatch_date" class = "form-control" value = "<?= @date('m/d/Y'); ?>"/>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="col-md-3 form-control-label" for="hf-email">Dispatch Notes</label>
+				<label class="col-md-3 form-control-label" for="dispatch_notes">Dispatch Notes</label>
 				<div class="col-md-9">
 					<textarea class = "form-control" rows = "8" name = "dispatch_notes"></textarea>
 				</div>
