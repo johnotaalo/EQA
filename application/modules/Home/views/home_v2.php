@@ -565,7 +565,7 @@
                             </div>
                             <div class="form-area">
                                 <div class="cf-msg"></div>
-                                <form class="form-inline" action="http://www.styllustheme.com/ThemeUnit/thirdeye-preview/thirdeye/sendMail.php" method="post" id="cf">
+                                <form class="form-inline" action="<?= @base_url('Home/sendMessage');?>" method="post">
                                     <div class="row">
                                         <ul class="contact-form">
                                             <li class="col-xs-12 col-sm-6">
