@@ -160,6 +160,7 @@ class PTRound extends MY_Controller {
 
     function Round($round_uuid){
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+        // echo '<pre>';print_r($user->facility_id);echo "</pre>";die();
         $facility_id = $user->facility_id;
 
         $data = [];
@@ -197,30 +198,35 @@ class PTRound extends MY_Controller {
 
         $facility_participants = $this->M_PPTRound->getFacilityParticipants($round_uuid,$facility_id);
         //echo '<pre>';print_r($facility_participants);echo "</pre>";die();
+        $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
 
         $heading = [
             "No.",
             "Participant ID",
             "Participant",
             "Phone Number",
+            "Verdict",
             "Actions"
         ];
         $tabledata = [];
 
+        // $this->db->where('verdict', 0);
+        
 
         if($facility_participants){
             $counter = 0;
             foreach($facility_participants as $participant){
                 $counter ++;
                 $participantid = $participant->participant_id;
-                 //echo "<pre>";print_r($participant);echo "</pre>";die();
+                 
 
                 $pid = $participant->p_id;
                 
-                $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round_uuid)->id;
+                $verdict = $this->M_PPTRound->getVerdictCheck($round_id,$pid);
+                // echo "<pre>";print_r($facility_participants);echo "</pre>";die();
 
                 
-                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
+                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-info btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
                 
 
                 $Check = $this->M_PPTRound->getDataSubmission($round_id,$pid);
@@ -232,15 +238,31 @@ class PTRound extends MY_Controller {
                 }
                 //echo "<pre>";print_r($getCheck);echo "</pre>";die();
                 if($getCheck == 1){
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                    $change_state .= '<a data-type="send" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-primary btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
                 }else if($getCheck == 2){
                     $change_state = '';
                     
                 }else{
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a> 
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>   
                     ';
-
                 }
+
+                if($participant->lab_result){
+                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
+                }else{
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
+                    ';
+                }
+
+                if($verdict == 1){
+                    $smart_status = "<label class = 'tag tag-success tag-sm'>Accepted</label>";
+                }else if($verdict == 0){
+                    $smart_status = "<label class = 'tag tag-danger tag-sm'>Rejected</label>";
+                }else{
+                    $smart_status = "<label class = 'tag tag-warning tag-sm'>Awaiting Verdict</label>";
+                }
+
+                
 
                 
                 $tabledata[] = [
@@ -248,6 +270,7 @@ class PTRound extends MY_Controller {
                     $participantid,
                     $participant->participant_lname.' '.$participant->participant_fname,
                     $participant->participant_phonenumber,
+                    $smart_status,
                     $change_state
                 ];
             }
@@ -343,6 +366,36 @@ class PTRound extends MY_Controller {
 
     }
 
+    function MarkLabResult($round_uuid,$round_id, $participant_uuid){
+
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+
+        //Removes any participant who was marked as the lab result
+
+        $this->db->set('lab_result', 0);
+        $this->db->where('pt_round_no', $round_uuid);
+        $this->db->where('participant_facility', $user->facility_id);
+        $this->db->update('participant_readiness');
+
+
+        //Marks this participant as the lab result
+
+        $this->db->set('lab_result', 1);
+        $this->db->where('pt_round_no', $round_uuid);
+        $this->db->where('participant_id', $participant_uuid);
+        $this->db->where('participant_facility', $user->facility_id);
+        $update = $this->db->update('participant_readiness');
+        //$this->db->update('equipment');
+
+        if($update){
+            $this->session->set_flashdata('success', "Successfully made Participant as the Lab Result");
+        }else{
+            $this->session->set_flashdata('error', "There was a problem making the participant as Lab Result. Please try again");
+        }
+
+        redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
+    }
+
     function ParticipantDetails($round_uuid,$participant_id){
         $data = [];
         $title = "Ready Participants";
@@ -389,7 +442,7 @@ class PTRound extends MY_Controller {
 
         
 
-        // echo "<pre>";print_r($datas[0]->cd3_absolute);echo "</pre>";die();
+        // echo "<pre>";print_r($equipments);echo "</pre>";die();
         
         $equipment_tabs = '';
 
@@ -478,9 +531,30 @@ class PTRound extends MY_Controller {
                     <table  style='text-align: center;' class='table table-bordered'>
 
 
-                    <tr><td style='style='text-align: center;' width:40%;' colspan='8'>
+                    <tr>
 
-                        <label style='text-align: center; width:40%;' for='lot_number'>Lot Number: </label>";
+                    <td style='style='text-align: center;' colspan='2'>
+
+                        <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<div>".$datas[0]->reagent_name." </div>" ;
+                    }else{
+                        $lot = "<div>No Reagent</div>";
+                    }
+                }else{
+                    $lot = "<div>No Reagent</div>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td>
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
 
                 if($datas){
                     // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
@@ -495,7 +569,31 @@ class PTRound extends MY_Controller {
                 $equipment_tabs .= $lot;
 
                             
-                      $equipment_tabs .= " </td></tr>
+                      $equipment_tabs .= " </td>
+
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='expiry_date'>Expiry Date: </label>";
+
+                if($datas){
+                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                    if($datas[0]->lot_number != ''){
+                        $lot = "<div>".$datas[0]->expiry_date." </div>" ;
+                    }else{
+                        $lot = "<div>No Expiry Date</div>";
+                    }
+                }else{
+                    $lot = "<div>No Expiry Date</div>";
+                }
+                $equipment_tabs .= $lot;
+
+                            
+                      $equipment_tabs .= " </td>
+
+
+
+                      </tr>
 
 
 
@@ -689,25 +787,39 @@ class PTRound extends MY_Controller {
             if($this->db->insert('pt_data_log', $insertdata)){
                 $this->session->set_flashdata('success', "Successfully sent the message");
 
+                if($verdict == 'Accepted'){
+                    $verd = 1;
+                }else if($verdict == 'Rejected'){
+                    $verd = 0;
+                }else{
+                    $verd = 2;
+                }
+
+
+                $this->db->set('verdict', $verd);
+                $this->db->where('round_id', $pt_id);
+                $this->db->where('participant_id', $part_id);
+                $this->db->where('equipment_id', $equip_id);
+                    $this->db->update('pt_data_submission');
+
 
                 $user = $this->M_Readiness->findUserByIdentifier('p_id', $part_id);
-                // echo "<pre>";print_r($user);echo "</pre>";die();
-
                 $pt_uuid = $this->M_Readiness->findRoundByIdentifier('id', $pt_id)->uuid;
 
-                // $this->db->where('uuid', $particapant_uuid);
-                // $user = $this->db->get('participants')->row();
+                if($verdict == 'Rejected'){
 
-                if($user){
-                    $data = [];
+                    if($user){
+                        $data = [];
 
-                    $body = $this->load->view('Template/email/qa_results_review', $data, TRUE);
-                    $this->load->library('Mailer');
-                    $sent = $this->mailer->sendMail($user->email_address, "QA / Supervisor Results Review", $body);
-                    if ($sent == FALSE) {
-                        log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
+                        $body = $this->load->view('Template/email/qa_results_review', $data, TRUE);
+                        $this->load->library('Mailer');
+                        $sent = $this->mailer->sendMail($user->email_address, "QA / Supervisor Results Review", $body);
+                        if ($sent == FALSE) {
+                            log_message('error', "The system could not send an email to {$user->participant_email}. Names: $user->participant_lname $user->participant_fname at " . date('Y-m-d H:i:s'));
+                        }
                     }
                 }
+                
 
             }else{
                 $this->session->set_flashdata('error', "There was a problem sending the message. Please try again");

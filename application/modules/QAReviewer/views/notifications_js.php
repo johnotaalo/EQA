@@ -32,7 +32,14 @@ $(function () {
 
     $('.showtoast').click(function () {
         var shortCutFunction = 'info';
-        var msg = 'Data for this particapant has already been sent to the NHRL';
+        var type = $(this).attr('data-type');
+
+        if(type == 'lab'){
+            var msg = 'This participant has already been marked as the lab result';
+        }else if(type == 'send'){
+            var msg = 'Data for this particapant has already been sent to the NHRL';
+        }
+  
         var title = 'Notification';
         var $showDuration = $('#showDuration');
         var $hideDuration = $('#hideDuration');
@@ -50,7 +57,7 @@ $(function () {
             debug: $('#debugInfo').prop('checked'),
             newestOnTop: $('#newestOnTop').prop('checked'),
             progressBar: $('#progressBar').prop('checked'),
-            positionClass: $('#positionGroup input:radio:checked').val() || 'toast-top-right',
+            positionClass: $('#positionGroup input:radio:checked').val() || 'toast-top-center',
             preventDuplicates: $('#preventDuplicates').prop('checked'),
             onclick: null
         };

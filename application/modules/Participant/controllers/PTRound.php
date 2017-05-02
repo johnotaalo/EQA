@@ -199,6 +199,7 @@ class PTRound extends MY_Controller {
                             'reagent_name'    =>  $reagent_name,
                             'expiry_date'    =>  date('Y-m-d', strtotime($expiry_date)),
                             'status'    =>  0,
+                            'verdict'    =>  2,
                             'doc_path'  =>  $file_path
                         ];
 

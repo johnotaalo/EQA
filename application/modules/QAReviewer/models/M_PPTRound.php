@@ -32,6 +32,40 @@ class M_PPTRound extends CI_Model {
     }
 
 
+    public function getVerdictCheck($round,$participant){
+
+        $this->db->where('round_id',$round);
+        $this->db->where('participant_id',$participant);
+        $this->db->having('verdict',2);
+
+        $sent = $this->db->get('pt_data_submission')->row();
+
+
+        $this->db->where('round_id',$round);
+        $this->db->where('participant_id',$participant);
+        $this->db->having('verdict',1);
+
+        $accepted = $this->db->get('pt_data_submission')->row();
+
+        $this->db->where('round_id',$round);
+        $this->db->where('participant_id',$participant);
+        $this->db->having('verdict',0);
+
+        $rejected = $this->db->get('pt_data_submission')->row();
+
+
+        if($rejected){
+            $datas = 0;
+        }else if($accepted){
+            $datas = 1;
+        }else{
+            $datas = 2;
+        }
+
+        return $datas;
+    }
+
+
 }
 
 /* End of file M_Participant.php */

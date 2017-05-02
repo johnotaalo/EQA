@@ -225,11 +225,12 @@ class Readiness extends MY_Controller {
             ];
 
             $insertrounddata = [
-            	'participant_id'	=>	$useruuid,
-            	'pt_round_no'		=>	$pt_round_no,
-            	'status'			=>	0,
-                'verdict'    	  	=>  0,
-                'comment'    		=>  'No comment made'
+            	'participant_id'		=>	$useruuid,
+            	'pt_round_no'			=>	$pt_round_no,
+            	'status'				=>	0,
+                'verdict'    	  		=>  0,
+                'comment'    			=>  'No comment made',
+                'participant_facility'  =>  $facilityid
             ];
 
             $this->db->insert('participant_readiness', $insertrounddata);
