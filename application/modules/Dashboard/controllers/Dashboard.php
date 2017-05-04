@@ -56,7 +56,7 @@ class Dashboard extends DashboardController {
 			$this->load->model('participant/M_Participant');
 			$view = "dashboard_v";
 			$data = [
-				'acceptance'   		=> $locking,
+				'receipt'   		=> $locking,
 				'dashboard_data'	=>	$this->getParticipantDashboardData($this->session->userdata('uuid')),
 				'participant'		=>	$this->M_Participant->findParticipantByIdentifier('uuid', $this->session->userdata('uuid'))
 			];
