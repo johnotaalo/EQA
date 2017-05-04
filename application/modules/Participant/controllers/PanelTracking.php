@@ -23,7 +23,7 @@ class PanelTracking extends DashboardController{
 					->addCss('plugin/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
 
 			$this->assets
-					->addJs('dashboard/js/libs/icheck/icheck.min.js')
+					// ->addJs('dashboard/js/libs/icheck/icheck.min.js')
 					->addJs('dashboard/js/libs/moment.min.js')
 					->addJs('plugin/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
 	                ->addJs('dashboard/js/libs/jquery.validate.js')

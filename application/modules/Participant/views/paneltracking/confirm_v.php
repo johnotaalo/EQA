@@ -46,8 +46,8 @@
 
 
 
-				<!-- <div id="bad-samples" style="display: none;"> -->
-				<div id="bad-samples">
+				<div id="bad-samples" style="display: none;">
+				<!-- <div id="bad-samples"> -->
 
 					<div class="form-group row">
 			          <label class = "col-sm-6">Sample Tube</label>
