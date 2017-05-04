@@ -2,26 +2,9 @@
 	$(document).ready(function(){
 		// console.log('conditions');
 
-		// $('#bad-samples').hide();
+		$('#bad-samples').hide();
 
-		
-
-
-		$('input[name="participant_received_date"]').datepicker({
-			"endDate" : "<?= @date('m/d/Y'); ?>"
-		});
-		$("input[type='checkbox']").iCheck({
-			checkboxClass: 'icheckbox_flat-green'
-		});
-		$("input[type='radio']").iCheck({
-			radioClass: 'iradio_flat-green'
-		});
-
-
-		console.log("conditions");
-    	
-    	$('#acceptanceyes').click(function() {
-    		console.log('yes clicked');
+    	$('input#acceptanceyes').click(function() {
 	   	    $check = $('#acceptanceyes').is(":checked"); 	
 	       	if($check){
 	       		$divcheck = $('#bad-samples').is(":visible");
@@ -33,8 +16,7 @@
     	});
 
 
-    	$('#acceptanceno').click(function(){
-			console.log('no clicked');
+    	$('input#acceptanceno').click(function(){
 	   	    $check = $('#acceptanceno').is(":checked"); 	
 	       	if($check){
 	       		$divcheck = $('#bad-samples').is(":visible");
@@ -44,22 +26,16 @@
 	       	}
     	});
 
-    $('input[type="radio"]').click(function() {
-    	console.log('no clicked');
-       if(($(this).attr('id') == 'acceptanceno')) {
-	   	    if($check){
-	       		$divcheck = $('#bad-samples').is(":visible");
-	       		if(!($divcheck)){
-	       			$('#bad-samples').slideDown();
-	       		}
-	       	}   
-       	}
-   });
 
-
-
-
-
+		$('input[name="participant_received_date"]').datepicker({
+			"endDate" : "<?= @date('m/d/Y'); ?>"
+		});
+		$("input[type='checkbox']").iCheck({
+			checkboxClass: 'icheckbox_flat-green'
+		});
+		$("input[type='radio']").iCheck({
+			radioClass: 'iradio_flat-green'
+		});
 
 });
 </script>

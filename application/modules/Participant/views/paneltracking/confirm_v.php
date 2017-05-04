@@ -39,8 +39,8 @@
 						<p>Are the sample tubes good to carry out this panel's tests ?</p>
 					</div>
 					<div class = "col-sm-6">
-						<input type="radio" value = "1" name="acceptance" class = "acceptance" id="acceptanceyes" required />&nbsp;<label for = "acceptanceyes">Yes</label>&nbsp;
-						<input type="radio" value = "0" name="acceptance" class = "acceptance" id="acceptanceno" required />&nbsp;<label for = "acceptanceno">No</label>&nbsp;
+						<input type="radio" value = "1" name="acceptance" class = "" id="acceptanceyes" required />&nbsp;<label for = "acceptanceyes">Yes</label>&nbsp;
+						<input type="radio" value = "0" name="acceptance" class = "" id="acceptanceno" required />&nbsp;<label for = "acceptanceno">No</label>&nbsp;
 					</div>	
 				</div>
 
@@ -79,48 +79,48 @@
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Insufficient Volume</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_yes" value = "1" required /> <label for = "insufficient_volume_yes">Yes</label>&nbsp;
+			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_no" value = "0" required /> <label for = "insufficient_volume_no">No</label>
 			          </div>
 			        </div>
 
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Haemolysed sample</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_yes" value = "1" required /> <label for = "haemolysed_sample_yes">Yes</label>&nbsp;
+			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_no" value = "0" required /> <label for = "haemolysed_sample_no">No</label>
 			          </div>
 			        </div>
 
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Clotted sample</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="clotted_sample" id = "clotted_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="clotted_sample" id = "clotted_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="clotted_sample" id = "clotted_sample_yes" value = "1" required /> <label for = "clotted_sample_yes">Yes</label>&nbsp;
+			            <input type="radio" name="clotted_sample" id = "clotted_sample_no" value = "0" required /> <label for = "clotted_sample_no">No</label>
 			          </div>
 			        </div>
 
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Duplicate sample received</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_yes" value = "1" required /> <label for = "duplicate_sample_yes">Yes</label>&nbsp;
+			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_no" value = "0" required /> <label for = "duplicate_sample_no">No</label>
 			          </div>
 			        </div>
 
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Missing sample</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="missing_sample" id = "missing_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="missing_sample" id = "missing_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="missing_sample" id = "missing_sample_yes" value = "1" required /> <label for = "missing_sample_yes">Yes</label>&nbsp;
+			            <input type="radio" name="missing_sample" id = "missing_sample_no" value = "0" required /> <label for = "missing_sample_no">No</label>
 			          </div>
 			        </div>
 
 			        <div class="form-group row">
 			          <label class = "col-sm-6">Mismatch of information details on introductory letter and sample tube</label>
 			          <div class="col-sm-6">
-			            <input type="radio" name="mismatch" id = "mismatch_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-			            <input type="radio" name="mismatch" id = "mismatch_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			            <input type="radio" name="mismatch" id = "mismatch_yes" value = "1" required /> <label for = "mismatch_yes">Yes</label>&nbsp;
+			            <input type="radio" name="mismatch" id = "mismatch_no" value = "0" required /> <label for = "mismatch_no">No</label>
 			          </div>
 			        </div>
 

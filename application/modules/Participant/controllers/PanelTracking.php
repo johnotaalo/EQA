@@ -23,9 +23,11 @@ class PanelTracking extends DashboardController{
 					->addCss('plugin/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
 
 			$this->assets
+					->addJs('dashboard/js/libs/icheck/icheck.min.js')
 					->addJs('dashboard/js/libs/moment.min.js')
 					->addJs('plugin/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
-					->addJs('dashboard/js/libs/icheck/icheck.min.js');
+	                ->addJs('dashboard/js/libs/jquery.validate.js')
+	                ->addJs('dashboard/js/libs/select2.min.js');
 
 			$this->assets
 					->setJavascript('Participant/paneltracking/confirm_js');
@@ -59,7 +61,7 @@ class PanelTracking extends DashboardController{
 
 				$this->db->where('uuid', $panel_tracking_uuid);
 				$this->db->update('pt_panel_tracking', $update_data);
-				
+
 				$this->session->set_flashdata('success', "You have successfully submitted your confirmation. Please confirm whether you are able to access the PT Round Submission Form. If not, please contact the NHRL Administrator for further guidance on what next should happen.");
 			
 			redirect('Participant/PanelTracking/confirm/' . $panel_tracking_uuid);	
