@@ -25,7 +25,9 @@ class PanelTracking extends DashboardController{
 			$this->assets
 					->addJs('dashboard/js/libs/moment.min.js')
 					->addJs('plugin/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
-					->addJs('dashboard/js/libs/icheck/icheck.min.js')
+					->addJs('dashboard/js/libs/icheck/icheck.min.js');
+
+			$this->assets
 					->setJavascript('Participant/paneltracking/confirm_js');
 
 			$this->template
@@ -39,10 +41,11 @@ class PanelTracking extends DashboardController{
 
 	function submitConfirmation($panel_tracking_uuid){
 		if ($this->input->post()) {
-			if($this->input->post('acceptance') == 1){
 				$update_data = [
 					'participant_received_date'	=>	date('Y-m-d', strtotime($this->input->post('participant_received_date'))),
-					'sample_tubes'			=>	$this->input->post('sample_tubes'),
+					'tubes_broken'			=>	$this->input->post('tubes_broken'),
+					'tubes_leaking'			=>	$this->input->post('tubes_leaking'),
+					'tubes_cracked'			=>	$this->input->post('tubes_cracked'),
 					'insufficient_volume'	=>	$this->input->post('insufficient_volume'),
 					'haemolysed_sample'	=>	$this->input->post('haemolysed_sample'),
 					'clotted_sample'	=>	$this->input->post('clotted_sample'),
@@ -56,12 +59,14 @@ class PanelTracking extends DashboardController{
 
 				$this->db->where('uuid', $panel_tracking_uuid);
 				$this->db->update('pt_panel_tracking', $update_data);
+				
 				$this->session->set_flashdata('success', "You have successfully submitted your confirmation. Please confirm whether you are able to access the PT Round Submission Form. If not, please contact the NHRL Administrator for further guidance on what next should happen.");
-			}else{
-				$this->session->set_flashdata('error', "There was a problem sending your confirmation");
-			}
+			
 			redirect('Participant/PanelTracking/confirm/' . $panel_tracking_uuid);	
+		}else{
+			$this->session->set_flashdata('error', "There was a problem in submitting the receipt. Please try again");
+			redirect('Participant/PanelTracking/confirm/' . $panel_tracking_uuid);
 		}
-		redirect('Participant/PanelTracking/confirm/' . $panel_tracking_uuid);
+		
 	}
 }

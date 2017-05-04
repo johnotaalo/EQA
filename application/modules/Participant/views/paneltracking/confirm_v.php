@@ -33,72 +33,105 @@
 				</div>
 
 				<legend>Condition of Panel</legend>
+
 				<div class="form-group row">
-		          <label class = "col-sm-6">Sample Tube</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="sample_tubes" id = "sample_tubes_0" value = "0" required /> <label for = "sample_tubes_0">Broken</label>&nbsp;
-		            <input type="radio" name="sample_tubes" id = "sample_tubes_1" value = "1" required /> <label for = "sample_tubes_1">Leaking</label>
-		            <input type="radio" name="sample_tubes" id = "sample_tubes_2" value = "2" required /> <label for = "sample_tubes_2">Cracked</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Insufficient Volume</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="insufficient_volume" id = "insufficient_volume_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="insufficient_volume" id = "insufficient_volume_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Haemolysed sample</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Clotted sample</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="clotted_sample" id = "clotted_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="clotted_sample" id = "clotted_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Duplicate sample received</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="duplicate_sample" id = "duplicate_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="duplicate_sample" id = "duplicate_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Missing sample</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="missing_sample" id = "missing_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="missing_sample" id = "missing_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-		        <div class="form-group row">
-		          <label class = "col-sm-6">Mismatch of information details on introductory letter and sample tube</label>
-		          <div class="col-sm-6">
-		            <input type="radio" name="mismatch" id = "mismatch_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
-		            <input type="radio" name="mismatch" id = "mismatch_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
-		          </div>
-		        </div>
-
-				<div class="form-group">
-					<label>Please provide a brief comment on why you chose the response above</label>
-					<textarea class = 'form-control' name = 'condition_comment' rows = "8" required></textarea>
+					<div class = "col-sm-6">
+						<p>Are the sample tubes good to carry out this panel's tests ?</p>
+					</div>
+					<div class = "col-sm-6">
+						<input type="radio" value = "1" name="acceptance" class = "acceptance" id="acceptanceyes" required />&nbsp;<label for = "acceptanceyes">Yes</label>&nbsp;
+						<input type="radio" value = "0" name="acceptance" class = "acceptance" id="acceptanceno" required />&nbsp;<label for = "acceptanceno">No</label>&nbsp;
+					</div>	
 				</div>
 
-				<div class="form-group">
-					<input type="checkbox" value = "1" name="acceptance" id = "acceptance"/>&nbsp;
-					<label for="acceptance" required>By clicking on this you agree that the data you have provided above is true.</label>
+
+
+				<!-- <div id="bad-samples" style="display: none;"> -->
+				<div id="bad-samples">
+
+					<div class="form-group row">
+			          <label class = "col-sm-6">Sample Tube</label>
+			          <div class = "col-sm-6">
+
+			          	<div class="">
+				          	<label><strong>Broken</strong></label>
+					            <input type="radio" name="tubes_broken" id = "tubes_broken_1" value = "1" /> <label for = "tubes_broken_1">Yes</label>&nbsp;
+					            <input type="radio" name="tubes_broken" id = "tubes_broken_0" value = "0" /> <label for = "tubes_broken_0">No</label>&nbsp;
+			          	</div>
+
+
+			         	<div class="">
+					          <label><strong>Leaking</strong></label>
+					            <input type="radio" name="tubes_leaking" id = "tubes_leaking_1" value = "1" /> <label for = "tubes_leaking_1">Yes</label>&nbsp;
+					            <input type="radio" name="tubes_leaking" id = "tubes_leaking_0" value = "0" /> <label for = "tubes_leaking_0">No</label>&nbsp;
+			            </div>
+
+
+			            <div class="">
+				          	<label for = "sample_tubes_0"><strong>Cracked</strong></label>
+					            <input type="radio" name="tubes_cracked" id = "tubes_cracked_1" value = "1" /> <label for = "tubes_cracked_1">Yes</label>&nbsp;
+					            <input type="radio" name="tubes_cracked" id = "tubes_cracked_0" value = "0" /> <label for = "tubes_cracked_0">No</label>&nbsp;
+				        </div>
+
+				      </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Insufficient Volume</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="insufficient_volume" id = "insufficient_volume_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Haemolysed sample</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="haemolysed_sample" id = "haemolysed_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Clotted sample</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="clotted_sample" id = "clotted_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="clotted_sample" id = "clotted_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Duplicate sample received</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="duplicate_sample" id = "duplicate_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Missing sample</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="missing_sample" id = "missing_sample_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="missing_sample" id = "missing_sample_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+			        <div class="form-group row">
+			          <label class = "col-sm-6">Mismatch of information details on introductory letter and sample tube</label>
+			          <div class="col-sm-6">
+			            <input type="radio" name="mismatch" id = "mismatch_yes" value = "1" required /> <label for = "tubes_condition_yes">Yes</label>&nbsp;
+			            <input type="radio" name="mismatch" id = "mismatch_no" value = "0" required /> <label for = "tubes_condition_no">No</label>
+			          </div>
+			        </div>
+
+					<div class="form-group">
+						<label>Please provide a brief comment on why you chose the response above</label>
+						<textarea class = 'form-control' name = 'condition_comment' rows = "8" required></textarea>
+					</div>
+
 				</div>
+
+				
 
 				<div class="alert alert-info" role = "alert">
 					<p>Please note that if your panels are in good condition, then you will be allowed to start reporting on your findings. Otherwise, you may have to wait for an administrator to intervene</p>
