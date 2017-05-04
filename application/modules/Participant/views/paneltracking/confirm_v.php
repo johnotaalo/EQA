@@ -30,11 +30,17 @@
 						<input type="text" name="participant_received_date" class = "form-control" value="<?= @date('m/d/Y'); ?>" required>
 						<span class="help-block">Format: month/day/year e.g. 02/01/2017</span>
 					</div>
+					
+				</div>
+				<div class="alert alert-warning" role = "alert">
+					<p>Please fill in for all the recieved samples</p>
 				</div>
 
 				<legend>Condition of Panel</legend>
 
-				<div class="form-group row">
+				<?= @$samples; ?>
+
+				<!-- <div class="form-group row">
 					<div class = "col-sm-6">
 						<p>Are the sample tubes good to carry out this panel's tests ?</p>
 					</div>
@@ -42,12 +48,11 @@
 						<input type="radio" value = "1" name="acceptance" class = "" id="acceptanceyes" required />&nbsp;<label for = "acceptanceyes">Yes</label>&nbsp;
 						<input type="radio" value = "0" name="acceptance" class = "" id="acceptanceno" required />&nbsp;<label for = "acceptanceno">No</label>&nbsp;
 					</div>	
-				</div>
+				</div> -->
 
 
 
-				<div id="bad-samples" style="display: none;">
-				<!-- <div id="bad-samples"> -->
+				<!-- <div id="bad-samples" style="display: none;">
 
 					<div class="form-group row">
 			          <label class = "col-sm-6">Sample Tube</label>
@@ -129,7 +134,7 @@
 						<textarea class = 'form-control' name = 'condition_comment' rows = "8" required></textarea>
 					</div>
 
-				</div>
+				</div> -->
 
 				
 

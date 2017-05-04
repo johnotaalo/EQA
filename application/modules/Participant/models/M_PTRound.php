@@ -84,6 +84,15 @@ class M_PTRound extends CI_Model {
 
         return $query->result();
     }
+
+    public function getPTUuid($panel_tracking_uuid){
+        $this->db->select('prp.pt_round_uuid,prp.participant_uuid');
+        $this->db->where('ppt.uuid', $panel_tracking_uuid);
+        $this->db->join('pt_ready_participants prp', 'prp.readiness_id = ppt.pt_readiness_id');
+        $query = $this->db->get('pt_panel_tracking ppt',1);
+
+        return $query->row();
+    }
 }
 
 /* End of file M_Participant.php */

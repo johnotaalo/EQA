@@ -3,6 +3,8 @@
 class PanelTracking extends DashboardController{
 	function __construct(){
 		parent::__construct();
+
+		$this->load->model('Participant/M_PTRound');
 	}
 
 	function confirm($panel_tracking_uuid){
@@ -12,8 +14,11 @@ class PanelTracking extends DashboardController{
 			if($panel_tracking->status_code == 3){
 				$this->session->set_flashdata('success', 'You have successfully submitted your confirmation. Please confirm whether you are able to access the PT Round Submission Form. If not, please contact the NHRL Administrator for further guidance on what next should happen.');
 			}
+		// echo "<pre>";print_r($this->getSamples($panel_tracking_uuid));echo "</pre>";die();
+
 			$data = [
-				'panel_tracking_uuid'	=>	$panel_tracking_uuid
+				'panel_tracking_uuid'	=>	$panel_tracking_uuid,
+				'samples'	=>	$this->getSamples($panel_tracking_uuid)
 			];
 
 			$this->assets
@@ -23,7 +28,6 @@ class PanelTracking extends DashboardController{
 					->addCss('plugin/bootstrap-datepicker/css/bootstrap-datepicker3.min.css');
 
 			$this->assets
-					// ->addJs('dashboard/js/libs/icheck/icheck.min.js')
 					->addJs('dashboard/js/libs/moment.min.js')
 					->addJs('plugin/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
 	                ->addJs('dashboard/js/libs/jquery.validate.js')
@@ -71,4 +75,142 @@ class PanelTracking extends DashboardController{
 		}
 		
 	}
+
+
+
+	function getSamples($panel_tracking_uuid){
+		$sample_view = "";
+		$pt_details = $this->M_PTRound->getPTUuid($panel_tracking_uuid);
+
+		
+		$samples = $this->M_PTRound->getSamples($pt_details->pt_round_uuid,$pt_details->participant_uuid);
+		
+		$counter = 1;
+		foreach ($samples as $key => $sample) {
+			$sample_view .= "<div class = 'card'>
+							  	<div class = 'card-header' role='tab' id = 'heading-".$sample->sample_id."'>
+							        <h5 class = 'mb-0'>
+							            <a data-toggle = 'collapse' data-parent = '#accordion' href = '#collapse".$sample->sample_id."' aria-expanded = 'true' aria-controls = 'collapse".$sample->sample_id."'>Sample ".$counter." : ";
+
+            $sample_view .= $sample->sample_name;
+
+
+            $sample_view .= "</a>
+						        </h5>
+						    </div>
+						    <div id = 'collapse".$sample->sample_id."' class = 'collapse' role = 'tabpanel' aria-labelledby= 'heading-".$sample->sample_id."'>
+						        <div class = 'card-block'>";
+
+
+
+
+        	$sample_view .= "<div class='form-group row'>
+					<div class = 'col-sm-6'>
+						<p>Are the sample tubes good to carry out this panel's tests ?</p>
+					</div>
+					<div class = 'col-sm-6'>
+						<input type='radio' value = '1' data-type='".$sample->sample_name."' name='acceptance".$counter."' class='acceptance' id= 'yes-".$sample->sample_name."' required />&nbsp;<label for = 'acceptanceyes'>Yes</label>&nbsp;
+						<input type='radio' value = '0' data-type='".$sample->sample_name."' name='acceptance".$counter."' class='acceptance' id='no-".$sample->sample_name."' required />&nbsp;<label for = 'acceptanceno'>No</label>&nbsp;
+					</div>	
+				</div>
+
+<div id='".$sample->sample_name."' style='display: none;'>
+
+					<div class='form-group row'>
+			          <label class = 'col-sm-6'>Sample Tube</label>
+			          <div class = 'col-sm-6'>
+
+			          	<div class=''>
+				          	<label><strong>Broken</strong></label>
+					            <input type='radio' name='tubes_broken".$counter."' id = 'tubes_broken_yes_".$sample->sample_id."' value = '1' /> <label for = 'tubes_broken_1'>Yes</label>&nbsp;
+					            <input type='radio' name='tubes_broken".$counter."' id = 'tubes_broken_no_".$sample->sample_id."' value = '0' /> <label for = 'tubes_broken_0'>No</label>&nbsp;
+			          	</div>
+
+
+			         	<div class=''>
+					          <label><strong>Leaking</strong></label>
+					            <input type='radio' name='tubes_leaking".$counter."' id = 'tubes_leaking_yes_".$sample->sample_id."' value = '1' /> <label for = 'tubes_leaking_1'>Yes</label>&nbsp;
+					            <input type='radio' name='tubes_leaking".$counter."' id = 'tubes_leaking_no_".$sample->sample_id."' value = '0' /> <label for = 'tubes_leaking_0'>No</label>&nbsp;
+			            </div>
+
+
+			            <div class=''>
+				          	<label for = 'sample_tubes_0'><strong>Cracked</strong></label>
+					            <input type='radio' name='tubes_cracked".$counter."' id = 'tubes_cracked_yes_".$sample->sample_id."' value = '1' /> <label for = 'tubes_cracked_1'>Yes</label>&nbsp;
+					            <input type='radio' name='tubes_cracked".$counter."' id = 'tubes_cracked_no_".$sample->sample_id."' value = '0' /> <label for = 'tubes_cracked_0'>No</label>&nbsp;
+				        </div>
+
+				      </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Insufficient Volume</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='insufficient_volume".$counter."' id = 'insufficient_volume_yes_".$sample->sample_id."' value = '1' required /> <label for = 'insufficient_volume_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='insufficient_volume".$counter."' id = 'insufficient_volume_no_".$sample->sample_id."' value = '0' required /> <label for = 'insufficient_volume_no'>No</label>
+			          </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Haemolysed sample</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='haemolysed_sample".$counter."' id = 'haemolysed_sample_yes_".$sample->sample_id."' value = '1' required /> <label for = 'haemolysed_sample_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='haemolysed_sample".$counter."' id = 'haemolysed_sample_no_".$sample->sample_id."' value = '0' required /> <label for = 'haemolysed_sample_no'>No</label>
+			          </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Clotted sample</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='clotted_sample".$counter."' id = 'clotted_sample_yes_".$sample->sample_id."' value = '1' required /> <label for = 'clotted_sample_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='clotted_sample".$counter."' id = 'clotted_sample_no_".$sample->sample_id."' value = '0' required /> <label for = 'clotted_sample_no'>No</label>
+			          </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Duplicate sample received</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='duplicate_sample".$counter."' id = 'duplicate_sample_yes_".$sample->sample_id."' value = '1' required /> <label for = 'duplicate_sample_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='duplicate_sample".$counter."' id = 'duplicate_sample_no_".$sample->sample_id."' value = '0' required /> <label for = 'duplicate_sample_no'>No</label>
+			          </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Missing sample</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='missing_sample".$counter."' id = 'missing_sample_yes_".$sample->sample_id."' value = '1' required /> <label for = 'missing_sample_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='missing_sample".$counter."' id = 'missing_sample_no_".$sample->sample_id."' value = '0' required /> <label for = 'missing_sample_no'>No</label>
+			          </div>
+			        </div>
+
+			        <div class='form-group row'>
+			          <label class = 'col-sm-6'>Mismatch of information details on introductory letter and sample tube</label>
+			          <div class='col-sm-6'>
+			            <input type='radio' name='mismatch".$counter."' id = 'mismatch_yes_".$sample->sample_id."' value = '1' required /> <label for = 'mismatch_yes'>Yes</label>&nbsp;
+			            <input type='radio' name='mismatch".$counter."' id = 'mismatch_no_".$sample->sample_id."' value = '0' required /> <label for = 'mismatch_no'>No</label>
+			          </div>
+			        </div>
+
+					<div class='form-group'>
+						<label>Please provide a brief comment on why you chose the response above</label>
+						<textarea class = 'form-control' name = 'condition_comment".$counter."' rows = '8'></textarea>
+					</div>
+
+				</div>";
+
+
+
+
+            $sample_view .= "</div>
+							    </div>
+							</div>";
+			$counter++;
+		}
+
+		
+		// echo "<pre>";print_r($sample_view);echo "</pre>";die();
+		return $sample_view;
+	}
+
+
 }
