@@ -45,7 +45,7 @@ class Dashboard extends DashboardController {
 					if($checklocking == null){
 						$locking = 0;
 					}else{
-						$locking = $checklocking->acceptance;
+						$locking = $checklocking->receipt;
 					}
 				}else{
 					$locking = 0;
@@ -272,7 +272,7 @@ class Dashboard extends DashboardController {
 					if($participant_readiness->status_code == 2){
 						$dashboard_data->current = "enroute";
 					}elseif($participant_readiness->status_code == 3){
-						if($participant_readiness->acceptance == 1){
+						if($participant_readiness->receipt == 1){
 							$dashboard_data->current = "pt_round_submission";
 						}else{
 							$dashboard_data->current = "bad_panel";

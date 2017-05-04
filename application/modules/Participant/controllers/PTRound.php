@@ -50,7 +50,7 @@ class PTRound extends MY_Controller {
                         if($checklocking == null){
                             $view = "";
                         }else{
-                            if($checklocking->acceptance){
+                            if($checklocking->receipt){
 
                                 $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('Participant/PTRound/Round/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
 

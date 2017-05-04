@@ -12,10 +12,6 @@
 	   	    var yescheck = $('#yes-'+sample_name).is(":checked");
 	   	    var view = $('#'+sample_name).is(":visible");
 
-	   	//     console.log('No '+nocheck);
-	   	//     console.log('Yes '+yescheck);
-	  		// console.log('View Visibility '+view);
-
 	       	if(nocheck && !(view)){
 	       		
 	       		if(!(view)){

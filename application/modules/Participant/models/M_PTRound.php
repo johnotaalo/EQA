@@ -12,7 +12,7 @@ class M_PTRound extends CI_Model {
     }
 
     public function allowPTRound($ongoing_pt_uuid, $participant_uuid){
-        $this->db->select('ppt.uuid, ppt.acceptance');
+        $this->db->select('ppt.uuid, ppt.receipt');
         $this->db->from('pt_panel_tracking ppt');
         $this->db->join('participant_readiness pr', 'pr.readiness_id = ppt.pt_readiness_id');
         $this->db->join('pt_round_v prv', 'prv.uuid = pr.pt_round_no');
