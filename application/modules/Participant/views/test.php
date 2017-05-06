@@ -1,96 +1,66 @@
-
-
-<div class='form-group row'>
-					<div class = 'col-sm-6'>
-						<p>Are the sample tubes good to carry out this panel's tests ?</p>
-					</div>
-					<div class = 'col-sm-6'>
-						<input type='radio' value = '1' name='acceptance' class = '' id='acceptanceyes' required />&nbsp;<label for = 'acceptanceyes'>Yes</label>&nbsp;
-						<input type='radio' value = '0' name='acceptance' class = '' id='acceptanceno' required />&nbsp;<label for = 'acceptanceno'>No</label>&nbsp;
-					</div>	
-				</div>
-
-<div id='bad-samples' style='display: none;'>
-				<!-- <div id='bad-samples'> -->
-
-					<div class='form-group row'>
-			          <label class = 'col-sm-6'>Sample Tube</label>
-			          <div class = 'col-sm-6'>
-
-			          	<div class=''>
-				          	<label><strong>Broken</strong></label>
-					            <input type='radio' name='tubes_broken[]' id = 'tubes_broken_1' value = '1' /> <label for = 'tubes_broken_1'>Yes</label>&nbsp;
-					            <input type='radio' name='tubes_broken[]' id = 'tubes_broken_0' value = '0' /> <label for = 'tubes_broken_0'>No</label>&nbsp;
-			          	</div>
-
-
-			         	<div class=''>
-					          <label><strong>Leaking</strong></label>
-					            <input type='radio' name='tubes_leaking[]' id = 'tubes_leaking_1' value = '1' /> <label for = 'tubes_leaking_1'>Yes</label>&nbsp;
-					            <input type='radio' name='tubes_leaking[]' id = 'tubes_leaking_0' value = '0' /> <label for = 'tubes_leaking_0'>No</label>&nbsp;
-			            </div>
-
-
-			            <div class=''>
-				          	<label for = 'sample_tubes_0'><strong>Cracked</strong></label>
-					            <input type='radio' name='tubes_cracked[]' id = 'tubes_cracked_1' value = '1' /> <label for = 'tubes_cracked_1'>Yes</label>&nbsp;
-					            <input type='radio' name='tubes_cracked[]' id = 'tubes_cracked_0' value = '0' /> <label for = 'tubes_cracked_0'>No</label>&nbsp;
-				        </div>
-
-				      </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Insufficient Volume</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='insufficient_volume[]' id = 'insufficient_volume_yes' value = '1' required /> <label for = 'insufficient_volume_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='insufficient_volume[]' id = 'insufficient_volume_no' value = '0' required /> <label for = 'insufficient_volume_no'>No</label>
-			          </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Haemolysed sample</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='haemolysed_sample[]' id = 'haemolysed_sample_yes' value = '1' required /> <label for = 'haemolysed_sample_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='haemolysed_sample[]' id = 'haemolysed_sample_no' value = '0' required /> <label for = 'haemolysed_sample_no'>No</label>
-			          </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Clotted sample</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='clotted_sample[]' id = 'clotted_sample_yes' value = '1' required /> <label for = 'clotted_sample_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='clotted_sample[]' id = 'clotted_sample_no' value = '0' required /> <label for = 'clotted_sample_no'>No</label>
-			          </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Duplicate sample received</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='duplicate_sample[]' id = 'duplicate_sample_yes' value = '1' required /> <label for = 'duplicate_sample_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='duplicate_sample[]' id = 'duplicate_sample_no' value = '0' required /> <label for = 'duplicate_sample_no'>No</label>
-			          </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Missing sample</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='missing_sample[]' id = 'missing_sample_yes' value = '1' required /> <label for = 'missing_sample_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='missing_sample[]' id = 'missing_sample_no' value = '0' required /> <label for = 'missing_sample_no'>No</label>
-			          </div>
-			        </div>
-
-			        <div class='form-group row'>
-			          <label class = 'col-sm-6'>Mismatch of information details on introductory letter and sample tube</label>
-			          <div class='col-sm-6'>
-			            <input type='radio' name='mismatch[]' id = 'mismatch_yes' value = '1' required /> <label for = 'mismatch_yes'>Yes</label>&nbsp;
-			            <input type='radio' name='mismatch[]' id = 'mismatch_no' value = '0' required /> <label for = 'mismatch_no'>No</label>
-			          </div>
-			        </div>
-
-					<div class='form-group'>
-						<label>Please provide a brief comment on why you chose the response above</label>
-						<textarea class = 'form-control' name = 'condition_comment' rows = '8'></textarea>
-					</div>
-
-				</div>
+<div class="col-sm-12 col-md-6">
+                    <div class="post-row mb0">
+                        <div class="post-header">
+                            <div class="post-feature">
+                                <img src="<?= @$assets_url; ?>home/img/post-feature-2.png" alt="responsive img">
+                            </div>
+                            <div class="post-sticker"><small>FAQ</small>
+                                <p class="month">8</p>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <div class="post-caption">
+                                <h2 class="post-heading"><a href="#">What do I do if I get an unsatisfactory result?</a></h2>
+                                <!-- <div class="post-meta">Martino / Design, at 2 pm</div> -->
+                            </div>
+                            <p class="post-text">Perform a root cause analysis followed by corrective action and where applicable, preventive action. Fill in the form provided online and submit within the stipulated duration</p>
+                        </div>
+                        <div class="post-footer">
+                            <!-- <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="post-row mb0">
+                        <div class="post-header">
+                            <div class="post-feature">
+                                <img src="<?= @$assets_url; ?>home/img/post-feature-2.png" alt="responsive img">
+                            </div>
+                            <div class="post-sticker"><small>FAQ</small>
+                                <p class="month">9</p>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <div class="post-caption">
+                                <h2 class="post-heading"><a href="#">Are the performance reports confidential?</a></h2>
+                                <!-- <div class="post-meta">Martino / Design, at 2 pm</div> -->
+                            </div>
+                            <p class="post-text">Individual performance reports are confidential. It is the responsibility of the participant to secure their log in credentials to prevent unauthorized access to their account</p>
+                        </div>
+                        <div class="post-footer">
+                            <!-- <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="post-row mb0">
+                        <div class="post-header">
+                            <div class="post-feature">
+                                <img src="<?= @$assets_url; ?>home/img/post-feature-2.png" alt="responsive img">
+                            </div>
+                            <div class="post-sticker"><small>FAQ</small>
+                                <p class="month">10</p>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <div class="post-caption">
+                                <h2 class="post-heading"><a href="#">How can the administrators of this EQA scheme be reached?</a></h2>
+                                <!-- <div class="post-meta">Martino / Design, at 2 pm</div> -->
+                            </div>
+                            <p class="post-text">Use the Contact us tab at the top right of the screen</p>
+                        </div>
+                        <div class="post-footer">
+                            <!-- <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a> -->
+                        </div>
+                    </div>
+                </div>

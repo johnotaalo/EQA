@@ -18,6 +18,11 @@ class Home extends MY_Controller {
 		$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v2')->frontEndTemplate2();
 	}
 
+    public function FAQ()
+    {
+        $this->template->setPageTitle('External Quality Assurance Programme')->setPartial('faq')->frontEndTemplate2();
+    }
+
 
 	function sendMessage($round_uuid,$particapant_uuid){
         if($this->input->post()){

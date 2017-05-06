@@ -70,13 +70,14 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#home" class="smoothscroll">Home</a></li>
+                        <!-- <li class="active"><a href="<?= @base_url('Home'); ?>" class="smoothscroll">Home</a></li> -->
+                        <li class="active"><a href="<?= @base_url('Home'); ?>">Home</a></li>
                         <li><a href="#about-us" class="smoothscroll">About us</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Library</a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">SOPs</a></li>
-                                <li><a href="#">FAQs</a></li>
+                                <li><a href="<?= @base_url('Home/FAQ'); ?>">FAQs</a></li>
                                 <!-- <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
                                     <ul class="dropdown-menu sub-menu">
                                         <li><a href="#">Sub Menu 1</a></li>

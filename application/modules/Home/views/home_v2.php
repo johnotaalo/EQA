@@ -465,65 +465,6 @@
     
 
 
-    <!-- <div class="blog-area inner-padding" id="blog">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="section-title-1">
-                        <h2 class="title-1">Latest Blog Post</h2>
-                        <p>Lorem provide best expert consectetur adipiscing elit, sed do eiusmod tempor dolor sit amet adipiscing elit, sed do eiusmod tempor incididunt ut labore et lor gna aliqua. </p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="post-row mb30">
-                        <div class="post-header">
-                            <div class="post-feature">
-                                <img src="<?= @$assets_url; ?>home/img/post-feature-1.png" alt="responsive img">
-                            </div>
-                            <div class="post-sticker"><small>08</small>
-                                <p class="month">JUN</p>
-                            </div>
-                        </div>
-                        <div class="post-body">
-                            <div class="post-caption">
-                                <h2 class="post-heading"><a href="#">World Business Trend Consultancy</a></h2>
-                                <div class="post-meta">Ricardo / Business, at 6 pm</div>
-                            </div>
-                            <p class="post-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, numquam ad debitis accusantium repudiandae adipisci sit autem alias repellat velit ipsum quaerat aliquid vitae itaque in nisi quam ipsa.</p>
-                        </div>
-                        <div class="post-footer">
-                            <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6">
-                    <div class="post-row mb0">
-                        <div class="post-header">
-                            <div class="post-feature">
-                                <img src="<?= @$assets_url; ?>home/img/post-feature-2.png" alt="responsive img">
-                            </div>
-                            <div class="post-sticker"><small>03</small>
-                                <p class="month">JUN</p>
-                            </div>
-                        </div>
-                        <div class="post-body">
-                            <div class="post-caption">
-                                <h2 class="post-heading"><a href="#">New Trend Designing Tips</a></h2>
-                                <div class="post-meta">Martino / Design, at 2 pm</div>
-                            </div>
-                            <p class="post-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil beatae placeat delectus modi praesentium eos accusamus dolore, excepturi quidem nesciunt tempore consequatur, quia officiis quaerat odit repellendus ex.</p>
-                        </div>
-                        <div class="post-footer">
-                            <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
 
 
     <footer>
