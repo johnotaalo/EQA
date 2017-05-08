@@ -10,12 +10,12 @@ CREATE TABLE `pt_panel_tracking` (
   `courier_official` text,
   `courier_dispatch_notes` text,
   `participant_received_date` date DEFAULT NULL,
-  `panel_condition` int(11) DEFAULT NULL,
   `panel_condition_comment` text,
   `panel_received_entered` datetime DEFAULT NULL,
-  `acceptance` int(11) DEFAULT '0',
+  `receipt` int(11) DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `panel_condition` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid_UNIQUE` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1

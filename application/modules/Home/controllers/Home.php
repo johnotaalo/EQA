@@ -55,7 +55,21 @@ class Home extends MY_Controller {
 
 
     function downloadSOP(){
-        
+
+        $pdf_view = '/uploads/docs/NHRL-PT-SOP-19042017.pdf';
+
+        $data['document_title'] = "STANDARD OPERATING PROCEDURE - " . date('d-m-Y');
+
+        $this->load->library('pdf');
+
+        $pdf = $this->pdf->load($pdf_view);
+        $pdf->AddPage("L");
+        // $stylesheet = file_get_contents('./assets/dashboard/css/style.css');
+
+        // $pdf->WriteHTML($stylesheet, 1);
+        // $pdf->WriteHTML($pdf_view, 2);
+
+        $pdf->output('STANDARD OPERATING PROCEDURE ' . date('d-m-Y') . '.pdf', 'D');
     }
 
 

@@ -76,7 +76,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Library</a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">SOPs</a></li>
+                                <li><a href="<?= @base_url('Home/downloadSOP'); ?>">SOPs</a></li>
                                 <li><a href="<?= @base_url('Home/FAQ'); ?>">FAQs</a></li>
                                 <!-- <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
                                     <ul class="dropdown-menu sub-menu">
