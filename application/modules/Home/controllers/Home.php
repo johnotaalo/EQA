@@ -20,7 +20,57 @@ class Home extends MY_Controller {
 
     public function FAQ()
     {
-        $this->template->setPageTitle('External Quality Assurance Programme')->setPartial('faq')->frontEndTemplate2();
+
+        $faq_view = '';
+
+        $faqs = $this->db->get('faqs')->result();
+        $counter = 1;
+        foreach($faqs as $faq){
+            $faq_view .= '<div class="col-sm-12 col-md-6">
+                    <div class="post-row mb30">
+                        <div class="post-header">
+                            <div class="post-feature">
+                                <img src="<?= @$assets_url; ?>frontend/images/files/FAQS/ENROLMENT.png" alt="responsive img">
+                            </div>
+                            <div class="post-sticker"><small>FAQ</small>
+                                <p class="month">';
+
+
+            $faq_view .= $counter;
+
+            $faq_view .= '</p>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <div class="post-caption">
+                                <h2 class="post-heading"><a href="#">';
+
+            $faq_view .= $faq->question;
+
+            $faq_view .= '</a></h2>
+                            </div>
+                            <p class="post-text">';
+
+            $faq_view .= $faq->answer;
+
+            $faq_view .= '</p>
+                        </div>
+                        <div class="post-footer">
+                        </div>
+                    </div>
+                </div>';
+
+
+
+            $counter ++;
+        }
+
+        $data = [
+            'faq_view'          =>  $faq_view
+        ];
+
+
+        $this->template->setPageTitle('External Quality Assurance Programme')->setPartial('faq', $data)->frontEndTemplate2();
     }
 
 

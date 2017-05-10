@@ -11,6 +11,11 @@
                 </div>
             </div>
             <div class="row">
+                
+
+                <!-- <?= @$faq_view; ?> -->
+
+
                 <div class="col-sm-12 col-md-6">
                     <div class="post-row mb30">
                         <div class="post-header">
@@ -24,12 +29,10 @@
                         <div class="post-body">
                             <div class="post-caption">
                                 <h2 class="post-heading"><a href="#">Why should I enrol?</a></h2>
-                                <!-- <div class="post-meta">Ricardo / Business, at 6 pm</div> -->
                             </div>
                             <p class="post-text">Proficiency testing offers an objective way to monitor and assess the reliability of laboratory results you generate for clinical care and management. It can also be used for evaluation of competency</p>
                         </div>
                         <div class="post-footer">
-                            <!-- <a href="#" class="btn btn-default btn-post" role="button">READ MORE<i class="fa fa-angle-double-right"></i></a> -->
                         </div>
                     </div>
                 </div>
@@ -50,17 +53,17 @@
                             </div>
                             <p class="post-text">The NHRL proficiency testing programme currently offers the following modules:</p>
                             <p>
-                            	<ul>
-                            		<li>
-                            			HIV Early Infant Diagnosis
-                            		</li>
-                            		<li>
-                            			HIV Viral Load
-                            		</li>
-                            		<li>
-                            			Flow Cytometry
-                            		</li>
-                            	</ul>
+                                <ul>
+                                    <li>
+                                        HIV Early Infant Diagnosis
+                                    </li>
+                                    <li>
+                                        HIV Viral Load
+                                    </li>
+                                    <li>
+                                        Flow Cytometry
+                                    </li>
+                                </ul>
                             </p>
                         </div>
                         <div class="post-footer">
@@ -247,8 +250,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
 
 
