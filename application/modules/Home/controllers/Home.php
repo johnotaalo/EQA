@@ -7,11 +7,6 @@ class Home extends MY_Controller {
 
 		$this->load->model('home_m');
 	}
-	
-	// public function index()
-	// {
-	// 	$this->template->setPageTitle('External Quality Assurance Programme')->setPartial('home_v')->frontEndTemplate();
-	// }
 
 	public function index()
 	{
@@ -23,17 +18,32 @@ class Home extends MY_Controller {
 
         $faq_view = '';
 
+        $this->db->where('status', 1);
         $faqs = $this->db->get('faqs')->result();
         $counter = 1;
+        $color_counter = 0;
         foreach($faqs as $faq){
             $faq_view .= '<div class="col-sm-12 col-md-6">
                     <div class="post-row mb30">
                         <div class="post-header">
-                            <div class="post-feature">
-                                <img src="<?= @$assets_url; ?>frontend/images/files/FAQS/ENROLMENT.png" alt="responsive img">
+                            <div class="post-feature">';
+
+            if ($color_counter == 0) {
+                $faq_view .= '<img src="'.base_url("assets/frontend/images/files/FAQS/background_blue.png").'" alt="'.$faq->title.'" />';
+                $faq_view .= '<div style="left: 0;position:absolute;text-align:center;top: 45%;width: 100%;font-size: 36px;color: #FFFFFF;font-weight: bold;">';
+                $color_counter++;
+            }else{
+                $faq_view .= '<img src="'.base_url("assets/frontend/images/files/FAQS/background_white.png").'" alt="'.$faq->title.'" />';
+                $faq_view .= '<div style="left: 0;position:absolute;text-align:center;top: 45%;width: 100%;font-size: 36px;color: #029ce7;font-weight: bold;">';
+                $color_counter = 0;
+            }
+
+            $faq_view .= $faq->title;
+            
+            $faq_view .=  '</div>
                             </div>
-                            <div class="post-sticker"><small>FAQ</small>
-                                <p class="month">';
+                                <div class="post-sticker"><small>FAQ</small>
+                                    <p class="month">';
 
 
             $faq_view .= $counter;
