@@ -76,7 +76,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Library</a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?= @base_url('Home/downloadSOP'); ?>">SOPs</a></li>
+                                <li><a download href="/uploads/docs/NHRL-PT-SOP-19042017.pdf">SOPs</a></li>
                                 <li><a href="<?= @base_url('Home/FAQ'); ?>">FAQs</a></li>
                                 <!-- <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
                                     <ul class="dropdown-menu sub-menu">
@@ -136,5 +136,4 @@
 </body>
 
 
-<!-- Mirrored from www.styllustheme.com/ThemeUnit/thirdeye-preview/thirdeye/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Apr 2017 11:05:58 GMT -->
 </html>
