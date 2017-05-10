@@ -207,7 +207,7 @@
                     <div class="post-row mb0">
                         <div class="post-header">
                             <div class="post-feature">
-                                <img src="<?= @$assets_url; ?>frontend/images/files/FAQS/REPORT_CONFIDENTIALITY.png" alt="responsive img">
+                                <img src="<?= @$assets_url; ?>frontend/images/files/FAQS/REPORT_CONFIDENTIALTY.png" alt="responsive img">
                             </div>
                             <div class="post-sticker"><small>FAQ</small>
                                 <p class="month">9</p>
