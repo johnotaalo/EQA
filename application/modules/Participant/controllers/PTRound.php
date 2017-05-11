@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PTRound extends MY_Controller {
+    protected $row_blueprint;
     public function __construct()
     {
         parent::__construct();
@@ -10,6 +11,8 @@ class PTRound extends MY_Controller {
         $this->load->model('Participant/M_Readiness');
         $this->load->model('Participant/M_Readiness');
         $this->load->library('Mailer');
+
+        $this->row_blueprint = "<tr class = 'reagent_row'><td colspan = '2'><label style='text-align: center;'>Reagent Name: </label> <input type = 'text' class = 'page-signup-form-control form-control' name = 'reagent_name[]' value = '|reagent_name|' required |disabled|/> </td><td colspan = '3'><label style='text-align: center;'>Lot Number: </label><input type = 'text' class = 'page-signup-form-control form-control' name = 'lot_number[]' value = '|lot_number|' required |disabled|/></td><td colspan = '3'><label style='text-align: center;'>Expiry Date: </label><input type = 'text' class = 'page-signup-form-control form-control' name = 'expiry_date[]' value = '|expiry_date|' required |disabled|/> </td></tr>";
     }
 
     public function index(){
@@ -116,6 +119,8 @@ class PTRound extends MY_Controller {
                 'data_submission' => 'data_submission'
             ];
 
+        $js_data['row_blueprint'] = $this->cleanReagentRowTemplate("");
+
 
               
         $this->assets
@@ -131,7 +136,7 @@ class PTRound extends MY_Controller {
                 ->addJs('dashboard/js/libs/select2.min.js')
                 ->addJs("plugin/sweetalert/sweetalert.min.js");
         $this->assets
-                ->setJavascript('Participant/data_submission_js');
+                ->setJavascript('Participant/data_submission_js', $js_data);
         
         $this->template->setPageTitle('PT Forms')->setPartial('pt_form_v',$data)->adminTemplate();
     }
@@ -160,6 +165,7 @@ class PTRound extends MY_Controller {
         if($this->input->post()){
             $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
+            $no_reagents = count($this->input->post('reagent_name'));
             $round_id = $this->M_Readiness->findRoundByIdentifier('uuid', $round)->id;
             $participant_uuid = $user->uuid;
             $participant_id = $user->p_id;
@@ -195,9 +201,6 @@ class PTRound extends MY_Controller {
                             'round_id'    =>  $round_id,
                             'participant_id'    =>  $participant_id,
                             'equipment_id'    =>  $equipmentid,
-                            'lot_number'    =>  $lot_number,
-                            'reagent_name'    =>  $reagent_name,
-                            'expiry_date'    =>  date('Y-m-d', strtotime($expiry_date)),
                             'status'    =>  0,
                             'verdict'    =>  2,
                             'doc_path'  =>  $file_path
@@ -239,6 +242,20 @@ class PTRound extends MY_Controller {
                                 }
                                 $counter2 ++;
                             }
+
+                            $reagent_insert = [];
+
+                            for ($i=0; $i < $no_reagents; $i++) { 
+                                $reagent_insert[] = [
+                                    'submission_id' =>  $submission_id,
+                                    'equipment_id'  =>  $equipmentid,
+                                    'reagent_name'  =>  $this->input->post('reagent_name')[$i],
+                                    'lot_number'    =>  $this->input->post('lot_number')[$i],
+                                    'expiry_date'   =>  $this->input->post('expiry_date')[$i]
+                                ];
+                            }
+
+                            $this->db->insert_batch('pt_data_submission_reagent', $reagent_insert);
 
                     }else{
                         //echo "submission_error";
@@ -283,13 +300,7 @@ class PTRound extends MY_Controller {
                                 ];
 
                         if($this->db->insert('pt_equipment_results', $insertequipmentdata)){
-                            if($lot_number != $submission->lot_number){
-                                //echo "<pre>";print_r("reached");echo "</pre>";die();
-
-                                $this->db->set('lot_number', $lot_number);
-                                $this->db->where('id', $submission_id);
-                                $this->db->update('pt_data_submission');
-                            }
+                            
                         }
 
                         $counter2 ++;
@@ -377,7 +388,6 @@ class PTRound extends MY_Controller {
 
             $datas = $this->db->get('data_entry_v')->result();
 
-
             $this->db->where('round_id',$round_id);
             $this->db->where('participant_id',$participant_id);
             $this->db->where('equipment_id',$equipment->id);
@@ -419,12 +429,14 @@ class PTRound extends MY_Controller {
 
             if($datas){
                 $getCheck = $this->M_PTRound->getDataSubmission($round_id,$participant_id,$equipment->id)->status;
+                // $submission_id = $this->db->get_where('pt_data_submission', );
             }else{
                 $getCheck = 0; 
             }
             
 
             // echo "<pre>";print_r("<br/><br/><br/><br/><br/>Lot Number: ".$lotcounter);echo "</pre>";
+            $disabled = "";
 
             if($getCheck == 1){
                 $disabled = "disabled='' ";
@@ -453,80 +465,82 @@ class PTRound extends MY_Controller {
 
                 <div class='row'>
                     <table class='table table-bordered'>
-
-
-
-
-
-
                         <tr>
+                            <td colspan = '8'>
+                                <a id = 'add-reagent' href = '#' class = 'btn btn-primary btn-sm pull-right'>Add Reagent</a>
+                            </td>
+                        </tr>";
+                $submission_id = ($datas) ? $datas[0]->id : NULL;
 
-                        <td style='style='text-align: center;' colspan='2'>
+                $equipment_tabs .= $this->generateReagentRow($submission_id, $equipment->id, $disabled);
+                        // $equipment_tabs .= "<tr>
 
-                        <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
+                        // <td style='style='text-align: center;' colspan='2'>
 
-                if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Reagent Name is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Reagent Name' value='".$datas[0]->lot_number."' required>" ;
-                    }else{
-                        $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Reagent Name' required>";
-                    }
-                }else{
-                    $lot = "<input style='text-align: center;' type='text' name='reagent_name' class='page-signup-form-control form-control' $disabled id='reagent_".$equipment->id."' placeholder='Enter the Reagent Name' required>";
-                }
-                $equipment_tabs .= $lot;
+                        // <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
 
-                            
-                      $equipment_tabs .= " </td>
-
-                      <td style='style='text-align: center;' colspan='3'>
-
-                        <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
-
-                if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Lot Number' value='".$datas[0]->lot_number."' required>" ;
-                    }else{
-                        $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Lot Number' required>";
-                    }
-                }else{
-                    $lot = "<input style='text-align: center;' type='text' name='lot_number' class='page-signup-form-control form-control' $disabled id='lot_".$equipment->id."' placeholder='Enter the Lot Number' required>";
-                }
-                $equipment_tabs .= $lot;
+                // if($datas){
+                //     // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Reagent Name is".$datas[$counter]->lot_number);echo "</pre>";
+                //     if($datas[0]->lot_number != ''){
+                //         $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Reagent Name' value='".$datas[0]->lot_number."' required>" ;
+                //     }else{
+                //         $lot = "<input style='text-align: center;' type='text' name='reagent_name' id='reagent_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Reagent Name' required>";
+                //     }
+                // }else{
+                //     $lot = "<input style='text-align: center;' type='text' name='reagent_name' class='page-signup-form-control form-control' $disabled id='reagent_".$equipment->id."' placeholder='Enter the Reagent Name' required>";
+                // }
+                // $equipment_tabs .= $lot;
 
                             
-                      $equipment_tabs .= " </td>
+                //       $equipment_tabs .= " </td>
 
+                //       <td style='style='text-align: center;' colspan='3'>
 
+                //         <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
 
-
-
-                      <td style='style='text-align: center;' colspan='3'>
-
-                        <label style='text-align: center;' for='lot_number'>Expiry date: </label>";
-
-                if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Expiry date is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Expiry date' value='".$datas[0]->lot_number."' required>" ;
-                    }else{
-                        $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control  form-control' value=". date('m/d/Y') ." $disabled placeholder='Enter the Expiry date' required>";
-                    }
-                }else{
-                    $lot = "<input style='text-align: center;' type='text' name='expiry_date' class='page-signup-form-control form-control' value=". date('m/d/Y') ." $disabled id='expiry_".$equipment->id."' placeholder='Enter the Expiry date' required>";
-                }
-                $equipment_tabs .= $lot;
+                // if($datas){
+                //     // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
+                //     if($datas[0]->lot_number != ''){
+                //         $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Lot Number' value='".$datas[0]->lot_number."' required>" ;
+                //     }else{
+                //         $lot = "<input style='text-align: center;' type='text' name='lot_number' id='lot_".$equipment->id."'class='page-signup-form-control  form-control' $disabled placeholder='Enter the Lot Number' required>";
+                //     }
+                // }else{
+                //     $lot = "<input style='text-align: center;' type='text' name='lot_number' class='page-signup-form-control form-control' $disabled id='lot_".$equipment->id."' placeholder='Enter the Lot Number' required>";
+                // }
+                // $equipment_tabs .= $lot;
 
                             
-                      $equipment_tabs .= " </td>
+                //       $equipment_tabs .= " </td>
 
 
 
 
 
-                      </tr>
+                //       <td style='style='text-align: center;' colspan='3'>
+
+                //         <label style='text-align: center;' for='lot_number'>Expiry date: </label>";
+
+                // if($datas){
+                //     // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Expiry date is".$datas[$counter]->lot_number);echo "</pre>";
+                //     if($datas[0]->lot_number != ''){
+                //         $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control form-control' $disabled placeholder='Enter the Expiry date' value='".$datas[0]->lot_number."' required>" ;
+                //     }else{
+                //         $lot = "<input style='text-align: center;' type='text' name='expiry_date' id='expiry_".$equipment->id."'class='page-signup-form-control  form-control' value=". date('m/d/Y') ." $disabled placeholder='Enter the Expiry date' required>";
+                //     }
+                // }else{
+                //     $lot = "<input style='text-align: center;' type='text' name='expiry_date' class='page-signup-form-control form-control' value=". date('m/d/Y') ." $disabled id='expiry_".$equipment->id."' placeholder='Enter the Expiry date' required>";
+                // }
+                // $equipment_tabs .= $lot;
+
+                            
+                //       $equipment_tabs .= " </td>
+
+
+
+
+
+                //       </tr>
 
 
 
@@ -534,7 +548,7 @@ class PTRound extends MY_Controller {
 
 
 
-                        <tr>
+                       $equipment_tabs .= "<tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
                             </th>
@@ -730,7 +744,40 @@ class PTRound extends MY_Controller {
 
     }
 
+    public function generateReagentRow($submission_id = NULL, $equipment_id, $disabled){
+        
 
+        $reagent_row = "";
+
+        if ($submission_id != NULL) {
+            $this->db->where('submission_id', $submission_id);
+            $this->db->where('equipment_id', $equipment_id);
+            $reagents = $this->db->get('pt_data_submission_reagent')->result();
+
+            if($reagents){
+                foreach ($reagents as $reagent) {
+                    $reagent_row .= $this->cleanReagentRowTemplate($disabled, $reagent->reagent_name, $reagent->lot_number, $reagent->expiry_date);
+                }
+            }
+        }
+
+        if ($reagent_row == "") {
+            $reagent_row = $this->cleanReagentRowTemplate($disabled);
+        }
+
+        return $reagent_row;
+    }
+
+    function cleanReagentRowTemplate($disabled, $reagent_name = NULL, $lot_number = NULL, $expiry_date = NULL){
+        $row_blueprint = $this->row_blueprint;
+
+        $search = ['|reagent_name|', '|lot_number|', '|expiry_date|', '|disabled|'];
+        $replace = [$reagent_name, $lot_number, $expiry_date, $disabled];
+
+        $row = str_replace($search, $replace, $row_blueprint);
+
+        return $row;
+    }
     public function QAMessage($round_id,$part_id,$equip_id){
         $message_view = '';
 
