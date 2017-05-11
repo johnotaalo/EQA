@@ -2,7 +2,7 @@
 
 $(document).ready(function(){
 
-    $('input[name="expiry_date"]').datepicker({
+    $('input[name="expiry_date[]"]').datepicker({
             todayHighlight: true
         });
 
