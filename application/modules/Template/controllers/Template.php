@@ -209,6 +209,12 @@ class Template extends MX_Controller {
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']
 			],
+			'faqs'		=>	[
+				'icon'	=>	'icon-chemistry',
+				'text'	=>	'FAQS',
+				'link'	=>	'FAQ/faqlist',
+				'users'	=>	['admin']
+			],
 			'participantrounds'	=>	[
 				'icon'	=>	'icon-chemistry',
 				'text'	=>	'PT Rounds',
