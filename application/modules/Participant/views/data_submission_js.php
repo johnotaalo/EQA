@@ -49,11 +49,11 @@ $(document).ready(function(){
 		   success: function(html){   
 		   		if(html){
 // alert(html);
-                	$("#data-info").html("Saving Data ...");
-                    // window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                	$("#data-info").html("Successfully saved the data");
+                    window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }else{
                 	
-                	$("#data-info").html("Loading Error ...");
+                	$("#data-info").html("Failed to save the data ...");
                 	// window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }	
 		   },
