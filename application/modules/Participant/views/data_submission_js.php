@@ -11,16 +11,35 @@ $(document).ready(function(){
 		 e.preventDefault();
 	  var form = $(this);
 	  var id = form.attr('id');
+      alert('id');
 	  var formData = new FormData(this);
 
 		dataSubmit(id, formData);
 	 
 	});
 
+    $('#add-reagent').click(function(){
+        var items = $('tr.reagent_row').length;
+        console.log(items);
+        if(items == 11){
+            alert("Cannot add more Reagents. Maximum limit exceeded");
+        }else if(items == 10){
+            $(this).attr('disabled', 'disabled');
+            alert("These are now 10")
+            addReagentRow(items);
+        }else{
+            addReagentRow(items);
+        }
+        
+    });
+
+    function addReagentRow(no_items){
+        $('tr.reagent_row').eq(no_items-2).after("<?= @$row_blueprint; ?>");
+    }
 	
 
 	function dataSubmit(equipmentid,formData){
-		 // alert(round);
+		 alert(round);
 	  	$.ajax({
 		   	type: "POST",
 		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+equipmentid+ '/' +round,
@@ -31,13 +50,16 @@ $(document).ready(function(){
 		   		if(html){
 
                 	$("#data-info").html("Saving Data ...");
-                    window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
+                    // window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }else{
                 	
                 	$("#data-info").html("Loading Error ...");
                 	// window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }	
 		   },
+           error: function(){
+
+           },
 		   beforeSend:function()
 		   {
 			// $("#add_err").css('display', 'inline', 'important');
