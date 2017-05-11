@@ -205,7 +205,7 @@ class Template extends MX_Controller {
 			],
 			'equipments'		=>	[
 				'icon'	=>	'icon-wrench',
-				'text'	=>	'Equipments',
+				'text'	=>	'Equipment',
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']
 			],

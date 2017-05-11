@@ -72,7 +72,7 @@ class PTRound extends MY_Controller {
 // echo '<pre>';print_r($participant->approved);echo "</pre>";die();
                 
 
-                if($participant->approved == 2){
+                if($participant->approved == 0){
                     $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/activate/$participant->username/$participant->uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Activate</a> ';
                 }else{
                     $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ChangeStatus/deactivate/$participant->username/$participant->uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;Deactivate</a> ';
