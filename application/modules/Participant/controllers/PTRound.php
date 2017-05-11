@@ -182,13 +182,21 @@ class PTRound extends MY_Controller {
             // Uploading file
             $file_upload_errors = [];
             $file_path = NULL;
+            
             if($_FILES){
                 $config['upload_path'] = './uploads/participant_data/';
                 $config['allowed_types'] = 'gif|jpg|png|xlsx|xls|pdf|csv';
                 $config['max_size'] = 10000000;
                 $this->load->library('upload', $config);
-                if (!$this->upload->do_upload('data_uploaded_form')) {
+
+                $this->upload->initialize($config); 
+                $docCheck = $this->upload->do_upload('data_uploaded_form');
+ 
+
+
+                if (!$docCheck) {
                     $file_upload_errors = $this->upload->display_errors();
+                    echo "<pre>";print_r($file_upload_errors);echo "</pre>";die();
                 }else{
                     $data =$this->upload->data();
                     $file_path = substr($config['upload_path'], 1) . $data['file_name'];
@@ -309,10 +317,12 @@ class PTRound extends MY_Controller {
                     echo "submission_update";
                 }
             }else{
+                echo "error3";
                 $this->session->set_flashdata('error', $file_upload_errors);
             }
         }else{
             //echo "no_post";
+            echo "error4";
           $this->session->set_flashdata('error', "No data was received");
         }
     }
@@ -454,7 +464,7 @@ class PTRound extends MY_Controller {
 
             </div>
             <div class='card-block'>
-            <form method='POST' class='p-a-4' id='".$equipment->id."' entype = 'multipart/form-data'>
+            <form method='POST' class='p-a-4' id='".$equipment->id."' enctype='multipart/form-data'>
                 <input type='hidden' class='page-signup-form-control form-control ptround' value='".$round_uuid."'>
                 <div>
                 ";

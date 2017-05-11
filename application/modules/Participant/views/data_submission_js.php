@@ -11,7 +11,7 @@ $(document).ready(function(){
 		 e.preventDefault();
 	  var form = $(this);
 	  var id = form.attr('id');
-      alert('id');
+      // alert('id');
 	  var formData = new FormData(this);
 
 		dataSubmit(id, formData);
@@ -39,7 +39,7 @@ $(document).ready(function(){
 	
 
 	function dataSubmit(equipmentid,formData){
-		 alert(round);
+		 // alert(round);
 	  	$.ajax({
 		   	type: "POST",
 		   	url: "<?= @base_url('Participant/PTRound/dataSubmission/'); ?>"+equipmentid+ '/' +round,
@@ -48,7 +48,7 @@ $(document).ready(function(){
             contentType: false,
 		   success: function(html){   
 		   		if(html){
-
+// alert(html);
                 	$("#data-info").html("Saving Data ...");
                     // window.location = "<?= @base_url('Participant/PTRound/Round/'); ?>"+round;
                 }else{
