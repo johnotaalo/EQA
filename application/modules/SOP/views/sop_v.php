@@ -18,10 +18,10 @@
                 <i class = "icon-wrench"></i>
                 &nbsp;
 
-                Frequently Asked Questions List
+                SOP List
 
                 <div class = "pull-right">  
-                    <a href = "<?= @base_url('FAQ/newFAQ'); ?>"><button class = "btn btn-primary btn-sm" id = "btn-create-faq"><i class = "icon-plus"></i> Add FAQ</button></a><br /><br />
+                    <a href = "<?= @base_url('SOP/newSOP'); ?>"><button class = "btn btn-primary btn-sm" id = "btn-add-sop"><i class = "icon-plus"></i> Add SOP</button></a><br /><br />
                 </div>
             </div>
             <div class = "card-block">

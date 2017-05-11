@@ -518,6 +518,7 @@ class PanelTracking extends DashboardController {
 
 	function track($readiness_uuid){
 		$data = [];
+		
 		$readiness = $this->db->get_where('participant_readiness', ['uuid' => $readiness_uuid])->row();
 		if($readiness){
 			$data = [

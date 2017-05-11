@@ -78,6 +78,7 @@
                             <ul class="dropdown-menu">
                                 <li><a download href="/uploads/docs/NHRL-PT-SOP-19042017.pdf">SOPs</a></li>
                                 <li><a href="<?= @base_url('Home/FAQ'); ?>">FAQs</a></li>
+                                <li><a download href="/uploads/docs/EXTERNAL_QUALITY_ASSURANCE_USER_GUIDE.pdf">User Guide</a></li>
                                 <!-- <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
                                     <ul class="dropdown-menu sub-menu">
                                         <li><a href="#">Sub Menu 1</a></li>
