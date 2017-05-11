@@ -517,7 +517,7 @@ class PTRound extends MY_Controller {
             }else{
                 $getCheck = 0; 
             }
-            //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+            
 
             $equipment_tabs .= "</label>
                     </div>
@@ -528,38 +528,45 @@ class PTRound extends MY_Controller {
             <div class='card-block'>
             
                 <div class='row'>
-                    <table  style='text-align: center;' class='table table-bordered'>
+                    <table  style='text-align: center;' class='table table-bordered'>";
 
+            $reagents = $this->M_PPTRound->getReagents($datas[0]->sample_id,$equipment->id);
+            // echo "<pre>";print_r($reagents);echo "</pre>";die();
 
-                    <tr>
+            foreach ($reagents as $regkey => $reagent) {
+                
+
+                $equipment_tabs .= "<tr>
 
                     <td style='style='text-align: center;' colspan='2'>
 
                         <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
 
                 if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<div>".$datas[0]->reagent_name." </div>" ;
+                    if($reagent->reagent_name){
+                        $reagent_name = "<div>".$reagent->reagent_name." </div>" ;
                     }else{
-                        $lot = "<div>No Reagent</div>";
+                        $reagent_name = "<div>No Reagent</div>";
                     }
                 }else{
-                    $lot = "<div>No Reagent</div>";
+                    $reagent_name = "<div>No Reagent</div>";
                 }
-                $equipment_tabs .= $lot;
+
+                // echo "<pre>";print_r($reagent);echo "</pre>";die();
+
+                $equipment_tabs .= $reagent_name;
 
                             
-                      $equipment_tabs .= " </td>
+                $equipment_tabs .= " </td>
 
                       <td style='style='text-align: center;' colspan='3'>
 
                         <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
 
                 if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<div>".$datas[0]->lot_number." </div>" ;
+                    
+                    if($reagent->lot_number){
+                        $lot = "<div>".$reagent->lot_number." </div>" ;
                     }else{
                         $lot = "<div>0</div>";
                     }
@@ -577,29 +584,25 @@ class PTRound extends MY_Controller {
                         <label style='text-align: center;' for='expiry_date'>Expiry Date: </label>";
 
                 if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<div>".$datas[0]->expiry_date." </div>" ;
+                    if($reagent->expiry_date != ''){
+                        $expiry_date = "<div>".$reagent->expiry_date." </div>" ;
                     }else{
-                        $lot = "<div>No Expiry Date</div>";
+                        $expiry_date = "<div>No Expiry Date</div>";
                     }
                 }else{
-                    $lot = "<div>No Expiry Date</div>";
+                    $expiry_date = "<div>No Expiry Date</div>";
                 }
-                $equipment_tabs .= $lot;
+
+                $equipment_tabs .= $expiry_date;
 
                             
-                      $equipment_tabs .= " </td>
+                $equipment_tabs .= " </td>
+                                    </tr>";
 
 
+            }
 
-                      </tr>
-
-
-
-
-
-                        <tr>
+                $equipment_tabs .= " <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
                             </th>
