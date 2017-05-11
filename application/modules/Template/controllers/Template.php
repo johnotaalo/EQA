@@ -209,17 +209,22 @@ class Template extends MX_Controller {
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']
 			],
-			'faqs'		=>	[
-				'icon'	=>	'icon-chemistry',
-				'text'	=>	'FAQS',
-				'link'	=>	'FAQ/faqlist',
-				'users'	=>	['admin']
-			],
-			'sops'		=>	[
-				'icon'	=>	'icon-chemistry',
-				'text'	=>	'SOP',
-				'link'	=>	'SOP/soplist',
-				'users'	=>	['admin']
+			'libraries' => [
+				'icon' => 'fa fa-hospital-o',
+				'text' => 'Libraries',
+				'sublist' => [
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'FAQ/faqlist',
+						'text' => 'FAQs'
+					],
+					[
+						'icon' => 'fa fa-table',
+						'link' => 'SOP/soplist',
+						'text' => 'SOPs'
+					]
+				],
+				'users' => ['admin']
 			],
 			'participantrounds'	=>	[
 				'icon'	=>	'icon-chemistry',
