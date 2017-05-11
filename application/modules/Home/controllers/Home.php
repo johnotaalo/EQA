@@ -92,7 +92,7 @@ class Home extends MY_Controller {
             $subject = $this->input->post('subject');
             $message = $this->input->post('message');
 
-            $email_to = "nhrlcd4eqa@nphls.or.ke";
+            $email_to = "nhrlCD4eqa@nphls.or.ke";
 
             $data = [
                 'names'  	=>  $fname,
