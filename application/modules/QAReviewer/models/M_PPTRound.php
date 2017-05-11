@@ -22,15 +22,6 @@ class M_PPTRound extends CI_Model {
         return $datas;
     }
 
-    public function getReagents($submission_id,$equipment_id){
-        $this->db->where('submission_id',$submission_id);
-        $this->db->where('equipment_id',$equipment_id);
-
-        $data = $this->db->get('pt_data_submission_reagent')->result();
-
-        return $data;
-    }
-
     public function getFacilityParticipantsView($facility_code){
 
         $this->db->where('facility_code', $facility_code);

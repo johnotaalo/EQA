@@ -75,6 +75,15 @@ class M_PTRound extends CI_Model {
     	return $query->row();
     }
 
+    public function getReagents($submission_id,$equipment_id){
+        $this->db->where('submission_id',$submission_id);
+        $this->db->where('equipment_id',$equipment_id);
+
+        $data = $this->db->get('pt_data_submission_reagent')->result();
+
+        return $data;
+    }
+
     public function getDataLog($round_id,$part_id,$equip_id){
         $this->db->where('round_id', $round_id);
         $this->db->where('participant_id', $part_id);
