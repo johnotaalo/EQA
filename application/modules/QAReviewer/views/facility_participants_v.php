@@ -17,7 +17,7 @@
         <div class = "card">
             <div class="card-header col-4">
                 <i class = "icon-wrench"></i>
-                &nbsp; Ready Participants
+                &nbsp; Facility Participants
                 <div class = "pull-right">
                 
                     <!-- <a href = "<?= @base_url('QAReviewer/PTRound/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Rounds</button></a><br /><br /> -->

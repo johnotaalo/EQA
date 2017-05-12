@@ -1,7 +1,9 @@
-<form method="POST" action="<?= @base_url('SOP/create'); ?>" class="p-a-4" id="sop-form" enctype='multipart/form-data'>
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
+    <a href = "<?= @base_url('SOP/soplist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to SOP</button></a><br /><br />
+
+<form method="POST" action="<?= @base_url('SOP/create'); ?>" class="p-a-4" id="sop-form" enctype='multipart/form-data'>
 
         <div class="card">
             <div class="card-header">
@@ -33,7 +35,10 @@
 
                 </div>   
             </div>
+
+            </form>
         </div>
+
+        
     </div>
 
-</form>

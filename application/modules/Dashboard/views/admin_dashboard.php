@@ -41,9 +41,9 @@
         <div class="card">
             <div class="card-block">
                 <div class="h4 m-0">215</div>
-                <div class="pb-1">Participants who Recieved PT Panels at Site</div>
+                <div class="pb-1">Participants who Received PT Panels at Site</div>
                 <progress class="progress progress-xs progress-success" value="100" max="100"></progress>
-                <!-- <small class="text-muted">Participants who Recieved PT Panels at Site</small> -->
+                <!-- <small class="text-muted">Participants who Received PT Panels at Site</small> -->
             </div>
         </div>
     </div>
@@ -52,9 +52,9 @@
         <div class="card">
             <div class="card-block">
                 <div class="h4 m-0">5</div>
-                <div class="pb-1">Participants not Recieved their PT Panels at Site</div>
+                <div class="pb-1">Participants not Received their PT Panels at Site</div>
                 <progress class="progress progress-xs progress-danger" value="100" max="100"></progress>
-                <!-- <small class="text-muted">Participants not Recieved their PT Panels at Site</small> -->
+                <!-- <small class="text-muted">Participants not Received their PT Panels at Site</small> -->
             </div>
         </div>
     </div>

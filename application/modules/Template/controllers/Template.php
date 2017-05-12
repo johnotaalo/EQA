@@ -22,8 +22,14 @@ class Template extends MX_Controller {
 		$this->db->where('current', 1);
 		$sop = $this->db->get('sops',1)->row();
 
+		if($sop){
+			$sop_path = $sop->sop_path;
+		}else{
+			$sop_path = "Home";
+		}
+
 		// echo "<pre>";print_r($sop->sop_path);echo "</pre>";die();
-		return $sop->sop_path;
+		return $sop_path;
 	}
 
 	// function viewNewMessages($participant_uuid){
@@ -219,16 +225,16 @@ class Template extends MX_Controller {
 				'users'	=>	['admin']
 			],
 			'libraries' => [
-				'icon' => 'fa fa-hospital-o',
+				'icon' => 'fa fa-book',
 				'text' => 'Libraries',
 				'sublist' => [
 					[
-						'icon' => 'fa fa-table',
+						'icon' => 'fa fa-bookmark',
 						'link' => 'FAQ/faqlist',
 						'text' => 'FAQs'
 					],
 					[
-						'icon' => 'fa fa-table',
+						'icon' => 'fa fa-bookmark',
 						'link' => 'SOP/soplist',
 						'text' => 'SOPs'
 					]

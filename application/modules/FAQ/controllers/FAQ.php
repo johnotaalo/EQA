@@ -77,7 +77,7 @@ class FAQ extends DashboardController{
                 $id = $faq->id;
                 if($faq->status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = '<a href = ' . base_url("FAQ/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
+                    $change_state = '<a href = ' . base_url("FAQ/changeState/deactivate/$id") . ' class = "btn btn-danger btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
                     
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
