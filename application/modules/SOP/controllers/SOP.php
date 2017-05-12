@@ -13,30 +13,29 @@ class SOP extends DashboardController{
     }
 
 
-    function soplist($eFacilities = NULL){
+    function soplist(){
         $data = [];
-        $title = "FAQs";
+        $title = "SOPs";
 
         $data = [
-            'table_view'    =>  $this->createFAQTable()
+            'table_view'    =>  $this->createSOPTable()
         ];
 
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
                 ->addJs('dashboard/js/libs/jquery.validate.js')
-                ->addJs('dashboard/js/libs/select2.min.js');
-        $this->assets->setJavascript('FAQ/faq_js');
+                ->addJs("dashboard/js/libs/toastr.min.js");
+        $this->assets->setJavascript('SOP/sop_js');
         $this->template
-                ->setModal("FAQ/new_faq_v", "Add New Equipment")
                 ->setPageTitle($title)
-                ->setPartial('FAQ/faqs_v', $data)
+                ->setPartial('SOP/sop_v', $data)
                 ->adminTemplate();
     }
 
-    function newFAQ(){
+    function newSOP(){
         $data = [];
-        $title = "FAQ";
+        $title = "SOP";
 
         $data = [
                
@@ -47,51 +46,48 @@ class SOP extends DashboardController{
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
                 ->addJs('dashboard/js/libs/jquery.validate.js')
                 ->addJs('dashboard/js/libs/select2.min.js');
-        $this->assets->setJavascript('FAQ/faq_js');
+        $this->assets->setJavascript('SOP/sop_js');
         $this->template
                 ->setPageTitle($title)
-                ->setPartial('FAQ/new_faq_v', $data)
+                ->setPartial('SOP/new_sop_v', $data)
                 ->adminTemplate();
     }
 
-    function createFAQTable(){
+    function createsopTable(){
 
         $template = $this->config->item('default');
 
         $heading = [
             "No.",
-            "Title",
-            "Question",
-            "Answer",
+            "Name (Click to download)",
+            "Date of Entry",
             "Status",
             "Actions"
         ];
         $tabledata = [];
 
-        $faqs = $this->db->get('faqs')->result();
+                $this->db->order_by('id','desc');
+        $sops = $this->db->get('sops')->result();
 
 
-        if($faqs){
+        if($sops){
             $counter = 0;
-            foreach($faqs as $faq){
+            foreach($sops as $sop){
                 $counter ++;
-                $id = $faq->id;
-                if($faq->status == 1){
-                    $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = '<a href = ' . base_url("FAQ/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
+                $id = $sop->id;
+                if($sop->current == 1){
+                    $status = "<label class = 'tag tag-success tag-sm'>Current</label>";
+                    $change_state = '<a href = ' . base_url("SOP/soplist/#") . ' class = "btn btn-primary btn-sm showtoast">&nbsp;Marked a Current </a>';
                     
                 }else{
-                    $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
-                    $change_state = '<a href = ' . base_url("FAQ/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate </a>';
+                    $status = "<label class = 'tag tag-danger tag-sm'>Not Current</label>";
+                    $change_state = '<a href = ' . base_url("SOP/changeState/$id") . ' class = "btn btn-warning btn-sm">&nbsp;Set as Current </a>';
                 }
-
-                $change_state .= ' <a href = ' . base_url("FAQ/faqEdit/$id") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Edit</a>';
                 
                 $tabledata[] = [
                     $counter,
-                    $faq->title,
-                    $faq->question,
-                    $faq->answer,
+                    "<a download href=".$sop->sop_path." >".$sop->sop_name."</a>",
+                    $sop->date_of_entry,
                     $status,
                     $change_state
                 ];
@@ -104,111 +100,89 @@ class SOP extends DashboardController{
     }
 
 
-    function changeState($type, $id){
-        switch($type){
-            case 'activate':
-                $this->db->set('status', 1);
+    function changeState($id){
+                $this->db->set('current', 0);
+                if($this->db->update('sops')){
+                    $this->db->set('current', 1);
+                    $this->db->where('id', $id);
 
-            break;
+                     if($this->db->update('sops')){
+                            $this->session->set_flashdata('success', "Successfully marked the SOP details");
+                        }else{
+                            $this->session->set_flashdata('error', "There was a problem marking the SOP details. Please try again");
+                        }
+                }
 
-            case 'deactivate':
-                $this->db->set('status', 0);
-                
-            break;
-        }
+       
 
-        $this->db->where('id', $id);
-
-        if($this->db->update('faqs')){
-            $this->session->set_flashdata('success', "Successfully updated the equipment details");
-        }else{
-            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
-        }
-
-        redirect('FAQ/faqlist', 'refresh');
+        redirect('sop/soplist', 'refresh');
 
     }
 
 
     function create(){
         if($this->input->post()){
-            $title = $this->input->post('title');
-            $question = $this->input->post('question');
-            $answer = $this->input->post('answer');
+            $name = $this->input->post('sop_name');
 
-            $insertdata = [
-                'title'    =>  $title,
-                'question'    =>  $question,
-                'answer'    =>  $answer,
-                'status'    =>  1
-            ];
+            $file_upload_errors = [];
+            $file_path = NULL;
+
+            if($_FILES){
+                $config['upload_path'] = './uploads/docs/SOPS/';
+                $config['allowed_types'] = 'pdf';
+                $config['max_size'] = 10000000;
+                $this->load->library('upload', $config);
+
+                $this->upload->initialize($config); 
+                $docCheck = $this->upload->do_upload('sop_file');
+ 
 
 
-            if($this->db->insert('faqs', $insertdata)){
-                $this->session->set_flashdata('success', "Successfully created new FAQ");
+                if (!$docCheck) {
+                    $file_upload_errors = $this->upload->display_errors();
+                    echo "<pre>";print_r($file_upload_errors);echo "</pre>";die();
+                }else{
+                    $data =$this->upload->data();
+                    $file_path = substr($config['upload_path'], 1) . $data['file_name'];
 
-                redirect('FAQ/faqlist/');
-
-            }else{
-                $this->session->set_flashdata('error', "There was a problem creating a new FAQ. Please try again");
+                    if(!($name)){
+                        $name = $data['file_name'];
+                    }
+                }
             }
+            
+            if(!$file_upload_errors){
 
-        }
-    }
-
-
-    function faqEdit($id){
-        $this->db->where('id', $id);
-        $faq = $this->db->get('faqs')->row();
-        //echo '<pre>';print_r($equipment);echo '</pre>';die();
-        
-        $data = [
-            'faqid'          =>  $faq->id,
-            'title'        =>  $faq->title,
-            'question'        =>  $faq->question,
-            'answer'              =>  $faq->answer,
-            'status'          =>  $faq->status
-        ];
-
-        $this->assets
-                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
-                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                ->addJs('dashboard/js/libs/jquery.validate.js')
-                ->addJs('dashboard/js/libs/select2.min.js');
-        // $this->assets->setJavascript('FAQ/faq_update_js');
-        $this->template
-                ->setPartial('FAQ/faq_edit_v', $data)
-                ->setPageTitle('FAQ Edit')
-                ->adminTemplate();
-    }
-
-
-    function editFAQ(){
-        if($this->input->post()){
-            $faqid = $this->input->post('faqid');
-            $title = $this->input->post('title');
-            $question = $this->input->post('question');
-            $answer = $this->input->post('answer'); 
-
-            $this->db->set('title', $title);
-            $this->db->set('question', $question);
-            $this->db->set('answer', $answer);
-
-            $this->db->where('id', $faqid);
+                    $insertsopdata = [
+                            'sop_name'    =>  $name,
+                            'sop_path'  =>  $file_path
+                        ];
 
 
 
-            if($this->db->update('faqs')){
+                    if($this->db->insert('sops', $insertsopdata)){
+                        $sop_id = $this->db->insert_id();
+
+                        echo "submission_save";
+                    $this->session->set_flashdata('success', "Successfully saved new SOP");
+
+
+                    }else{
+                        //echo "submission_error";
+                        $this->session->set_flashdata('error', "A problem was encountered while saving SOP. Please try again...");
+                    }
+
+                    
+                    redirect('SOP/soplist/');
                 
-                $this->session->set_flashdata('success', "Successfully updated the FAQ ");
-
             }else{
-                $this->session->set_flashdata('error', "There was a problem updating the FAQ details. Please try again");
+                echo "file error";
+                $this->session->set_flashdata('error', $file_upload_errors);
             }
 
-            redirect('FAQ/faqlist', 'refresh');
         }
     }
+
 
 
 }
