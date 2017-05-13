@@ -290,11 +290,11 @@ class Equipments extends DashboardController{
                 $id = $equipment->uuid;
                 if($equipment->equipment_status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/deactivate/$id") . ' class = "btn btn-danger btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
                     
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
-                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate </a>';
+                    $change_state = '<a href = ' . base_url("Equipments/changeState/activate/$id") . ' class = "btn btn-success btn-sm"><i class = "icon-refresh"></i>&nbsp;Activate </a>';
                 }
 
                 $change_state .= ' <a href = ' . base_url("Equipments/equipmentEdit/$id") . ' class = "btn btn-primary btn-sm"><i class = "icon-note"></i>&nbsp;Edit</a>';

@@ -77,7 +77,7 @@ class SOP extends DashboardController{
                 $id = $sop->id;
                 if($sop->current == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Current</label>";
-                    $change_state = '<a href = ' . base_url("SOP/soplist/#") . ' class = "btn btn-primary btn-sm showtoast">&nbsp;Marked a Current </a>';
+                    $change_state = '<a href = ' . base_url("SOP/soplist/#") . ' class = "btn btn-primary btn-sm showtoast">&nbsp;Marked as Current </a>';
                     
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Not Current</label>";

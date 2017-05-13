@@ -1,7 +1,7 @@
 
 <div class="row">
     <div class="col-md-12">
-    <a href = "<?= @base_url('SOP/soplist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to SOP</button></a><br /><br />
+    <a href = "<?= @base_url('SOP/soplist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to SOPs</button></a><br /><br />
 
 <form method="POST" action="<?= @base_url('SOP/create'); ?>" class="p-a-4" id="sop-form" enctype='multipart/form-data'>
 
