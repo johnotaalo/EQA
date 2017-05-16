@@ -350,17 +350,49 @@ class PTRound extends MY_Controller {
 
     function MarkSubmissions($round_uuid,$round_id, $pid){
 
-        $this->db->set('status', 1);
-        
-        $this->db->where('round_id', $round_id);
-        $this->db->where('participant_id', $pid);
-        //$this->db->update('equipment');
+        $denySubmission = 0;
 
-        if($this->db->update('pt_data_submission')){
-            $this->session->set_flashdata('success', "Successfully sent PT submission to the NHRL");
-        }else{
-            $this->session->set_flashdata('error', "There was a problem sending the details. Please try again");
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+
+        $participants = $this->M_PPTRound->getFacilityParticipantsView($user->facility_id);
+
+        foreach ($participants as $key => $participant) {
+           
+            $statusCheck = $this->M_PPTRound->getStatusCheck($round_id, $participant->p_id);
+            // echo "<pre>";print_r($user);echo "</pre>";die();
+            if($statusCheck->status){
+                $denySubmission = 1;
+            }
         }
+
+            
+
+        if($denySubmission){
+            $this->session->set_flashdata('error', "A participant's data for this PT Round has already sent to NHRL");
+        }else{
+            $verdictCheck = $this->M_PPTRound->getFacilityParticipant($round_uuid, $user->facility_id);
+
+            // echo "<pre>";print_r($verdictCheck->lab_result);echo "</pre>";die();
+
+            if($verdictCheck->lab_result){
+                $this->db->set('status', 1);
+        
+                $this->db->where('round_id', $round_id);
+                $this->db->where('participant_id', $pid);
+                //$this->db->update('equipment');
+
+                if($this->db->update('pt_data_submission')){
+                    $this->session->set_flashdata('success', "Successfully sent PT submission to the NHRL");
+                }else{
+                    $this->session->set_flashdata('error', "There was a problem sending the details. Please try again");
+                }
+            }else{
+                $this->session->set_flashdata('error', "Participant must be set as the Lab Result First");
+            }
+
+            
+        }
+
 
         redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
 
