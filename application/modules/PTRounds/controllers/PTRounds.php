@@ -627,16 +627,46 @@ public function createTabs($round_uuid, $participant_uuid){
             <div class='card-block'>
             
                 <div class='row'>
-                    <table  style='text-align: center;' class='table table-bordered'>
+                    <table  style='text-align: center;' class='table table-bordered'>";
 
-                    <tr><td style='style='text-align: center;' width:40%;' colspan='8'>
+                        
+                        $reagents = $this->M_PTRound->getReagents($datas[0]->sample_id,$equipment->id);
+            // echo "<pre>";print_r($reagents);echo "</pre>";die();
 
-                        <label style='text-align: center; width:40%;' for='lot_number'>Lot Number: </label>";
+            foreach ($reagents as $regkey => $reagent) {
+                
+
+                $equipment_tabs .= "<tr>
+
+                    <td style='style='text-align: center;' colspan='2'>
+
+                        <label style='text-align: center;' for='reagent_name'>Reagent Name: </label>";
 
                 if($datas){
-                    // echo "<pre>";print_r("<br/><br/><br/><br/><br/>".$counter.": Lot number is".$datas[$counter]->lot_number);echo "</pre>";
-                    if($datas[0]->lot_number != ''){
-                        $lot = "<div>".$datas[0]->lot_number." </div>" ;
+                    if($reagent->reagent_name){
+                        $reagent_name = "<div>".$reagent->reagent_name." </div>" ;
+                    }else{
+                        $reagent_name = "<div>No Reagent</div>";
+                    }
+                }else{
+                    $reagent_name = "<div>No Reagent</div>";
+                }
+
+                // echo "<pre>";print_r($reagent);echo "</pre>";die();
+
+                $equipment_tabs .= $reagent_name;
+
+                            
+                $equipment_tabs .= " </td>
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='lot_number'>Lot Number: </label>";
+
+                if($datas){
+                    
+                    if($reagent->lot_number){
+                        $lot = "<div>".$reagent->lot_number." </div>" ;
                     }else{
                         $lot = "<div>0</div>";
                     }
@@ -646,10 +676,34 @@ public function createTabs($round_uuid, $participant_uuid){
                 $equipment_tabs .= $lot;
 
                             
-                      $equipment_tabs .= " </td></tr>
+                      $equipment_tabs .= " </td>
+
+
+                      <td style='style='text-align: center;' colspan='3'>
+
+                        <label style='text-align: center;' for='expiry_date'>Expiry Date: </label>";
+
+                if($datas){
+                    if($reagent->expiry_date != ''){
+                        $expiry_date = "<div>".$reagent->expiry_date." </div>" ;
+                    }else{
+                        $expiry_date = "<div>No Expiry Date</div>";
+                    }
+                }else{
+                    $expiry_date = "<div>No Expiry Date</div>";
+                }
+
+                $equipment_tabs .= $expiry_date;
+
+                            
+                $equipment_tabs .= " </td>
+                                    </tr>";
+
+
+            }
 
                       
-                        <tr>
+                        $equipment_tabs .= " <tr>
                             <th style='text-align: center; width:20%;' rowspan='3'>
                                 PANEL
                             </th>

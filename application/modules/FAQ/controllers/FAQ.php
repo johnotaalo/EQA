@@ -13,7 +13,7 @@ class FAQ extends DashboardController{
     }
 
 
-    function faqlist($eFacilities = NULL){
+    function faqlist(){
         $data = [];
         $title = "FAQs";
 
@@ -28,7 +28,6 @@ class FAQ extends DashboardController{
                 ->addJs('dashboard/js/libs/select2.min.js');
         $this->assets->setJavascript('FAQ/faq_js');
         $this->template
-                ->setModal("FAQ/new_faq_v", "Add New Equipment")
                 ->setPageTitle($title)
                 ->setPartial('FAQ/faqs_v', $data)
                 ->adminTemplate();
@@ -78,7 +77,7 @@ class FAQ extends DashboardController{
                 $id = $faq->id;
                 if($faq->status == 1){
                     $status = "<label class = 'tag tag-success tag-sm'>Active</label>";
-                    $change_state = '<a href = ' . base_url("FAQ/changeState/deactivate/$id") . ' class = "btn btn-warning btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
+                    $change_state = '<a href = ' . base_url("FAQ/changeState/deactivate/$id") . ' class = "btn btn-danger btn-sm"><i class = "icon-refresh"></i>&nbsp;Deactivate </a>';
                     
                 }else{
                     $status = "<label class = 'tag tag-danger tag-sm'>Inactive</label>";
@@ -120,9 +119,9 @@ class FAQ extends DashboardController{
         $this->db->where('id', $id);
 
         if($this->db->update('faqs')){
-            $this->session->set_flashdata('success', "Successfully updated the equipment details");
+            $this->session->set_flashdata('success', "Successfully updated the FAQ details");
         }else{
-            $this->session->set_flashdata('error', "There was a problem updating the equipment details. Please try again");
+            $this->session->set_flashdata('error', "There was a problem updating the FAQ details. Please try again");
         }
 
         redirect('FAQ/faqlist', 'refresh');

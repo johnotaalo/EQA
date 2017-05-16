@@ -18,34 +18,48 @@ class Template extends MX_Controller {
 		$this->load->library('Assets', $this->config);
 	}
 
-	function viewNewMessages($participant_uuid){
+	function getCurrentSOP(){
+		$this->db->where('current', 1);
+		$sop = $this->db->get('sops',1)->row();
 
-		$new_messages = '';
-
-		$this->load->model('Auth/auth_m');
-		$message_details = $this->auth_m->getNewMessages('to_uuid', $participant_uuid);
-
-		if($message_details){
-			foreach ($message_details as $key => $value) {
-				// echo "</pre>";print_r($value->from);echo "</pre>";die();
-				$new_messages .= "<a href='Dashboard/myMessage/";
-				$new_messages .= $value->uuid;
-				$new_messages .= "' class='dropdown-item'><div class='message'><div><small class='text-muted'>";
-                $new_messages .= $value->from;
-                $new_messages .= "</small><small class='text-muted float-xs-right mt-q'>";
-                $new_messages .= $value->date_sent;
-                $new_messages .= "</small></div><div class='text-truncate font-weight-bold'>Subject: ";
-                $new_messages .= $value->subject;
-                $new_messages .= "</div><div class='small text-muted text-truncate'>";
-                $new_messages .= $value->message;
-                $new_messages .= "</div></div></a>";
-			}
+		if($sop){
+			$sop_path = $sop->sop_path;
+		}else{
+			$sop_path = "Home";
 		}
-		// echo "</pre>";print_r($message_details);echo "</pre>";die();
 
-
-		return $new_messages;
+		// echo "<pre>";print_r($sop->sop_path);echo "</pre>";die();
+		return $sop_path;
 	}
+
+	// function viewNewMessages($participant_uuid){
+
+	// 	$new_messages = '';
+
+	// 	$this->load->model('Auth/auth_m');
+	// 	$message_details = $this->auth_m->getNewMessages('to_uuid', $participant_uuid);
+
+	// 	if($message_details){
+	// 		foreach ($message_details as $key => $value) {
+	// 			// echo "<pre>";print_r($value->from);echo "</pre>";die();
+	// 			$new_messages .= "<a href='Dashboard/myMessage/";
+	// 			$new_messages .= $value->uuid;
+	// 			$new_messages .= "' class='dropdown-item'><div class='message'><div><small class='text-muted'>";
+ //                $new_messages .= $value->from;
+ //                $new_messages .= "</small><small class='text-muted float-xs-right mt-q'>";
+ //                $new_messages .= $value->date_sent;
+ //                $new_messages .= "</small></div><div class='text-truncate font-weight-bold'>Subject: ";
+ //                $new_messages .= $value->subject;
+ //                $new_messages .= "</div><div class='small text-muted text-truncate'>";
+ //                $new_messages .= $value->message;
+ //                $new_messages .= "</div></div></a>";
+	// 		}
+	// 	}
+	// 	// echo "</pre>";print_r($message_details);echo "</pre>";die();
+
+
+	// 	return $new_messages;
+	// }
 
 
 	function adminTemplate(){
@@ -68,7 +82,7 @@ class Template extends MX_Controller {
 			$data['user_details'] = $user_details;
 			$data['m_count'] = $new_m_count;
 			 // echo "</pre>";print_r($this->viewNewMessages($this->session->userdata('uuid')));echo "</pre>";die();
-			$data['new_messages'] = $this->viewNewMessages($this->session->userdata('uuid'));
+			// $data['new_messages'] = $this->viewNewMessages($this->session->userdata('uuid'));
 			$data['menu'] = $this->createSideBar();
 			$data['pagetitle'] = $this->pageTitle;
 			$data['pagedescription'] = $this->pageDescription;
@@ -159,6 +173,7 @@ class Template extends MX_Controller {
 
 		$data['javascript_file'] = $this->assets->javascript_file;
 		$data['javascript_data'] = $this->assets->javascript_data;
+		$data['sop_path'] = $this->getCurrentSOP();
 		$this->load->view('Template/frontend_template_v2', $data);
 	}
 
@@ -205,15 +220,26 @@ class Template extends MX_Controller {
 			],
 			'equipments'		=>	[
 				'icon'	=>	'icon-wrench',
-				'text'	=>	'Equipments',
+				'text'	=>	'Equipment',
 				'link'	=>	'Equipments/equipmentlist',
 				'users'	=>	['admin']
 			],
-			'faqs'		=>	[
-				'icon'	=>	'icon-chemistry',
-				'text'	=>	'FAQS',
-				'link'	=>	'FAQ/faqlist',
-				'users'	=>	['admin']
+			'libraries' => [
+				'icon' => 'fa fa-book',
+				'text' => 'Libraries',
+				'sublist' => [
+					[
+						'icon' => 'fa fa-bookmark',
+						'link' => 'FAQ/faqlist',
+						'text' => 'FAQs'
+					],
+					[
+						'icon' => 'fa fa-bookmark',
+						'link' => 'SOP/soplist',
+						'text' => 'SOPs'
+					]
+				],
+				'users' => ['admin']
 			],
 			'participantrounds'	=>	[
 				'icon'	=>	'icon-chemistry',

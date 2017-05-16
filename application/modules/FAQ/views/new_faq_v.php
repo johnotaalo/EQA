@@ -1,7 +1,8 @@
-<form method="POST" action="<?= @base_url('FAQ/create'); ?>" class="p-a-4" id="participant-report">
+<form method="POST" action="<?= @base_url('FAQ/create'); ?>" class="p-a-4" id="faq-form">
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
+    <a href = "<?= @base_url('FAQ/faqlist'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to FAQs</button></a><br /><br />
 
         <div class="card">
             <div class="card-header">

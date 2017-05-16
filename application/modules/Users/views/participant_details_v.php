@@ -32,8 +32,13 @@
                             </tr>
 
                             <tr>
-                                <th>Phonenumber:</th>
+                                <th>Phone Number:</th>
                                 <td><?= @$participant->participant_phonenumber; ?></td>
+                            </tr>
+
+                            <tr>
+                                <th>User Type:</th>
+                                <td><?= @$participant->user_type; ?></td>
                             </tr>
 
                             <tr>

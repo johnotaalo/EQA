@@ -182,13 +182,21 @@ class PTRound extends MY_Controller {
             // Uploading file
             $file_upload_errors = [];
             $file_path = NULL;
+            
             if($_FILES){
                 $config['upload_path'] = './uploads/participant_data/';
                 $config['allowed_types'] = 'gif|jpg|png|xlsx|xls|pdf|csv';
                 $config['max_size'] = 10000000;
                 $this->load->library('upload', $config);
-                if (!$this->upload->do_upload('data_uploaded_form')) {
+
+                $this->upload->initialize($config); 
+                $docCheck = $this->upload->do_upload('data_uploaded_form');
+ 
+
+
+                if (!$docCheck) {
                     $file_upload_errors = $this->upload->display_errors();
+                    echo "<pre>";print_r($file_upload_errors);echo "</pre>";die();
                 }else{
                     $data =$this->upload->data();
                     $file_path = substr($config['upload_path'], 1) . $data['file_name'];
@@ -251,7 +259,7 @@ class PTRound extends MY_Controller {
                                     'equipment_id'  =>  $equipmentid,
                                     'reagent_name'  =>  $this->input->post('reagent_name')[$i],
                                     'lot_number'    =>  $this->input->post('lot_number')[$i],
-                                    'expiry_date'   =>  $this->input->post('expiry_date')[$i]
+                                    'expiry_date'   =>  date('Y-m-d', strtotime($this->input->post('expiry_date')[$i]))
                                 ];
                             }
 
@@ -266,16 +274,9 @@ class PTRound extends MY_Controller {
                     $this->session->set_flashdata('success', "Successfully saved new data");
 
                 }else{
-
+                    $reagent_insert = [];
                     
-
                     $submission_id = $submission->id;
-
-                    // $this->db->where('round_uuid',$round_uuid);
-                    // $this->db->where('participant_id',$participant_id);
-                    // $this->db->where('equipment_id',$equipment->id);
-
-                    // $datas = $this->db->get('data_entry_v')->result();
 
                         $this->db->where('sample_id', $submission_id);
                         $this->db->delete('pt_equipment_results');
@@ -305,14 +306,35 @@ class PTRound extends MY_Controller {
 
                         $counter2 ++;
                     }
+
+                    $this->db->where('submission_id', $submission_id);
+                    $this->db->where('equipment_id', $equipmentid);
+                    $this->db->delete('pt_data_submission_reagent');
+
+                    for ($i=0; $i < $no_reagents; $i++) { 
+                        $reagent_insert[] = [
+                            'submission_id' =>  $submission_id,
+                            'equipment_id'  =>  $equipmentid,
+                            'reagent_name'  =>  $this->input->post('reagent_name')[$i],
+                            'lot_number'    =>  $this->input->post('lot_number')[$i],
+                            'expiry_date'   =>  date('Y-m-d', strtotime($this->input->post('expiry_date')[$i]))
+                        ];
+                    }
+
+                    $this->db->insert_batch('pt_data_submission_reagent', $reagent_insert);
+
+
+
                     $this->session->set_flashdata('success', "Successfully updated data");
                     echo "submission_update";
                 }
             }else{
+                echo "error3";
                 $this->session->set_flashdata('error', $file_upload_errors);
             }
         }else{
             //echo "no_post";
+            echo "error4";
           $this->session->set_flashdata('error', "No data was received");
         }
     }
@@ -454,7 +476,7 @@ class PTRound extends MY_Controller {
 
             </div>
             <div class='card-block'>
-            <form method='POST' class='p-a-4' id='".$equipment->id."' entype = 'multipart/form-data'>
+            <form method='POST' class='p-a-4' id='".$equipment->id."' enctype='multipart/form-data'>
                 <input type='hidden' class='page-signup-form-control form-control ptround' value='".$round_uuid."'>
                 <div>
                 ";
@@ -470,7 +492,11 @@ class PTRound extends MY_Controller {
                                 <a id = 'add-reagent' href = '#' class = 'btn btn-primary btn-sm pull-right'>Add Reagent</a>
                             </td>
                         </tr>";
-                $submission_id = ($datas) ? $datas[0]->id : NULL;
+
+                
+                $submission_id = ($datas) ? $datas[0]->sample_id : NULL;
+                // echo "<pre>";print_r($submission_id);echo "</pre>";die();
+
 
                 $equipment_tabs .= $this->generateReagentRow($submission_id, $equipment->id, $disabled);
                         // $equipment_tabs .= "<tr>

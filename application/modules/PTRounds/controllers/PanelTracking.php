@@ -518,11 +518,22 @@ class PanelTracking extends DashboardController {
 
 	function track($readiness_uuid){
 		$data = [];
+		
 		$readiness = $this->db->get_where('participant_readiness', ['uuid' => $readiness_uuid])->row();
+		$tracking = $this->db->get_where('pt_ready_participants', ['readiness_uuid'	=>	$readiness_uuid, 'pt_round_uuid' => $readiness->pt_round_no])->row();
+
+		$conditions = $this->db->get_where('sample_conditions', ['participant_uuid'	=>	$tracking->participant_uuid, 'pt_round_uuid' => $readiness->pt_round_no])->result();
+		
+
+		$condition_view = $this->generateConditions($conditions);
+		// echo "<pre>";print_r($condition_view);echo "</pre>";die();
+
+		
 		if($readiness){
 			$data = [
 				'pt_round_no'	=>	$readiness->pt_round_no,
-				'tracking'		=>	$this->db->get_where('pt_ready_participants', ['readiness_uuid'	=>	$readiness_uuid, 'pt_round_uuid' => $readiness->pt_round_no])->row()
+				'tracking'		=>	$tracking,
+				'conditions'	=> 	$condition_view
 			];
 			$this->template
 					->setPartial('PTRounds/paneltracking/track_v', $data)
@@ -532,6 +543,153 @@ class PanelTracking extends DashboardController {
 			show_404();
 		}
 	}
+
+
+	function generateConditions($conditions){
+		$conditions_view = '';
+
+		$counter = 1;
+		foreach ($conditions as $key => $condition) {
+			// echo "<pre>";print_r($conditions);echo "</pre>";die();
+			$conditions_view .= '<tr style="background-color:#D3D3D3">
+									<th style="width: 30%;">Sample '.$counter.'</th>
+											<td> </td> 
+									</tr>';
+			$check = $condition->acceptance;
+
+			if($check){
+				$conditions_view .= '<tr>
+										<th style="width: 30%;">Sample Condition for '.$condition->sample_name.'</th>
+											<td> Acceptable / Good </td> 
+									</tr>';
+			}else{
+				$conditions_view .= '<tr style="width: 30%;">
+										<th>Sample Condition for '.$condition->sample_name.'</th>
+											<td> Not Acceptable / Good </td> 
+									</tr>';
+
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Broken Tubes </th>
+											<td>';
+				if($condition->tubes_broken){
+					$tubes_broken = 'Yes';
+				} else {
+					$tubes_broken = 'No';
+				}
+				$conditions_view .= $tubes_broken.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Leaking Tubes </th>
+											<td>';
+				if($condition->tubes_leaking){
+					$tubes_leaking = 'Yes';
+				} else {
+					$tubes_leaking = 'No';
+				}
+				$conditions_view .= $tubes_leaking.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Cracked Tubes </th>
+											<td>';
+				if($condition->tubes_cracked){
+					$tubes_cracked = 'Yes';
+				} else {
+					$tubes_cracked = 'No';
+				}
+				$conditions_view .= $tubes_cracked.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Insufficient Volume </th>
+											<td>';
+				if($condition->insufficient_volume){
+					$insufficient_volume = 'Yes';
+				} else {
+					$insufficient_volume = 'No';
+				}
+				$conditions_view .= $insufficient_volume.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Haemolysed Sample </th>
+											<td>';
+				if($condition->haemolysed_sample){
+					$haemolysed_sample = 'Yes';
+				} else {
+					$haemolysed_sample = 'No';
+				}
+				$conditions_view .= $haemolysed_sample.'</tr>';
+
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Clotted Sample </th>
+											<td>';
+				if($condition->clotted_sample){
+					$clotted_sample = 'Yes';
+				} else {
+					$clotted_sample = 'No';
+				}
+				$conditions_view .= $clotted_sample.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Duplicate Sample </th>
+											<td>';
+				if($condition->duplicate_sample){
+					$duplicate_sample = 'Yes';
+				} else {
+					$duplicate_sample = 'No';
+				}
+				$conditions_view .= $duplicate_sample.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Missing Sample </th>
+											<td>';
+				if($condition->missing_sample){
+					$missing_sample = 'Yes';
+				} else {
+					$missing_sample = 'No';
+				}
+				$conditions_view .= $missing_sample.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Mismatch </th>
+											<td>';
+				if($condition->mismatch){
+					$mismatch = 'Yes';
+				} else {
+					$mismatch = 'No';
+				}
+				$conditions_view .= $mismatch.'</tr>';
+
+
+				$conditions_view .= '<tr style="width: 30%;">
+										<th> Condtion Comments Made </th>
+											<td>';
+				if($condition->condition_comment){
+					$condition_comment = $condition->condition_comment;
+				} else {
+					$condition_comment = 'No comment added';
+				}
+				$conditions_view .= $condition_comment.'</tr> 
+														<tr><td></td></tr>';
+			}
+
+				$conditions_view .=	'<tr><th></th><td></td></tr>';
+				$counter++;
+		}
+
+		return $conditions_view;
+
+	}
+
 
 	function getDispatchRatio($pt_round_uuid){
 		$this->db->where('status_code', 1);

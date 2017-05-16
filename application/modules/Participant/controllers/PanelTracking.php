@@ -73,6 +73,7 @@ class PanelTracking extends DashboardController{
 						
 						$participant_uuid = $pt_details->participant_uuid;
 						$pt_round_uuid = $pt_details->pt_round_uuid;
+						$sample_name = $this->input->post('sample_name'.$counter);
 						$acceptance = $this->input->post('acceptance'.$counter);
 						$tubes_broken = $this->input->post('tubes_broken'.$counter);
 						$tubes_leaking = $this->input->post('tubes_leaking'.$counter);
@@ -84,11 +85,13 @@ class PanelTracking extends DashboardController{
 						$missing_sample = $this->input->post('missing_sample'.$counter);
 						$mismatch = $this->input->post('mismatch'.$counter);
 						$condition_comment = $this->input->post('condition_comment'.$counter);
+						
 
 
 						$condition_insert[] = [
 							'id'	=>	$id,
 							'participant_uuid'		=>	$participant_uuid,
+							'sample_name'	=>	$sample_name,
 							'pt_round_uuid'	=>	$pt_round_uuid,
 							'acceptance' => $acceptance,
 							'tubes_broken'		=>	$tubes_broken,
@@ -155,6 +158,7 @@ class PanelTracking extends DashboardController{
         	$sample_view .= "<div class='form-group row'>
 					<div class = 'col-sm-6'>
 						<p>Is this sample acceptable / good enough to carry out this PT Round ?</p>
+						<input type='hidden' value='".$sample->sample_name."' name='sample_name".$counter."' />
 					</div>
 					<div class = 'col-sm-6'>
 						<input type='radio' value = '1' data-type='".$sample->sample_name."' name='acceptance".$counter."' class='acceptance' id= 'yes-".$sample->sample_name."' required />&nbsp;<label for = 'yes-".$sample->sample_name."'>Yes</label>&nbsp;

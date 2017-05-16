@@ -41,7 +41,7 @@
 
                   <fieldset class="page-signup-form-group form-group form-group-lg">
                     <div class = "form-group">
-                        <label class = "control-label col-md-3">Leave Absolute Count beads empty, if none</label>
+                        <label class = "control-label col-md-3">Absolute Count beads</label>
                         <div class="col-md-9">
                             <input type = "text" name = "acb" class = "form-control"/>
                             <span class="help-block text-info">Leave Absolute Count beads empty, if none</span>

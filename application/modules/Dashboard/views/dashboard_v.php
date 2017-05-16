@@ -17,7 +17,7 @@
 				</div>
 				<div class="col-sm-4">
 				<?php
-					if($receipt){
+					if($dashboard_data->current == "pt_round_submission"){
 				?>
 						<a href = "<?= @base_url('Participant/PTRound/Round/' . $dashboard_data->pt_round->uuid); ?>" class = "btn btn-primary pull-right">Open Round</a>
 				<?php

@@ -4,7 +4,7 @@
             <div class="card-header col-4">
                 <i class = "icon-user"></i>
                 &nbsp;
-                Paticipants
+                QA/Supervisors and Paticipants
             </div>
             <div class = "card-block">
                 <table class = "table table-bordered table-outline mb-0 hidden-sm-down" id = "participantsTable">
