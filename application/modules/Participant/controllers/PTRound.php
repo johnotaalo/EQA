@@ -489,7 +489,7 @@ class PTRound extends MY_Controller {
                     <table class='table table-bordered'>
                         <tr>
                             <td colspan = '8'>
-                                <a id = 'add-reagent' href = '#' class = 'btn btn-primary btn-sm pull-right'>Add Reagent</a>
+                                <button id = 'add-reagent' href = '#' class = 'btn btn-primary btn-sm pull-right' $disabled> <a>Add Reagent</a> </button>
                             </td>
                         </tr>";
 

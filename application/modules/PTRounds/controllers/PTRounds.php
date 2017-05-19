@@ -892,28 +892,53 @@ public function createTabs($round_uuid, $participant_uuid){
                 $getRound = $this->M_PTRounds->getDataSubmission($round_id);
 
                 if($getRound){
-                    $submissions = "<a class = 'btn btn-info btn-sm' href = '".base_url('PTRounds/PTRounds/ReadyParticipants/' . $round->uuid)."'><i class = 'fa fa-file-text-o'></i>&nbsp;Submissions</a>";
+                    $submissions = "<a class = 'btn btn-info btn-sm dropdown-item' href = '".base_url('PTRounds/PTRounds/ReadyParticipants/' . $round->uuid)."'><i class = 'fa fa-file-text-o'></i>&nbsp;Submissions</a>";
                 }else{
                     $submissions = '';
                 }
 
                 $created = date('dS F, Y', strtotime($round->date_of_entry));
-                $view = "<a class = 'btn btn-success btn-sm' href = '".base_url('PTRounds/create/information/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
-                $panel_tracking = "<a class = 'btn btn-danger btn-sm' href = '".base_url('PTRounds/PanelTracking/details/' . $round->uuid)."'><i class = 'fa fa-truck'></i>&nbsp;Panel Tracking</a>";
+                $view = "<a class = 'btn btn-success btn-sm dropdown-item' href = '".base_url('PTRounds/create/information/' . $round->uuid)."'><i class = 'fa fa-eye'></i>&nbsp;View</a>";
+                $panel_tracking = "<a class = 'btn btn-danger btn-sm dropdown-item' href = '".base_url('PTRounds/PanelTracking/details/' . $round->uuid)."'><i class = 'fa fa-truck'></i>&nbsp;Panel Tracking</a>";
                 $status = ($round->status == "active") ? '<span class = "tag tag-success">Active</span>' : '<span class = "tag tag-danger">Inactive</span>';
                 if ($round->type == "ongoing") {
                     $ongoing .= "<tr>
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view} {$panel_tracking} {$submissions}</td>
+                    <td>
+                        <div class = 'dropdown'>
+                            <button class = 'btn btn-secondary dropdown-toggle' type = 'button' id = 'dropdownMenuButton1' data-toggle = 'dropdown' aria-haspopup='true' aria-expanded = 'true'>
+                                Quick Actions
+                            </button>
+                            <div class = 'dropdown-menu' aria-labelledby= = 'dropdownMenuButton'>
+                                $view
+                                $panel_tracking
+                                $submissions
+                            </div>
+                        </div>
+                    </td>
+
                     </tr>";
                 }else{
                     $prevfut .= "<tr>
                     <td>{$round->pt_round_no}</td>
                     <td>{$created}</td>
                     <td>{$status}</td>
-                    <td>{$view} {$panel_tracking} {$submissions}</td>
+
+                    <td>
+                        <div class = 'dropdown'>
+                            <button class = 'btn btn-secondary dropdown-toggle' type = 'button' id = 'dropdownMenuButton2' data-toggle = 'dropdown' aria-haspopup='true' aria-expanded = 'true'>
+                                Quick Actions
+                            </button>
+                            <div class = 'dropdown-menu' aria-labelledby= = 'dropdownMenuButton'>
+                                $view
+                                $panel_tracking
+                                $submissions
+                            </div>
+                        </div>
+                    </td>
+
                     </tr>";
                 }
             }

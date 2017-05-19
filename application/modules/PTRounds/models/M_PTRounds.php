@@ -85,6 +85,7 @@ class M_PTRounds extends MY_Model{
         $this->db->join('pt_data_submission pds', 'pds.round_id = dev.round_id');
         $this->db->where('dev.round_uuid', $round_uuid);
         $this->db->where('pds.status', 1);
+        $this->db->where('prp.lab_result', 1);
         $this->db->group_by('dev.round_uuid, dev.participant_id');
         $this->db->order_by('prp.facility_code','asc');
         

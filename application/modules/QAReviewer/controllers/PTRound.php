@@ -226,7 +226,13 @@ class PTRound extends MY_Controller {
                 // echo "<pre>";print_r($facility_participants);echo "</pre>";die();
 
                 
-                $change_state = ' <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-info btn-sm"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
+                $change_state = '<div class = "dropdown">
+                            <button class = "btn btn-secondary dropdown-toggle" type = "button" id = "dropdownMenuButton1" data-toggle = "dropdown" aria-haspopup="true" aria-expanded = "true">
+                                Quick Actions
+                            </button>
+                            <div class = "dropdown-menu" aria-labelledby= = "dropdownMenuButton">
+
+                             <a href = ' . base_url("QAReviewer/PTRound/ParticipantDetails/$round_uuid/$participantid") . ' class = "btn btn-info btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;View Submissions</a> ';
                 
 
                 $Check = $this->M_PPTRound->getDataSubmission($round_id,$pid);
@@ -235,23 +241,6 @@ class PTRound extends MY_Controller {
                     $getCheck = $Check->status;
                 }else{
                     $getCheck = 2;
-                }
-                //echo "<pre>";print_r($getCheck);echo "</pre>";die();
-                if($getCheck == 1){
-                    $change_state .= '<a data-type="send" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-primary btn-sm showtoast" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
-                }else if($getCheck == 2){
-                    $change_state = '';
-                    
-                }else{
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>   
-                    ';
-                }
-
-                if($participant->lab_result){
-                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
-                }else{
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
-                    ';
                 }
 
                 if($verdict == 1){
@@ -262,9 +251,29 @@ class PTRound extends MY_Controller {
                     $smart_status = "<label class = 'tag tag-warning tag-sm'>Awaiting Verdict</label>";
                 }
 
-                
+                //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+                if($getCheck == 1){
+                    $change_state .= '<a data-type="send" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-primary btn-sm showtoast dropdown-item" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+                }else if($getCheck == 2){
+                    $change_state = '';
+                    
+                }else{
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>   
+                    ';
+                }
 
-                
+                if($participant->lab_result){
+                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast dropdown-item"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
+                }else{
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
+                    ';
+                }
+
+                $change_state .= '</div>
+                        </div> 
+                    ';
+
+    
                 $tabledata[] = [
                     $counter,
                     $participantid,
@@ -350,17 +359,49 @@ class PTRound extends MY_Controller {
 
     function MarkSubmissions($round_uuid,$round_id, $pid){
 
-        $this->db->set('status', 1);
-        
-        $this->db->where('round_id', $round_id);
-        $this->db->where('participant_id', $pid);
-        //$this->db->update('equipment');
+        $denySubmission = 0;
 
-        if($this->db->update('pt_data_submission')){
-            $this->session->set_flashdata('success', "Successfully sent PT submission to the NHRL");
-        }else{
-            $this->session->set_flashdata('error', "There was a problem sending the details. Please try again");
+        $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
+
+        $participants = $this->M_PPTRound->getFacilityParticipantsView($user->facility_id);
+
+        foreach ($participants as $key => $participant) {
+           
+            $statusCheck = $this->M_PPTRound->getStatusCheck($round_id, $participant->p_id);
+            // echo "<pre>";print_r($user);echo "</pre>";die();
+            if($statusCheck->status){
+                $denySubmission = 1;
+            }
         }
+
+            
+
+        if($denySubmission){
+            $this->session->set_flashdata('error', "A participant's data for this PT Round has already sent to NHRL");
+        }else{
+            $verdictCheck = $this->M_PPTRound->getFacilityParticipant($round_uuid, $user->facility_id);
+
+            // echo "<pre>";print_r($verdictCheck->lab_result);echo "</pre>";die();
+
+            if($verdictCheck->lab_result){
+                $this->db->set('status', 1);
+        
+                $this->db->where('round_id', $round_id);
+                $this->db->where('participant_id', $pid);
+                //$this->db->update('equipment');
+
+                if($this->db->update('pt_data_submission')){
+                    $this->session->set_flashdata('success', "Successfully sent PT submission to the NHRL");
+                }else{
+                    $this->session->set_flashdata('error', "There was a problem sending the details. Please try again");
+                }
+            }else{
+                $this->session->set_flashdata('error', "Participant must be set as the Lab Result First");
+            }
+
+            
+        }
+
 
         redirect('QAReviewer/PTRound/Round/'.$round_uuid, 'refresh');
 

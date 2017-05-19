@@ -170,7 +170,7 @@ class Equipments extends DashboardController{
                 'kit_name'    =>  $kitnames,
                 'lysis_method'    =>  $lysis,
                 'absolute_count_beads'    =>  $acb,
-                'equipment_status'    =>  1
+                'equipment_status'    =>  0
             ];
 
             //$this->db->insert('equipment', $insertdata);
