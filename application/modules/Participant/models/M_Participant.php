@@ -21,13 +21,14 @@ class M_Participant extends CI_Model {
 			$this->db->like("participant_email", $search_value);
 			$this->db->or_like("CONCAT(participant_fname, ' ', participant_lname)", $search_value);
 			$this->db->or_like("participant_phonenumber", $search_value);
+			$this->db->or_like("user_type", $search_value);
 		}
 
 		if(isset($limit) && isset($offset)){
 			$this->db->limit($limit, $offset);
 		}
 
-		$this->db->select("uuid, CONCAT(participant_fname, ' ', participant_lname) as name, participant_email, participant_phonenumber, confirm_token, status, approved");
+		$this->db->select("uuid, CONCAT(participant_fname, ' ', participant_lname) as name, user_type, participant_facility, participant_email, participant_phonenumber, confirm_token, status, approved");
 		$this->db->from("participants");
 		$query = $this->db->get();
 
