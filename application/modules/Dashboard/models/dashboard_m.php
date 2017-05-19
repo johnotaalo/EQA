@@ -27,4 +27,19 @@ class Dashboard_m extends CI_Model {
     	return $result;
     }
 
+    public function getDashboardStats($round_uuid){
+        $sql = "SELECT 
+                    count(pr.readiness_id) as readiness_submitted,
+                    count(a.id) as panels_received,
+                    count(b.id) as panels_not_received 
+                FROM participant_readiness pr
+                LEFT JOIN (SELECT id, pt_readiness_id FROM pt_panel_tracking WHERE participant_received_date IS NOT NULL) a
+                        ON pr.readiness_id = a.pt_readiness_id
+                LEFT JOIN (SELECT id, pt_readiness_id FROM pt_panel_tracking WHERE participant_received_date IS NULL) b
+                        ON pr.readiness_id = b.pt_readiness_id
+                WHERE pr.pt_round_no = '$round_uuid';";
+
+        return $this->db->query($sql)->row();
+    }
+
 }
