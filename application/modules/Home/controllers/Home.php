@@ -5,7 +5,7 @@ class Home extends MY_Controller {
 	public function __construct(){
 		parent::__construct();
 
-		$this->load->model('Home/home_m');
+		$this->load->model('Home/Home_m');
 	}
 
 	public function index()
