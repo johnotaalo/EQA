@@ -1,7 +1,18 @@
 <div class="row">
 
 <div class="col-lg-12 col-xs-6">
-	<a href = "<?= @base_url('PTRounds/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Rounds</button></a><br /><br />
+	<div class = "row">
+		<div class="col-sm-2">
+			<a href = "<?= @base_url('PTRounds/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Rounds</button></a>
+		</div>
+		<div class="col-sm-10">
+			<?php if($stats->batches == 0){ ?>
+			<div class="alert alert-danger">
+				Seems like there are no batches. Please add some <a href = '<?= @base_url('PTRounds/PanelTracking/batches/' . $pt_uuid); ?>'>here</a> before proceeding. Alternatively click on more info on the blue box below
+			</div>
+			<?php } ?>
+		</div>
+	</div>
 </div>
 
 

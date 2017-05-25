@@ -26,8 +26,6 @@ class Dashboard extends DashboardController {
 			$this->db->where('status','active');
 			$get = $this->db->get('pt_round_v')->row();
 
-			// echo "<pre>";print_r($get);echo "</pre>";die();
-
 			if($get == null){
 				$locking = 0;
 			}else{
@@ -60,30 +58,68 @@ class Dashboard extends DashboardController {
 				'dashboard_data'	=>	$this->getParticipantDashboardData($this->session->userdata('uuid')),
 				'participant'		=>	$this->M_Participant->findParticipantByIdentifier('uuid', $this->session->userdata('uuid'))
 			];
-			$this->assets
+		}elseif($type == "admin"){
+			$view = "admin_dashboard";
+			$stats = $this->getDashboardStats();
+			$data = [
+                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
+                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
+                'new_equipments'    =>  $this->dashboard_m->newEquipments(),
+                'stats'						=>	$stats
+            ];
+		}else if($type == "qareviewer"){
+			$this->db->where('status','active');
+			$this->db->where('type', 'ongoing');
+			$round = $this->db->get('pt_round_v')->row();
+
+			if($round){
+
+			}
+            $view = "qa_dashboard";
+            $data = [
+            	'pt_round'	=>	$round
+            ];
+
+            if($round){
+            	$data['round'] = $round->id;
+            }
+        }
+
+        // echo "<pre>";print_r($data);echo "</pre>";die();
+        $this->assets
 				->addJs('dashboard/js/libs/moment.min.js')
 				->addJs('dashboard/js/libs/fullcalendar.min.js')
 				->addJs('dashboard/js/libs/gcal.js');
 
-			$this->assets->setJavascript('PTRounds/calendar_js');
-		}elseif($type == "admin"){
-			$view = "admin_dashboard";
-			$data = [
-                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
-                'pending_participants'    =>  $this->dashboard_m->pendingParticipants(),
-                'new_equipments'    =>  $this->dashboard_m->newEquipments()
-            ];
-		}else if($type == "qareviewer"){
-            $view = "qa_dashboard";
-            $data = [
-            ];
-        }
-
-        // echo "<pre>";print_r($data);echo "</pre>";die();
+		$this->assets->setJavascript('PTRounds/calendar_js');
 		$this->template->setPageTitle('EQA Dashboard')->setPartial($view,$data)->adminTemplate();
 	}
 
-	
+	private function getDashboardStats(){
+		$this->db->where('status', 'active');
+		$this->db->where('type', 'ongoing');
+		$pt_round = $this->db->get('pt_round_v')->row();
+
+		$stats = new StdClass;
+		$stats->pt_round = null;
+		$stats->readiness_submissions = 0;
+		$stats->received_panels = 0;
+		$stats->not_received_panels = 0;
+		$stats->pending_review = 0;
+		$stats->no_response = 0;
+		$stats->completed_and_revied = 0;
+		$stats->not_completed = 0;
+
+		if ($pt_round) {
+			$stats->pt_round = $pt_round->pt_round_no;
+			$dashboard_stats = $this->dashboard_m->getDashboardStats($pt_round->uuid);
+			$stats->readiness_submissions = $dashboard_stats->readiness_submitted;
+			$stats->received_panels = $dashboard_stats->panels_received;
+			$stats->not_received_panels = $dashboard_stats->panels_not_received;
+		}
+
+		return $stats;
+	}
 
 
 	public function viewMessages(){

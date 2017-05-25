@@ -97,6 +97,7 @@ class Users extends MY_Controller{
          if($participants){
              foreach($participants as $participant){
                  $activation = $status = $details = $approval = "";
+                 $facility = $this->db->get_where('facility', ['id'=>$participant->participant_facility])->row();
 
                  $details = "<a class = 'btn btn-sm btn-warning' href = '".base_url('Users/Participants/details/' . $participant->uuid)."'>Details</a>";
 
@@ -117,10 +118,16 @@ class Users extends MY_Controller{
                  }else{
                      $approval = "<a class = 'btn btn-danger btn-sm approval' href = '".base_url('Users/Participants/approval/' . $participant->uuid)."'>Not Approved</a>";
                  }
+                 $usertype = "Participant";
+                if($participant->user_type == "qareviewer"){
+                    $usertype = "QA Reviewer";      
+                }
                  $data[] = [
                      $participant->name,
+                     $facility->facility_name,
                      $participant->participant_email,
                      $participant->participant_phonenumber,
+                     $usertype,
                      $activation,
                      $status,
                      $approval ."&nbsp;". $details

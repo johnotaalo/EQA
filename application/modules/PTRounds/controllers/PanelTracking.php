@@ -50,12 +50,72 @@ class PanelTracking extends DashboardController {
 
 			$data['batch_table'] = $this->createBatchTable($pt_round->id);
 
+			$this->assets->addCss("plugin/sweetalert/sweetalert.css");
+
+			$this->assets->addJs("plugin/sweetalert/sweetalert.min.js");
 			$this->assets->setJavascript('PTRounds/paneltracking/batches_js');
 			$this->template
 				->setPartial('PTRounds/paneltracking/batches_v', $data)
 				->adminTemplate();
 		}else{
 			show_404();
+		}
+	}
+
+	function checkBatch(){
+		$response = [];
+
+		if ($this->input->is_ajax_request()) {
+			if ($this->input->post()) {
+				$batch_id = $this->input->post('batch_id');
+
+				$this->db->where('uuid', $batch_id);
+				$batch = $this->db->get('pt_batches_v')->row();
+
+				if($batch){
+					if($batch->not_received > 0 || $batch->received > 0){
+						$response['continue'] = false;
+						$response['message'] = "You cannot delete a batch that has already been sent to at least one participant";
+					}else{
+						$response['continue'] = true;
+					}
+				}else{
+					$response['continue'] = false;
+					$response['message'] = "There was an error confirming the batch. Please refresh the page";
+				}
+			}else{
+				$response['continue'] = false;
+				$response['message'] = "There was an error confirming the batch. Please refresh the page";
+			}
+
+			return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+		}else{
+			$this->output->set_status_header(500);
+		}
+	}
+	function deleteBatch(){
+		if($this->input->is_ajax_request()){
+			$response = [];
+			if ($this->input->post()) {
+				$batch_id = $this->input->post('batch_id');
+
+				$batch = $this->db->get_where('pt_batches', ['uuid'=>$batch_id])->row();
+
+				$this->db->where('batch_id', $batch->id);
+				$this->db->delete('pt_batch_tube');
+
+				$this->db->where('id', $batch->id);
+				$this->db->delete('pt_batches');
+
+				$response['status'] = true;
+			}else{
+				$this->output->set_status_header(500);
+				$response['status'] = false;
+			}
+
+			return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+		}else{
+			$this->output->set_status_header(500);
 		}
 	}
 
@@ -78,14 +138,14 @@ class PanelTracking extends DashboardController {
 
 	private function createBatchTable($pt_id){
 		$tubes = $this->db->get_where('pt_tubes', ['pt_round_id'=>$pt_id])->result();
-		$batches = $this->db->get_where('pt_batches', ['pt_round_id'=>$pt_id])->result();
+		$batches = $this->db->get_where('pt_batches_v', ['pt_round_id'=>$pt_id])->result();
 		$header = [];
 		$header = [
 			'#',
 			'Batch No',
 			"Tubes",
 			"Details",
-			"Delete"
+			"Actions"
 		];
 
 		$body = [];
@@ -105,8 +165,22 @@ class PanelTracking extends DashboardController {
 				}
 				$tubes_list .= "</ul>";
 				$body[$key_counter][] = $tubes_list;
-				$body[$key_counter][] = "";
-				$body[$key_counter][] = "";
+				$body[$key_counter][] = "
+					<ul>
+						<li>{$batch->assigned} batch(es) assigned</li>
+						<li>{$batch->not_received} batch(es) enroute</li>
+						<li>{$batch->received} batch(es) received</li>
+					</ul>
+				";
+				$body[$key_counter][] = "<div class = 'dropdown'>
+					<button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+					Quick Actions
+					</button>
+					<div class='dropdown-menu' aria-labelledby='dropdownmenubutton'> 	
+						<a class='dropdown-item edit-batch' href='#' data-id = '{$batch->uuid}'><i class = 'fa fa-pencil'></i>&nbsp;Edit Batch</a>
+						<a class='dropdown-item delete-batch' href='#' data-id = '{$batch->uuid}'><i class = 'fa fa-trash'></i>&nbsp;Delete Batch</a>
+					</div>
+				</div>";
 				$key_counter++;
 				$counter++;
 			}
@@ -153,6 +227,57 @@ class PanelTracking extends DashboardController {
 		return $this->output->set_content_type('application/json')->set_output(json_encode($return_data));
 	}
 
+	function editBatch($pt_round_uuid, $batch_uuid){
+		$response = [];
+		$pt_round = $this->db->get_where('pt_round', ['uuid'=>$pt_round_uuid])->row();
+		$error = false;
+		if($pt_round){
+			$data['pt_uuid'] = $pt_round->uuid;
+			$batch = $this->db->get_where('pt_batches', ['uuid'	=>	$batch_uuid, 'pt_round_id'=>$pt_round->id])->row();
+			if ($batch) {
+				$tubes_list = "";
+				$tubes = $this->db->get_where('pt_tubes', ['pt_round_id'=>$pt_round->id])->result();
+				foreach ($tubes as $tube) {
+					$tubes_list .= "<div class = 'form-group'>";
+					$tubes_list .= "<label>{$tube->tube_name}</label>";
+					$tubes_list .= "<select class = 'form-control' name = 'test_{$tube->uuid}'>";
+					$samples = $this->db->get_where('pt_samples', ['pt_round_id'=>$pt_round->id])->result();
+					$tube_sample = $this->db->get_where('pt_batch_tube', ['batch_id'=>$batch->id, 'tube_id'=>$tube->id])->row();
+					$selected_sample = ($tube_sample) ? $tube_sample->sample_id : NULL;
+					foreach ($samples as $sample) {
+						// $selected =
+						$selected = ($selected_sample != NULL && $selected_sample == $sample->id) ? "selected = 'selected'" : "";
+						$tubes_list .= "<option value = '{$sample->uuid}' {$selected}>{$sample->sample_name}</option>";
+					}
+					$tubes_list .= "</select>";
+					$tubes_list .= "</div>";
+				}
+
+				$data['tubes_list'] = $tubes_list;
+				$data['batch_name'] = $batch->batch_name;
+				$data['batch_uuid'] = $batch->uuid;
+
+				$response = [
+					'status'	=>	true,
+					'title'		=>	"Editting Batch ({$batch->batch_name})",
+					'page'		=>	$this->load->view('PTRounds/paneltracking/new_batch_v', $data, TRUE)
+				];
+			}else{
+				$error = true;
+			}
+		}else{
+			$error = true;
+		}
+
+		if($error == true){
+			$this->output->set_status_header(500);
+			$response['status'] = false;
+			$response['message'] = "There was an error getting the batch. Please contact a super administrator";
+		}
+
+		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+
 	function pt_brand_name($pt_round_id){
 		$this->db->select_max('batch_name');
 		$this->db->where('pt_round_id', $pt_round_id);
@@ -194,6 +319,40 @@ class PanelTracking extends DashboardController {
 
 			$this->session->set_flashdata('success', "Successfully added Batch Information");
 			redirect('PTRounds/PanelTracking/batches/' . $this->input->post('pt_round_uuid'));
+		}
+	}
+
+	function editBatchInfo($batch_uuid){
+		$batch = $this->db->get_where('pt_batches', ['uuid'=>$batch_uuid])->row();
+		if ($batch) {
+			$this->db->where('batch_id', $batch->id);
+			$this->db->select('sample_id, tube_id');
+			$batch_tubes = $this->db->get('pt_batch_tube')->result();
+
+			$tubes_array = [];
+			if($this->input->post()){
+				foreach ($this->input->post() as $key => $value) {
+					if ("test_" == substr($key, 0, 5)) {
+						$tube_uuid = str_replace('test_', '', $key);
+						$tube = $this->db->get_where('pt_tubes', ['uuid'=>$tube_uuid])->row();
+						$sample = $this->db->get_where('pt_samples', ['uuid'=>$value])->row();
+						$tubes_array[$tube->id] =	$sample->id;
+					}
+				}
+			}
+
+			if ($batch_tubes) {
+				foreach ($batch_tubes as $batch_tube) {
+					$batch_tube->sample_id = $tubes_array[$batch_tube->tube_id];
+
+					$this->db->where('batch_id', $batch->id);
+					$this->db->where('tube_id', $batch_tube->tube_id);
+					$this->db->update('pt_batch_tube', $batch_tube);
+				}
+
+				$this->session->set_flashdata('success', "Successfully updated Batch Information");
+				redirect('PTRounds/PanelTracking/batches/' . $this->input->post('pt_round_uuid'));
+			}
 		}
 	}
 

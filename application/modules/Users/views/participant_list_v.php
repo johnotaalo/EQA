@@ -10,8 +10,10 @@
                 <table class = "table table-bordered table-outline mb-0 hidden-sm-down" id = "participantsTable">
                     <thead>
                         <th>Participant Name</th>
+                        <th>Facility</th>
                         <th>Email</th>
                         <th>Phone Number</th>
+                        <th>Type</th>
                         <th>Activation</th>
                         <th>Status</th>
                         <th>Details</th>
