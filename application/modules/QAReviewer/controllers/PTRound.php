@@ -7,8 +7,9 @@ class PTRound extends MY_Controller {
         parent::__construct();
 
         $this->load->model('M_PPTRound');
-        $this->load->model('Participant/M_Readiness');
-        $this->load->model('Participant/M_PTRound');
+        $this->load->module('Participant');
+        $this->load->model('M_Readiness');
+        $this->load->model('M_PTRound');
         $this->load->library('Mailer');
         $this->load->library('table');
         $this->load->config('table');
@@ -28,10 +29,10 @@ class PTRound extends MY_Controller {
         $title = "Facility Participants";
 
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-        //echo '<pre>';print_r($user);echo "</pre>";die();
+        // echo '<pre>';print_r($user);echo "</pre>";die();
 
         $data = [
-            'table_view'    =>  $this->createFacilityParticipantsTableView($user->facility_code)
+            'table_view'    =>  $this->createFacilityParticipantsTableView($user->facility_id)
         ];
 
        

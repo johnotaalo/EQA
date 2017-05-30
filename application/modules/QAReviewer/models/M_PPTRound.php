@@ -34,7 +34,6 @@ class M_PPTRound extends CI_Model {
     public function getFacilityParticipantsView($facility_code){
         $this->db->where('facility_id', $facility_code);
         $this->db->where('user_type', 'participant');
-        $this->db->where('status', 1);
         $query = $this->db->get('participant_readiness_v')->result();
 
         return $query;
