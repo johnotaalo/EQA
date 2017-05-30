@@ -82,8 +82,8 @@
               <option value="">Years of Experience in Flow Cytometry</option>
               <option value="six_months_less">Less than 6 Months</option>
               <option value="one_year_less">6 Months to Less than a year</option>
-              <option value="one_year">1 year</option>
-              <option value="two_years">2 year</option>
+              <option value="one_year">1 Year</option>
+              <option value="two_years">2 Years</option>
               <option value="three_years">3 Years</option>
               <option value="fours_years">4 Years</option>
               <option value="over_fours_years">Over 4 Years</option>
