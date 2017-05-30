@@ -84,7 +84,7 @@ class Home extends MY_Controller {
     }
 
 
-	function sendMessage($round_uuid,$particapant_uuid){
+	function sendMessage(){
         if($this->input->post()){
             
             $fname = $this->input->post('fname');
@@ -102,11 +102,21 @@ class Home extends MY_Controller {
                 'to'		=>  $email_to
             ];
 
+            $insertdata = [
+                'to_uuid'       =>  'nhrlCD4eqa@nphls.or.ke',
+                'from'          =>  $fname,
+                'email'         =>  $email,
+                'subject'       =>  $subject,
+                'message'       =>  $message
+            ];
+
             $body = $this->load->view('Template/email/message_v', $data, TRUE);
             $this->load->library('Mailer');
             $sent = $this->mailer->sendMail($email_to, $subject, $body);
             if ($sent == FALSE) {
                 log_message('error', "The system could not send an email to {$email_to}, from: $fname at " . date('Y-m-d H:i:s'));
+            }else{
+                $this->db->insert('messages', $insertdata);
             }
                       
             redirect('Home/', 'refresh');
