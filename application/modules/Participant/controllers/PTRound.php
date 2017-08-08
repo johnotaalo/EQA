@@ -7,9 +7,9 @@ class PTRound extends MY_Controller {
     {
         parent::__construct();
 
-        $this->load->model('Participant/M_PTRound');
-        $this->load->model('Participant/M_Readiness');
-        $this->load->model('Participant/M_Readiness');
+        $this->load->module('Participant');
+        $this->load->model('M_PTRound');
+        $this->load->model('M_Readiness');
         $this->load->library('Mailer');
 
         $this->row_blueprint = "<tr class = 'reagent_row'><td colspan = '2'><label style='text-align: center;'>Reagent Name: </label> <input type = 'text' class = 'page-signup-form-control form-control' name = 'reagent_name[]' value = '|reagent_name|' required |disabled|/> </td><td colspan = '3'><label style='text-align: center;'>Lot Number: </label><input type = 'text' class = 'page-signup-form-control form-control' name = 'lot_number[]' value = '|lot_number|' required |disabled|/></td><td colspan = '3'><label style='text-align: center;'>Expiry Date: </label><input type = 'text' class = 'page-signup-form-control form-control' name = 'expiry_date[]' value = '|expiry_date|' required |disabled|/> </td></tr>";

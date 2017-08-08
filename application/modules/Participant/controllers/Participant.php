@@ -5,8 +5,11 @@ class Participant extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Participant/M_Participant');
+
+		$this->load->module('Participant');
+		$this->load->model('M_Participant');
 		$this->load->library('Mailer');
+
 	}
 	function register(){
 		if ($this->input->server('REQUEST_METHOD') == "POST") {

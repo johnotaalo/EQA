@@ -5,6 +5,7 @@ class Readiness extends MY_Controller {
 	public function __construct(){
 		parent::__construct();
 
+		$this->load->module('Participant');
 		$this->load->model('M_Readiness');
 
 	}
