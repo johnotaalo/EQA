@@ -438,7 +438,7 @@ class PTRound extends MY_Controller {
 
                 </div>
                 <div class='col-md-6'>
-                    <a class='nav-link nav-link'  href='".base_url('Participant/PTRound/QAMessage/'.$round_id.'/'.$participant_id.'/'.$equipment->id)."' role='button'>
+                    <a class='nav-link nav-link'  href='".base_url('Participant/PTRound/QAMessage/'.$round_uuid.'/'.$round_id.'/'.$participant_id.'/'.$equipment->id)."' role='button'>
                     Message(s) from QA on ". $equipment->equipment_name ."
                         <i class='icon-envelope-letter'></i>
                         <span class='tag tag-pill tag-danger'>". $new_m_count ."</span>
@@ -804,7 +804,7 @@ class PTRound extends MY_Controller {
 
         return $row;
     }
-    public function QAMessage($round_id,$part_id,$equip_id){
+    public function QAMessage($round_uuid,$round_id,$part_id,$equip_id){
         $message_view = '';
 
         $messages = $this->M_PTRound->getDataLog($round_id,$part_id,$equip_id);
@@ -872,11 +872,11 @@ class PTRound extends MY_Controller {
 
         }
 
-        $data = [];
         $title = "QA/Supervisor Message";
 
         $data = [
-              'message_view' => $message_view 
+            'pt_uuid'    =>  $round_uuid,
+            'message_view' => $message_view 
             ];
 
         $this->assets

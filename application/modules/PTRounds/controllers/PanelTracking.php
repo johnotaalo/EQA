@@ -830,7 +830,7 @@ class PanelTracking extends DashboardController {
 
 
 				$conditions_view .= '<tr style="width: 30%;">
-										<th> Condtion Comments Made </th>
+										<th> Condition Comment Made </th>
 											<td>';
 				if($condition->condition_comment){
 					$condition_comment = $condition->condition_comment;
