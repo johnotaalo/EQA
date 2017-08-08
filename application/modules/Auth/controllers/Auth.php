@@ -26,7 +26,7 @@ class Auth extends MY_Controller {
 	}
 
 	public function verify($email, $token){
-		$this->load->model('Participant/M_Participant');
+		$this->load->module('Participant');
 		$token = urldecode($token);
 		$user = $this->M_Participant->findParticipantByIdentifier('participant_email', $email);
 		if($user){

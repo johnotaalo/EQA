@@ -3,7 +3,7 @@
 class Facilities extends DashboardController{
     function __construct(){
         parent::__construct();
-        $this->load->model('Facilities/M_Facilities');
+        $this->load->model('M_Facilities');
     }
 
     function listing($type = NULL){

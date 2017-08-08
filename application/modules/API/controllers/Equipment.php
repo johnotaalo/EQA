@@ -5,7 +5,7 @@ class Equipment extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('API/M_Equipment');
+		$this->load->model('M_Equipment');
 	}
 
 	function get($id = NULL){

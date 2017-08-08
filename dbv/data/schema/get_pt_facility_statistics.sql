@@ -1,14 +1,5 @@
 CREATE DEFINER=`homestead`@`%` PROCEDURE `get_pt_facility_statistics`(
 	IN `v_pt_uuid` VARCHAR(36)
-
-
-
-
-
-
-
-
-
 )
 BEGIN
 	SELECT 

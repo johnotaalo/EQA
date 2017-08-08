@@ -8,7 +8,8 @@ class Dashboard extends DashboardController {
 		$this->load->library('table');
         $this->load->config('table');
 		$this->load->model('dashboard_m');
-		$this->load->model('Participant/m_ptround');
+		$this->load->module('Participant');
+		$this->load->model('m_ptround');
 
 	}
 	

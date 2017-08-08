@@ -1,7 +1,8 @@
 CREATE TABLE `faqs` (
-  `id` INT NOT NULL,
-  `title` VARCHAR(255) NULL,
-  `question` VARCHAR(255) NULL,
-  `answer` VARCHAR(255) NULL,
-  `status` INT NULL DEFAULT 1,
-  PRIMARY KEY (`id`));
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `question` text,
+  `answer` text,
+  `status` int(11) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
