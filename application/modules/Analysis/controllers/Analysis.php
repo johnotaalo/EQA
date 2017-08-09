@@ -7,8 +7,7 @@ class Analysis extends DashboardController {
 
 		$this->load->library('table');
         $this->load->config('table');
-		// $this->load->model('dashboard_m');
-		// $this->load->module('Participant');
+		$this->load->model('Analysis_m');
 
 	}
 	
@@ -99,21 +98,19 @@ class Analysis extends DashboardController {
 
 
         $pt_id = $this->db->get_where('pt_round', $where_array)->row()->id;
+		$equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
+		//echo "<pre>";print_r($equipments);echo "</pre>";die();
 
-		// echo "<pre>";print_r($pt_id);echo "</pre>";die();
+		
+			$data = [
+				'equipment_tabs' => $this->createTabs($pt_id)
+			];
+            
 
-            $data = [
-                'nhrl_table'    		=>  $this->createNHRLTable($pt_id, 2),
-                'peer_table'    		=>  $this->createPeerTable($pt_id, 2),
-                'participant_results'   =>  $this->createParticipantTable($pt_id, 2)
-            ];
-
-        
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                ->addJs('dashboard/js/libs/jquery.validate.js')
-                ->addJs('dashboard/js/libs/select2.min.js');
+                        ->addJs('dashboard/js/libs/moment.min.js');
         $this->assets->setJavascript('Analysis/analysis_js');
         $this->template
                 ->setPageTitle($title)
@@ -187,35 +184,6 @@ class Analysis extends DashboardController {
         ];
         $tabledata = [];
 
-        
-        // $rounds = $this->db->get('pt_round_v')->result();
-        // // echo "<pre>";print_r($rounds);echo "</pre>";die();
-
-        // if($rounds){
-        //     $counter = 0;
-        //     foreach($rounds as $round){
-        //         $counter ++;
-        //         $round_uuid = $round->uuid;
-
-        //         if($round->type == "ongoing"){
-        //             $status = "<label class = 'tag tag-warning tag-sm'>Ongoing</label>"; 
-        //         }else{
-        //             $status = "<label class = 'tag tag-success tag-sm'>Done</label>";
-        //         }
-                
-        //         $tabledata[] = [
-        //             $counter,
-        //             $round->pt_round_no,
-        //             $round->from,
-        //             $round->to,
-        //             $round->tag,
-        //             $round->lab_unit,
-        //             $status,
-        //             '<a href = ' . base_url("Analysis/Results/$round_uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-eye"></i>&nbsp;View </a>
-        //             '
-        //         ];
-        //     }
-        // }
         $this->table->set_heading($heading);
         $this->table->set_template($template);
 
@@ -240,40 +208,181 @@ class Analysis extends DashboardController {
         ];
         $tabledata = [];
 
-        
-        // $rounds = $this->db->get('pt_round_v')->result();
-        // // echo "<pre>";print_r($rounds);echo "</pre>";die();
-
-        // if($rounds){
-        //     $counter = 0;
-        //     foreach($rounds as $round){
-        //         $counter ++;
-        //         $round_uuid = $round->uuid;
-
-        //         if($round->type == "ongoing"){
-        //             $status = "<label class = 'tag tag-warning tag-sm'>Ongoing</label>"; 
-        //         }else{
-        //             $status = "<label class = 'tag tag-success tag-sm'>Done</label>";
-        //         }
-                
-        //         $tabledata[] = [
-        //             $counter,
-        //             $round->pt_round_no,
-        //             $round->from,
-        //             $round->to,
-        //             $round->tag,
-        //             $round->lab_unit,
-        //             $status,
-        //             '<a href = ' . base_url("Analysis/Results/$round_uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-eye"></i>&nbsp;View </a>
-        //             '
-        //         ];
-        //     }
-        // }
         $this->table->set_heading($heading);
         $this->table->set_template($template);
 
         return $this->table->generate($tabledata);
 	}
+
+
+
+	public function createTabs($round_id){
+        
+        $datas=[];
+
+        $tab = 0;
+        $zero = '0';
+        
+        $where = ['pt_round_id' =>  $round_id];
+        $samples = $this->db->get_where('pt_samples', $where)->result();
+
+        
+        $equipments = $this->Analysis_m->Equipments();
+        // echo "<pre>";print_r($equipments);echo "</pre>";die();
+        
+        $equipment_tabs = '';
+
+        $equipment_tabs .= "<ul class='nav nav-tabs' role='tablist'>";
+
+        foreach ($equipments as $key => $equipment) {
+            $tab++;
+            $equipment_tabs .= "";
+
+            $equipment_tabs .= "<li class='nav-item'>";
+            if($tab == 1){
+                $equipment_tabs .= "<a class='nav-link active' data-toggle='tab'";
+            }else{
+                $equipment_tabs .= "<a class='nav-link' data-toggle='tab'";
+            }
+
+            $equipmentname = $equipment->equipment_name;
+            $equipmentname = str_replace(' ', '_', $equipmentname);
+            
+            $equipment_tabs .= " href='#".$equipmentname."' role='tab' aria-controls='home'><i class='icon-calculator'></i>&nbsp;";
+            $equipment_tabs .= $equipment->equipment_name;
+            $equipment_tabs .= "&nbsp;";
+            // $equipment_tabs .= "<span class='tag tag-success'>Complete</span>";
+            $equipment_tabs .= "</a>
+                                </li>";
+        }
+
+        $equipment_tabs .= "</ul>
+                            <div class='tab-content'>";
+
+        $counter = 0;
+
+        foreach ($equipments as $key => $equipment) {
+            $counter++;
+
+            
+
+            $equipment_id = $equipment->id;
+            $equipmentname = $equipment->equipment_name;
+            $equipmentname = str_replace(' ', '_', $equipmentname);
+
+            if($counter == 1){
+            	// echo "<pre>";print_r($equipmentname);echo "</pre>";die();
+                $equipment_tabs .= "<div class='tab-pane active' id='". $equipmentname ."' role='tabpanel'>";
+            }else{
+
+                $equipment_tabs .= "<div class='tab-pane' id='". $equipmentname ."' role='tabpanel'>";
+            }
+
+            $equipment_tabs .= '<div class = "row">
+								    <div class="col-md-12">
+								        <div class = "card card-outline-info">
+								            <div class="card-header col-4">
+								                <i class = "icon-chart"></i>
+								                &nbsp;
+
+								                    Equipment Info
+
+								            </div>
+
+								            <div class = "card-block">
+								            No. of Registrations : ';
+
+            $equipment_tabs .= '';
+
+            $equipment_tabs .= ' <br/>
+                No. of Submissions : ';
+
+            $equipment_tabs .= '';
+
+            $equipment_tabs .= ' <br/>
+                No. of Passes : ';
+
+            $equipment_tabs .= '';
+
+            $equipment_tabs .= ' <br/>
+                No. of Failed : ';
+
+            $equipment_tabs .= '';
+
+            $equipment_tabs .= ' <br/>
+				            </div>
+				        </div>
+				    </div>
+				</div>';
+            
+            $equipment_tabs .= '<div class = "row">
+				    <div class="col-md-12">
+				    <div class="card ">
+
+						<div class="col-md-6">
+							<div class = "card card-outline-success">
+					            <div class="card-header col-6">
+					            	<i class = "icon-chart"></i>
+				                &nbsp;
+
+				                    NHRL Results
+					            </div>
+					            <div class = "card-block">';
+
+            $equipment_tabs .= $this->createNHRLTable($round_id, $equipment_id);
+
+            $equipment_tabs .= '</div>
+						    </div>
+					    </div>
+
+						<div class="col-md-6">
+							<div class = "card card-outline-warning">
+					            <div class="card-header col-6">
+					            	<i class = "icon-chart"></i>
+				                &nbsp;
+				                Peer Results
+					            </div>
+					            <div class = "card-block">';
+
+            $equipment_tabs .= $this->createPeerTable($round_id, $equipment_id);
+
+            $equipment_tabs .= '</div>
+						    </div>
+					    </div>
+
+				    </div>
+				    </div>
+				</div>
+
+
+				<div class = "row">
+				    <div class="col-md-12">
+				        <div class = "card card-outline-danger">
+				            <div class="card-header col-4">
+				                <i class = "icon-chart"></i>
+				                &nbsp;
+				                    Participant Results
+				            </div>
+
+				            <div class = "card-block col-12">';
+
+            $equipment_tabs .= $this->createParticipantTable($round_id, $equipment_id);
+
+            $equipment_tabs .= '</div>
+
+
+				        </div>
+				    </div>
+				</div>
+			</div>';
+               
+        }
+
+        $equipment_tabs .= "</div>";
+  // echo "<pre>";print_r($equipments);echo "</pre>";die();
+        return $equipment_tabs;
+
+    }
 
 	
 
