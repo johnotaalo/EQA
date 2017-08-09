@@ -253,20 +253,27 @@ class PTRound extends MY_Controller {
                 }
 
                 //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+                
+
+                if($participant->lab_result){
+                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast dropdown-item"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
+
+                    $smart_status .= "&nbsp;<label class = 'tag tag-info tag-sm'>Lab Result</label>";
+                }else{
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
+                    ';
+                }
+
                 if($getCheck == 1){
                     $change_state .= '<a data-type="send" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-primary btn-sm showtoast dropdown-item" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+
+                    $smart_status .= "&nbsp;<label class = 'tag tag-danger tag-sm'>Sent to NHRL</label>";
+
                 }else if($getCheck == 2){
                     $change_state = '';
                     
                 }else{
                     $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>   
-                    ';
-                }
-
-                if($participant->lab_result){
-                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast dropdown-item"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
-                }else{
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
                     ';
                 }
 

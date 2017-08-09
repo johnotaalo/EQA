@@ -355,7 +355,7 @@ class PTRound extends MY_Controller {
 
         
         $equipments = $this->M_PTRound->Equipments($participant_uuid);
-        
+        // echo "<pre>";print_r($equipments);echo "</pre>";die();
         
         $equipment_tabs = '';
 

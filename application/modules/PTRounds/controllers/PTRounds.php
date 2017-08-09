@@ -7,10 +7,11 @@ class PTRounds extends DashboardController{
         $this->load->helper('form');
         $this->load->library('table');
         $this->load->config('table');
-        $this->load->model('M_PTRounds');
         
         $this->load->module('Participant');
         $this->load->model('M_Readiness');
+        $this->load->model('M_PTRounds');
+        $this->load->model('M_PTRound');
     
         // $this->load->model('Participant/M_PTRound');
         // $this->load->model('Participant/M_Readiness');

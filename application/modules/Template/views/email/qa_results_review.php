@@ -4,7 +4,7 @@
 <head>
 <meta name="viewport" content="width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Actionable emails e.g. reset password</title>
+<title>QA Result Review</title>
 <style type="text/css">
 	/* -------------------------------------
     GLOBAL
@@ -323,7 +323,7 @@ a {
 
 								<tr>
 									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-										<a href="<?= @$this->config->item('server_url'); ?>Participant/Readiness/readinessChecklist/<?= @$round_uuid; ?>" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry log in</a>
+										<a href="<?= @$this->config->item('server_url'); ?>Auth/signin/" class="btn-primary" itemprop="url">NHRL Proficiency Testing Programme: Flow cytometry log in</a>
 									</td>
 								</tr>
                 <tr>
