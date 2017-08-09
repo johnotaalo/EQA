@@ -245,7 +245,7 @@ class Template extends MX_Controller {
 			'analysis'		=>	[
 				'icon'	=>	'icon-chart',
 				'text'	=>	'Analysis',
-				'link'	=>	'Analysis/roundlist',
+				'link'	=>	'Analysis/',
 				'users'	=>	['admin']
 			],
 			'participantrounds'	=>	[
