@@ -20,16 +20,17 @@
                 <i class = "icon-chart"></i>
                 &nbsp;
 
-                    Analysis Results
+                    Participants Analysis
 
                 <div class = "pull-right">
-                    <a href = "<?= @base_url('Analysis/'); ?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to PT Analysis</button></a><br /><br />
+                    <a href = "<?= @base_url('Analysis/Results/'); ?><?= @$round_uuid?>"> <button class = "btn btn-primary btn-sm"><i class = "fa fa-arrow-left"></i>  Back to Analysis Results</button></a><br /><br />
                 </div>
             </div>
 
             <div class = "card-block">
 
-            	<?= @$equipment_tabs; ?>
+                <?= @$participants_info; ?>
+            	<?= @$results_table; ?>
           
             </div>
         </div>
