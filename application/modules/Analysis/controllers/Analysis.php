@@ -92,16 +92,23 @@ class Analysis extends DashboardController {
 	public function Results($round_uuid){
 		$data = [];
         $title = "Analysis";
-        // $pt_count = $this->db->count_all('pt_rounds');
+
+        $where_array = [
+                            'uuid'   => $round_uuid
+                        ];
+
+
+        $pt_id = $this->db->get_where('pt_round', $where_array)->row()->id;
+
+		// echo "<pre>";print_r($pt_id);echo "</pre>";die();
 
             $data = [
-                'nhrl_table'    		=>  $this->createNHRLTable(),
-                'peer_table'    		=>  $this->createPeerTable(),
-                'participant_results'   =>  $this->createParticipantTable()
+                'nhrl_table'    		=>  $this->createNHRLTable($pt_id, 2),
+                'peer_table'    		=>  $this->createPeerTable($pt_id, 2),
+                'participant_results'   =>  $this->createParticipantTable($pt_id, 2)
             ];
 
         
-
         $this->assets
                 ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
                 ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
@@ -115,7 +122,58 @@ class Analysis extends DashboardController {
 	}
 
 
-	public function createNHRLTable(){
+	public function createNHRLTable($round_id, $equipment_id){
+		$template = $this->config->item('default');
+
+		$where = ['pt_round_id' =>  $round_id];
+        $samples = $this->db->get_where('pt_samples', $where)->result();
+        $testers = $this->db->get_where('pt_testers', $where)->result();
+        $labs = $this->db->get_where('pt_labs', $where)->result();
+        $equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
+
+		$where_array = [
+                            'pt_round_id'   => $round_id,
+                            'equipment_id'  => $equipment_id
+                        ];
+
+		$nhrl_results = $this->db->get_where('pt_testers_result', $where_array)->result();
+
+        $heading = [
+            "Sample ID",
+            "Mean",
+            "SD",
+            "2SD",
+            "Upper Limit",
+            "Lower Limit"
+        ];
+        $tabledata = [];
+
+// echo "<pre>";print_r($nhrl_results);echo "</pre>";die();
+        foreach($samples as $sample){
+                    $table_body = [];
+                    $table_body[] = $sample->sample_name;
+                    
+
+                    $calculated_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'pt_sample_id'  =>  $sample->id])->row(); 
+
+                    $tabledata[] = [
+	                    $sample->sample_name,
+	                    ($calculated_values) ? $calculated_values->mean : 0,
+	                    ($calculated_values) ? $calculated_values->sd : 0,
+	                    ($calculated_values) ? $calculated_values->doublesd : 0,
+	                    ($calculated_values) ? $calculated_values->upper_limit : 0,
+	                    ($calculated_values) ? $calculated_values->lower_limit : 0
+                	];
+
+                }
+
+                $this->table->set_template($template);
+                $this->table->set_heading($heading);
+
+        return $this->table->generate($tabledata);
+	}
+
+	public function createPeerTable($round_uuid){
 		$template = $this->config->item('default');
 
         $heading = [
@@ -164,56 +222,7 @@ class Analysis extends DashboardController {
         return $this->table->generate($tabledata);
 	}
 
-	public function createPeerTable(){
-		$template = $this->config->item('default');
-
-        $heading = [
-            "Sample ID",
-            "Mean",
-            "SD",
-            "2SD",
-            "Upper Limit",
-            "Lower Limit",
-            "Actions"
-        ];
-        $tabledata = [];
-
-        
-        // $rounds = $this->db->get('pt_round_v')->result();
-        // // echo "<pre>";print_r($rounds);echo "</pre>";die();
-
-        // if($rounds){
-        //     $counter = 0;
-        //     foreach($rounds as $round){
-        //         $counter ++;
-        //         $round_uuid = $round->uuid;
-
-        //         if($round->type == "ongoing"){
-        //             $status = "<label class = 'tag tag-warning tag-sm'>Ongoing</label>"; 
-        //         }else{
-        //             $status = "<label class = 'tag tag-success tag-sm'>Done</label>";
-        //         }
-                
-        //         $tabledata[] = [
-        //             $counter,
-        //             $round->pt_round_no,
-        //             $round->from,
-        //             $round->to,
-        //             $round->tag,
-        //             $round->lab_unit,
-        //             $status,
-        //             '<a href = ' . base_url("Analysis/Results/$round_uuid") . ' class = "btn btn-primary btn-sm"><i class = "icon-eye"></i>&nbsp;View </a>
-        //             '
-        //         ];
-        //     }
-        // }
-        $this->table->set_heading($heading);
-        $this->table->set_template($template);
-
-        return $this->table->generate($tabledata);
-	}
-
-	public function createParticipantTable(){
+	public function createParticipantTable($round_uuid){
 		$template = $this->config->item('default');
 
         $heading = [
