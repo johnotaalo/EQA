@@ -29,7 +29,7 @@
 
             <div class = "card-block">
 
-            	<?= @$equipment_tabs; ?>
+            	<?= @$sample_tabs; ?>
           
             </div>
         </div>

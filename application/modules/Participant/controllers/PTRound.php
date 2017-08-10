@@ -178,6 +178,7 @@ class PTRound extends MY_Controller {
             $lot_number = $this->input->post('lot_number');
             $reagent_name = $this->input->post('reagent_name');
             $expiry_date = $this->input->post('expiry_date');
+            // echo "<pre>";print_r($sample);echo "</pre>";die();
 
             // Uploading file
             $file_upload_errors = [];
@@ -221,6 +222,7 @@ class PTRound extends MY_Controller {
 
                             foreach ($samples as $key => $sample) {
 
+                                $sample_id = $this->input->post('sample_'.$counter2);
                                 $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
                                 $cd3_per = $this->input->post('cd3_per_'.$counter2);
                                 $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
@@ -229,7 +231,8 @@ class PTRound extends MY_Controller {
                                 $other_per = $this->input->post('other_per_'.$counter2);
 
                                 $insertequipmentdata = [
-                                'sample_id'    =>  $submission_id,
+                                'equip_result_id'    =>  $submission_id,
+                                'sample_id'    =>  $sample_id,
                                 'cd3_absolute'    =>  $cd3_abs,
                                 'cd3_percent'    =>  $cd3_per,
                                 'cd4_absolute'    =>  $cd4_abs,
@@ -278,11 +281,12 @@ class PTRound extends MY_Controller {
                     
                     $submission_id = $submission->id;
 
-                        $this->db->where('sample_id', $submission_id);
+                        $this->db->where('equip_result_id', $submission_id);
                         $this->db->delete('pt_equipment_results');
                     
                     foreach ($samples as $key => $sample) {     
 
+                        $sample_id = $this->input->post('sample_'.$counter2);
                         $cd3_abs = $this->input->post('cd3_abs_'.$counter2);
                         $cd3_per = $this->input->post('cd3_per_'.$counter2);
                         $cd4_abs = $this->input->post('cd4_abs_'.$counter2);
@@ -291,7 +295,8 @@ class PTRound extends MY_Controller {
                         $other_per = $this->input->post('other_per_'.$counter2);
 
                         $insertequipmentdata = [
-                                'sample_id'    =>  $submission_id,
+                                'equip_result_id'    =>  $submission_id,
+                                'sample_id'    =>  $sample_id,
                                 'cd3_absolute'    =>  $cd3_abs,
                                 'cd3_percent'    =>  $cd3_per,
                                 'cd4_absolute'    =>  $cd4_abs,
@@ -494,7 +499,7 @@ class PTRound extends MY_Controller {
                         </tr>";
 
                 
-                $submission_id = ($datas) ? $datas[0]->sample_id : NULL;
+                $submission_id = ($datas) ? $datas[0]->equip_result_id : NULL;
                 // echo "<pre>";print_r($submission_id);echo "</pre>";die();
 
 
@@ -617,7 +622,7 @@ class PTRound extends MY_Controller {
                     foreach ($samples as $key => $sample) {
                         
                         
-// echo "<pre>";print_r($datas[$counter2]->cd3_absolute);echo "</pre>";die();
+ // echo "<pre>";print_r($sample);echo "</pre>";die();
                         $value = 0;
                         $equipment_tabs .= "
                                         <tr>
@@ -626,6 +631,7 @@ class PTRound extends MY_Controller {
 
                         $equipment_tabs .= "</th>
                             <td>
+                                <input type='hidden' name='sample_".$counter2."' value='".$sample->sample_id."' />
                                 <input type='text' data-type='". $equipment->equipment_name ."' class='page-signup-form-control form-control' $disabled placeholder='' value = '";
                                 
                         //echo "<pre>";print_r($datas[$counter2]->equipment_id);echo "</pre>";die();

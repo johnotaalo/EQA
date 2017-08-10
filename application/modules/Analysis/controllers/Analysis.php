@@ -36,104 +36,7 @@ class Analysis extends DashboardController {
 	}
 
 
-	public function ParticipantResults()
-	{	
-		$data = [];
-        $title = "Participant Results";
-        // $pt_count = $this->db->count_all('pt_rounds');
-
-            $data = [
-            	'participants_info' => $this->ParticipantInfo(),
-                'results_table'    =>  $this->createParticipantResultsTable()
-            ];
-
-        $this->assets
-                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
-                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
-                ->addJs('dashboard/js/libs/jquery.validate.js')
-                ->addJs('dashboard/js/libs/select2.min.js');
-        $this->assets->setJavascript('Analysis/analysis_js');
-        $this->template
-                ->setPageTitle($title)
-                ->setPartial('Analysis/participant_analysis_v', $data)
-                ->adminTemplate();
-	}
-
-	public function ParticipantInfo()
-	{
-		$part_info = '';
-
-		$part_info .= '<div class = "row">
-								    <div class="col-md-6">
-								        <div class = "card card-outline-danger">
-								            <div class="card-header col-4">
-								                <i class = "icon-chart"></i>
-								                &nbsp;
-
-								                    General Details
-
-								            </div>
-
-								            <div class = "card-block">
-								            Round ID : <strong>';
-
-									        $part_info .= '';
-
-									        $part_info .= '</strong> <br/> Equipment : <strong>';
-
-									        $part_info .= '';
-
-									        $part_info .= '</strong> <br/> Sample : <strong>';
-
-									        $part_info .= '';
-
-        $part_info .= '	</strong> <br/></div>
-				       </div>
-				    </div>
-
-				    <div class="col-md-6">
-								        <div class = "card card-outline-info">
-								            <div class="card-header col-4">
-								                <i class = "icon-chart"></i>
-								                &nbsp;
-
-								                    Participants Information
-
-								            </div>
-								            <div class = "card-block">
-									            <div class="col-md-6">
-									            Mean : <strong>';
-
-									            $part_info .= '';
-
-										        $part_info .= '</strong> <br/> SD : <strong>';
-
-										        $part_info .= '';
-
-										        $part_info .= '</strong> <br/> 2SD : <strong>';
-
-										        $part_info .= '';
-
-		$part_info .= '	</strong> <br/>
-						</div>
-						<div class="col-md-6">
-							Highest : <strong>';
-
-							$part_info .= '';
-
-					        $part_info .= '</strong> <br/> Lowest : <strong>';
-
-					        $part_info .= '';
-
-							$part_info .= '	</strong> <br/> 
-						</div>
-				       </div>
-				    </div>
-				  </div>
-				  </div>';
-  		
-        return $part_info;
-	}
+	
 
 	public function createPTTable()
 	{
@@ -187,21 +90,41 @@ class Analysis extends DashboardController {
 	}
 
 
-	public function createParticipantResultsTable()
+	public function createParticipantResultsTable($equipment_id)
 	{
 		$template = $this->config->item('default');
 
         $heading = [
             "No.",
             "Participant ID",
-            "Result"
+            "CD4 Absolute Mean Results"
         ];
-        $tabledata = [];
+		$tabledata = [];
 
         
-        // $rounds = $this->db->get('participant_result_v')->result();
-        // echo "<pre>";print_r($rounds);echo "</pre>";die();
+        $part_results = $this->db->get_where('pt_participant_result_v',['equipment_id' => $equipment_id])->result();
+         //echo "<pre>";print_r($part_results);echo "</pre>";die();
 
+        if($part_results){
+            $counter = 0;
+            foreach($part_results as $part_result){
+                $counter ++;
+
+                $participant_id = $this->db->get_where('participant_readiness_v', ['p_id' => $part_result->participant_id])->row()->username;
+
+                // if($round->type == "ongoing"){
+                //     $status = "<label class = 'tag tag-warning tag-sm'>Ongoing</label>"; 
+                // }else{
+                //     $status = "<label class = 'tag tag-success tag-sm'>Done</label>";
+                // }
+                
+                $tabledata[] = [
+                    $counter,
+                    $participant_id,
+                    $part_result->cd4_absolute_mean
+                ];
+            }
+        }
         $this->table->set_heading($heading);
         $this->table->set_template($template);
 
@@ -219,12 +142,12 @@ class Analysis extends DashboardController {
 
 
         $pt_id = $this->db->get_where('pt_round', $where_array)->row()->id;
-		$equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
+		// $equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
 		//echo "<pre>";print_r($equipments);echo "</pre>";die();
 
 		
 			$data = [
-				'equipment_tabs' => $this->createTabs($pt_id)
+				'sample_tabs' => $this->createTabs($pt_id)
 			];
             
 
@@ -253,8 +176,6 @@ class Analysis extends DashboardController {
                             'pt_round_id'   => $round_id,
                             'equipment_id'  => $equipment_id
                         ];
-
-		$nhrl_results = $this->db->get_where('pt_testers_result', $where_array)->result();
 
         $heading = [
             "Sample ID",
@@ -291,9 +212,137 @@ class Analysis extends DashboardController {
         return $this->table->generate($tabledata);
 	}
 
-	public function createPeerTable($round_uuid){
+	public function ParticipantInfo($round_id,$equipment_id,$sample_id)
+	{
+
+		$round_id_name = $this->db->get_where('pt_round', ['id' =>  $round_id])->row()->pt_round_no;
+		$equipment_name = $this->db->get_where('equipment', ['id' =>  $equipment_id])->row()->equipment_name;
+		$sample_name = $this->db->get_where('pt_samples', ['id' =>  $sample_id])->row()->sample_name;
+
+		
+
+		$cd4_calculated_values = $this->db->get_where('pt_participants_calculated_v', ['round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'sample_id'  =>  $sample_id])->row();
+
+		$mean = ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_mean : 0;
+        $sd = ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_sd : 0;
+        $sd2 = ($cd4_calculated_values) ? $cd4_calculated_values->double_cd4_absolute_sd : 0;
+        $upper = ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_upper_limit : 0;
+        $lower = ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_lower_limit : 0;
+
+
+		// echo "<pre>";print_r($round_id_name);echo "</pre>";die();
+		$part_info = '';
+
+		$part_info .= '<div class = "row">
+								    <div class="col-md-6">
+								        <div class = "card card-outline-danger">
+								            <div class="card-header col-4">
+								                <i class = "icon-chart"></i>
+								                &nbsp;
+
+								                    General Details
+
+								            </div>
+
+								            <div class = "card-block">
+								            Round ID : <strong>';
+
+									        $part_info .= $round_id_name;
+
+									        $part_info .= '</strong> <br/> Equipment : <strong>';
+
+									        $part_info .= $equipment_name;
+
+									        $part_info .= '</strong> <br/> Sample : <strong>';
+
+									        $part_info .= $sample_name;
+
+        $part_info .= '	</strong> <br/></div>
+				       </div>
+				    </div>
+
+				    <div class="col-md-6">
+								        <div class = "card card-outline-info">
+								            <div class="card-header col-4">
+								                <i class = "icon-chart"></i>
+								                &nbsp;
+
+								                    Participants Information
+
+								            </div>
+								            <div class = "card-block">
+									            <div class="col-md-6">
+									            Mean : <strong>';
+
+									            $part_info .= $mean;
+
+										        $part_info .= '</strong> <br/> SD : <strong>';
+
+										        $part_info .= $sd;
+
+										        $part_info .= '</strong> <br/> 2SD : <strong>';
+
+										        $part_info .= $sd2;
+
+		$part_info .= '	</strong> <br/>
+						</div>
+						<div class="col-md-6">
+							Upper Limit: <strong>';
+
+							$part_info .= $upper;
+
+					        $part_info .= '</strong> <br/> Lower Limit : <strong>';
+
+					        $part_info .= $lower;
+
+							$part_info .= '	</strong> <br/> 
+						</div>
+				       </div>
+				    </div>
+				  </div>
+				  </div>';
+  		
+        return $part_info;
+	}
+
+	public function ParticipantResults($round_id,$equipment_id,$sample_id)
+	{	
+		$data = [];
+        $title = "Participant Results";
+
+        $round_uuid = $this->db->get_where('pt_round', ['id' =>  $round_id])->row()->uuid;
+
+            $data = [
+            	'round_uuid' => $round_uuid,
+            	'participants_info' => $this->ParticipantInfo($round_id,$equipment_id,$sample_id),
+                'results_table'    =>  $this->createParticipantResultsTable($equipment_id)
+            ];
+
+        $this->assets
+                ->addJs("dashboard/js/libs/jquery.dataTables.min.js")
+                ->addJs("dashboard/js/libs/dataTables.bootstrap4.min.js")
+                ->addJs('dashboard/js/libs/jquery.validate.js')
+                ->addJs('dashboard/js/libs/select2.min.js');
+        $this->assets->setJavascript('Analysis/analysis_js');
+        $this->template
+                ->setPageTitle($title)
+                ->setPartial('Analysis/participant_analysis_v', $data)
+                ->adminTemplate();
+	}
+
+	public function createPeerTable($round_id, $equipment_id){
 		$template = $this->config->item('default');
 
+		$where = ['pt_round_id' =>  $round_id];
+        $samples = $this->db->get_where('pt_samples', $where)->result();
+        $equipments = $this->db->get_where('equipment', ['equipment_status'=>1])->result();
+
+		$where_array = [
+                            'round_id'   => $round_id,
+                            'equipment_id'  => $equipment_id
+                        ];
+
+	
         $heading = [
             "Sample ID",
             "Mean",
@@ -305,8 +354,40 @@ class Analysis extends DashboardController {
         ];
         $tabledata = [];
 
-        $this->table->set_heading($heading);
-        $this->table->set_template($template);
+        
+
+
+        foreach($samples as $sample){
+                    $table_body = [];
+                    $table_body[] = $sample->sample_name;
+                    
+                    $view = "<a class = 'btn btn-success btn-sm dropdown-item' href = '".base_url('Analysis/ParticipantResults/' . $round_id . '/' . $equipment_id . '/' . $sample->id)."'><i class = 'fa fa-eye'></i>&nbsp;View Log</a>";
+
+                    $cd4_calculated_values = $this->db->get_where('pt_participants_calculated_v', ['round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'sample_id'  =>  $sample->id])->row(); 
+
+                    // echo "<pre>";print_r($cd4_calculated_values);echo "</pre>";die();
+
+                    $tabledata[] = [
+	                    $sample->sample_name,
+	                    ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_mean : 0,
+	                    ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_sd : 0,
+	                    ($cd4_calculated_values) ? $cd4_calculated_values->double_cd4_absolute_sd : 0,
+	                    ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_upper_limit : 0,
+	                    ($cd4_calculated_values) ? $cd4_calculated_values->cd4_absolute_lower_limit : 0,
+	                    "<div class = 'dropdown'>
+                            <button class = 'btn btn-secondary dropdown-toggle' type = 'button' id = 'dropdownMenuButton1' data-toggle = 'dropdown' aria-haspopup='true' aria-expanded = 'true'>
+                                Act
+                            </button>
+                            <div class = 'dropdown-menu' aria-labelledby= = 'dropdownMenuButton'>
+                                $view
+                            </div>
+                        </div>"
+                	];
+
+                }
+
+                $this->table->set_template($template);
+                $this->table->set_heading($heading);
 
         return $this->table->generate($tabledata);
 	}
@@ -357,7 +438,6 @@ class Analysis extends DashboardController {
 
         foreach ($equipments as $key => $equipment) {
             $tab++;
-            $equipment_tabs = "";
 
             $equipment_tabs .= "<li class='nav-item'>";
             if($tab == 1){
@@ -378,6 +458,7 @@ class Analysis extends DashboardController {
         }
 
         $equipment_tabs .= "</ul>
+
                             <div class='tab-content'>";
 
         $counter = 0;
@@ -437,11 +518,9 @@ class Analysis extends DashboardController {
 				</div>';
             
             $equipment_tabs .= '<div class = "row">
-				    <div class="col-md-12">
-				    <div class="card ">
-
+				  
 						<div class="col-md-6">
-							<div class = "card card-outline-success">
+							<div class = "card">
 					            <div class="card-header col-6">
 					            	<i class = "icon-chart"></i>
 				                &nbsp;
@@ -457,7 +536,7 @@ class Analysis extends DashboardController {
 					    </div>
 
 						<div class="col-md-6">
-							<div class = "card card-outline-warning">
+							<div class = "card ">
 					            <div class="card-header col-6">
 					            	<i class = "icon-chart"></i>
 				                &nbsp;
@@ -470,9 +549,6 @@ class Analysis extends DashboardController {
             $equipment_tabs .= '</div>
 						    </div>
 					    </div>
-
-				    </div>
-				    </div>
 				</div>
 
 
@@ -493,8 +569,9 @@ class Analysis extends DashboardController {
 
 
 				        </div>
-				    </div>
-				</div>
+				    
+					</div>
+			    </div>
 			</div>';
                
         }

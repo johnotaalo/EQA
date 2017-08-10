@@ -634,7 +634,7 @@ public function createTabs($round_uuid, $participant_uuid){
                     <table  style='text-align: center;' class='table table-bordered'>";
 
                         
-                        $reagents = $this->M_PTRound->getReagents($datas[0]->sample_id,$equipment->id);
+                        $reagents = $this->M_PTRound->getReagents($datas[0]->equip_result_id,$equipment->id);
             // echo "<pre>";print_r($reagents);echo "</pre>";die();
 
             foreach ($reagents as $regkey => $reagent) {
