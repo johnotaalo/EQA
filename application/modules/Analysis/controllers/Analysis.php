@@ -400,7 +400,7 @@ class Analysis extends DashboardController {
             "Participant ID",
             "Batch No"
         ];
-        $tabledata = [];
+        $tabledata = $tablebody = [];
 
         $samples = $this->db->get_where('pt_samples', ['pt_round_id' =>  $round_id])->result();
 
@@ -413,11 +413,10 @@ class Analysis extends DashboardController {
 
         foreach ($participants as $key => $participant) {
 		$part_counter++;
-		// echo "<pre>";print_r($part_counter);echo "</pre>";
 
-        $batch = $this->db->get_where('pt_ready_participants', ['p_id' => $participant->p_id, 'pt_round_uuid' => $round_uuid])->row()->batch;
+        
 
-       	
+       	$batch = $this->db->get_where('pt_ready_participants', ['p_id' => $participant->p_id, 'pt_round_uuid' => $round_uuid])->row()->batch;
 			$tabledata[] = [
 				$part_counter,
 				$participant->username,
@@ -425,31 +424,39 @@ class Analysis extends DashboardController {
 			];
 
 
-        	foreach ($samples as $sample => $samp) {
+        	foreach ($samples as $sample) {
         		$samp_counter++;
+				
+        		array_push($heading, $sample->sample_name,"Comment");
 
-
-
-        		array_push($heading, $samp->sample_name,"Comment");
-
-        		$nhrl_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'pt_sample_id'  =>  $samp->id])->row(); 
+        		$nhrl_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'pt_sample_id'  =>  $sample->id])->row(); 
 
         		$upper_limit = $nhrl_values->upper_limit;
         		$lower_limit = $nhrl_values->lower_limit;
 
-        		$part_cd4 = $this->db->get_where('pt_participant_review_v', ['round_id' =>  $round_id, 'equipment_id' =>  $equipment_id, 'sample_id' => $samp->id, 'participant_id' => $participant->p_id])->row()->cd4_absolute;
-        		
+        		$part_cd4 = $this->Analysis_m->absoluteValue($round_id,$equipment_id,$sample->id,$participant->p_id);
 
-        		if($part_cd4 >= $lower_limit && $part_cd4 <= $upper_limit){
-				 	$acceptable++;
-				 	$comment = "Acceptable";
-        		}else{
-        			$unacceptable++;
-        			$comment = "Unacceptable";
-        		}   
+        		// $part_cd4 = $this->db->get_where('pt_participant_review_v', ['round_id' =>  $round_id, 'equipment_id' =>  $equipment_id, 'sample_id' => $sample->id, 'participant_id' => $participant->p_id])->result()->cd4_absolute;
 
-        		if($part_cd4 == 0){
-        			$zerocount++;
+        		// echo "<pre>";print_r($part_cd4);echo "</pre>";die();
+
+        		if($part_cd4){
+        			if($part_cd4->cd4_absolute >= $lower_limit && $part_cd4->cd4_absolute <= $upper_limit){
+					 	$acceptable++;
+					 	$comment = "Acceptable";
+	        		}else{
+	        			$unacceptable++;
+	        			$comment = "Unacceptable";
+	        		}   
+
+	        		if($part_cd4->cd4_absolute == 0){
+	        			$zerocount++;
+	        		}
+
+	        		$tablebody[] = [
+						$part_cd4,
+						$comment
+					];
         		}
 
         				
@@ -466,6 +473,8 @@ class Analysis extends DashboardController {
         	}else{
         		$review = "Incomplete submission";
         	}
+
+        	// array_push($tabledata, $tablebody, $overall_grade, $review);
         
 
         }
@@ -639,7 +648,7 @@ class Analysis extends DashboardController {
         }
 
         $equipment_tabs .= "</div>";
-  // echo "<pre>";print_r($equipments);echo "</pre>";die();
+  // echo "<pre>";print_r($equipment_tabs);echo "</pre>";die();
         return $equipment_tabs;
 
     }
