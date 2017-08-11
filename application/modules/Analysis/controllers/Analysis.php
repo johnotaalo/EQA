@@ -392,26 +392,88 @@ class Analysis extends DashboardController {
         return $this->table->generate($tabledata);
 	}
 
-	public function createParticipantTable($round_uuid){
+	public function createParticipantTable($round_id, $equipment_id){
 		$template = $this->config->item('default');
 
         $heading = [
             "No.",
             "Participant ID",
-            "Review Slot",
-            "Sample 1",
-            "Comment 1",
-            "Sample 2",
-            "Comment 2",
-            "Sample 3",
-            "Comment 3",
-            "Overall Grade",
-            "Review Comment"
+            "Batch No"
         ];
         $tabledata = [];
 
-        $this->table->set_heading($heading);
+        $samples = $this->db->get_where('pt_samples', ['pt_round_id' =>  $round_id])->result();
+
+        $participants = $this->db->get_where('participant_readiness_v', ['status' =>  1, 'approved' => 1, 'user_type' => 'participant'])->result();
+
+        $round_uuid = $this->db->get_where('pt_round', ['id' =>  $round_id])->row()->uuid;
+
+
+        $zerocount = $acceptable = $unacceptable = $part_counter = $samp_counter = 0;
+
+        foreach ($participants as $key => $participant) {
+		$part_counter++;
+		// echo "<pre>";print_r($part_counter);echo "</pre>";
+
+        $batch = $this->db->get_where('pt_ready_participants', ['p_id' => $participant->p_id, 'pt_round_uuid' => $round_uuid])->row()->batch;
+
+       	
+			$tabledata[] = [
+				$part_counter,
+				$participant->username,
+				$batch
+			];
+
+
+        	foreach ($samples as $sample => $samp) {
+        		$samp_counter++;
+
+
+
+        		array_push($heading, $samp->sample_name,"Comment");
+
+        		$nhrl_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' =>  $round_id, 'equipment_id'   =>  $equipment_id, 'pt_sample_id'  =>  $samp->id])->row(); 
+
+        		$upper_limit = $nhrl_values->upper_limit;
+        		$lower_limit = $nhrl_values->lower_limit;
+
+        		$part_cd4 = $this->db->get_where('pt_participant_review_v', ['round_id' =>  $round_id, 'equipment_id' =>  $equipment_id, 'sample_id' => $samp->id, 'participant_id' => $participant->p_id])->row()->cd4_absolute;
+        		
+
+        		if($part_cd4 >= $lower_limit && $part_cd4 <= $upper_limit){
+				 	$acceptable++;
+				 	$comment = "Acceptable";
+        		}else{
+        			$unacceptable++;
+        			$comment = "Unacceptable";
+        		}   
+
+        		if($part_cd4 == 0){
+        			$zerocount++;
+        		}
+
+        				
+        	}
+
+        	$grade = (($acceptable / $samp_counter) * 100);
+
+        	$overall_grade = $grade . ' %';
+
+        	if($grade == 100){
+        		$review = "Satisfactory performance";
+        	}else if($zerocount == $samp_counter){
+        		$review = "Non-responsive";
+        	}else{
+        		$review = "Incomplete submission";
+        	}
+        
+
+        }
+
+        array_push($heading, "Review Comment");
+
         $this->table->set_template($template);
+        $this->table->set_heading($heading);
 
         return $this->table->generate($tabledata);
 	}
