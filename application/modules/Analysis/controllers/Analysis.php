@@ -2,12 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Analysis extends DashboardController {
+
 	public function __construct(){
 		parent::__construct();
 
 		$this->load->library('table');
         $this->load->config('table');
 		$this->load->model('Analysis_m');
+
+		
 
 	}
 	
@@ -432,11 +435,7 @@ class Analysis extends DashboardController {
         		$lower_limit = $nhrl_values->lower_limit;
 
         		$part_cd4 = $this->Analysis_m->absoluteValue($round_id,$equipment_id,$sample->id,$participant->p_id);
-
-        		// $part_cd4 = $this->db->get_where('pt_participant_review_v', ['round_id' =>  $round_id, 'equipment_id' =>  $equipment_id, 'sample_id' => $sample->id, 'participant_id' => $participant->p_id])->result()->cd4_absolute;
-
-        		// echo "<pre>";print_r($part_cd4);echo "</pre>";die();
-
+		 		// echo "<pre>";print_r($part_cd4);echo "</pre>";die();
         		if($part_cd4){
         			if($part_cd4->cd4_absolute >= $lower_limit && $part_cd4->cd4_absolute <= $upper_limit){
 					 	$acceptable++;
@@ -485,7 +484,7 @@ class Analysis extends DashboardController {
 
         array_push($heading, 'Overall Grade', "Review Comment");
 
-        // echo "<pre>";print_r($table);echo "</pre>";die();
+        
 
         $this->table->set_template($template);
         $this->table->set_heading($heading);
@@ -499,8 +498,7 @@ class Analysis extends DashboardController {
         
         $datas=[];
 
-        $tab = 0;
-        $zero = '0';
+        $samp_counter = $acceptable = $counter = $tab = 0;
         
         $where = ['pt_round_id' =>  $round_id];
         $samples = $this->db->get_where('pt_samples', $where)->result();
@@ -538,24 +536,59 @@ class Analysis extends DashboardController {
 
                             <div class='tab-content'>";
 
-        $counter = 0;
+        
+
 
         foreach ($equipments as $key => $equipment) {
             $counter++;
-
-            
-
+            $passed = $failed = 0;
             $equipment_id = $equipment->id;
             $equipmentname = $equipment->equipment_name;
             $equipmentname = str_replace(' ', '_', $equipmentname);
 
             if($counter == 1){
-            	// echo "<pre>";print_r($equipmentname);echo "</pre>";die();
+            	
                 $equipment_tabs .= "<div class='tab-pane active' id='". $equipmentname ."' role='tabpanel'>";
             }else{
 
                 $equipment_tabs .= "<div class='tab-pane' id='". $equipmentname ."' role='tabpanel'>";
             }
+
+            $round_uuid = $this->db->get_where('pt_round', ['id' => $round_id])->row()->uuid;
+
+            $submissions = $this->Analysis_m->getSubmissionsNumber($round_id, $equipment_id);
+            $registrations = $this->Analysis_m->getRegistrationsNumber($round_uuid, $equipment_id);
+            $participants = $this->Analysis_m->getReadyParticipants($round_id, $equipment_id);
+
+
+	        foreach ($samples as $sample) {
+	    		$samp_counter++;
+
+	    		$nhrl_values = $this->db->get_where('pt_testers_calculated_v', ['pt_round_id' => $round_id, 'equipment_id' => $equipment_id, 'pt_sample_id' => $sample->id])->row(); 
+
+	    		$upper_limit = $nhrl_values->upper_limit;
+	    		$lower_limit = $nhrl_values->lower_limit;
+
+	    		foreach ($participants as $participant) {
+	    			$part_cd4 = $this->Analysis_m->absoluteValue($round_id,$equipment_id,$sample->id,$participant->p_id);
+
+		    		if($part_cd4){
+		    			if($part_cd4->cd4_absolute >= $lower_limit && $part_cd4->cd4_absolute <= $upper_limit){
+						 	$acceptable++;
+		        		}  
+		    		}	
+	    		}	
+	        }
+
+	    	$grade = (($acceptable / $samp_counter) * 100);
+
+	    	if($grade == 100){
+	    		$passed++;
+	    	}else{
+	    		$failed++;
+	    	}
+
+            // echo "<pre>";print_r($registrations);echo "</pre>";die();
 
             $equipment_tabs .= '<div class = "row">
 								    <div class="col-md-12">
@@ -569,26 +602,35 @@ class Analysis extends DashboardController {
 								            </div>
 
 								            <div class = "card-block">
-								            No. of Registrations : ';
+								            No. of Registrations : <strong>';
 
-            $equipment_tabs .= '';
+            if($registrations){
+            	$equipment_tabs .= $registrations->register_count;
+            }else{
+            	$equipment_tabs .= 0;
+            }
 
-            $equipment_tabs .= ' <br/>
-                No. of Submissions : ';
+            $equipment_tabs .= ' </strong><br/>
+                No. of Submissions : <strong>';
 
-            $equipment_tabs .= '';
+                if($submissions){
+                	$equipment_tabs .= $submissions->submissions_count;
+                }else{
+                	$equipment_tabs .= 0;
+                }
 
-            $equipment_tabs .= ' <br/>
-                No. of Passes : ';
+            
+            $equipment_tabs .= ' </strong><br/>
+                No. of Passes : <strong>';
 
-            $equipment_tabs .= '';
+            $equipment_tabs .= $passed;
 
-            $equipment_tabs .= ' <br/>
-                No. of Failed : ';
+            $equipment_tabs .= ' </strong><br/>
+                No. of Failed : <strong>';
 
-            $equipment_tabs .= '';
+            $equipment_tabs .= $failed;
 
-            $equipment_tabs .= ' <br/>
+            $equipment_tabs .= ' </strong><br/>
 				            </div>
 				        </div>
 				    </div>
