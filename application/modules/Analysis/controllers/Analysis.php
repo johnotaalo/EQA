@@ -206,6 +206,8 @@ class Analysis extends DashboardController {
 
                 }
 
+                // echo "<pre>";print_r($tabledata);echo "</pre>";die();
+
                 $this->table->set_template($template);
                 $this->table->set_heading($heading);
 
@@ -400,7 +402,7 @@ class Analysis extends DashboardController {
             "Participant ID",
             "Batch No"
         ];
-        $tabledata = $tablebody = [];
+        $tabledata = $tablebody = $table = [];
 
         $samples = $this->db->get_where('pt_samples', ['pt_round_id' =>  $round_id])->result();
 
@@ -417,13 +419,8 @@ class Analysis extends DashboardController {
         
 
        	$batch = $this->db->get_where('pt_ready_participants', ['p_id' => $participant->p_id, 'pt_round_uuid' => $round_uuid])->row()->batch;
-			$tabledata[] = [
-				$part_counter,
-				$participant->username,
-				$batch
-			];
 
-
+			
         	foreach ($samples as $sample) {
         		$samp_counter++;
 				
@@ -449,17 +446,17 @@ class Analysis extends DashboardController {
 	        			$comment = "Unacceptable";
 	        		}   
 
-	        		if($part_cd4->cd4_absolute == 0){
+	        		if($part_cd4->cd4_absolute == 0 || $part_cd4->cd4_absolute == null){
 	        			$zerocount++;
 	        		}
 
-	        		$tablebody[] = [
-						$part_cd4,
-						$comment
-					];
-        		}
+	        		array_push($tablebody, $part_cd4->cd4_absolute, $comment);
+					
+        		}else{
 
-        				
+
+        			array_push($tablebody, 0, "Unacceptable");
+        		}				
         	}
 
         	$grade = (($acceptable / $samp_counter) * 100);
@@ -467,24 +464,33 @@ class Analysis extends DashboardController {
         	$overall_grade = $grade . ' %';
 
         	if($grade == 100){
-        		$review = "Satisfactory performance";
+        		$review = "Satisfactory Performance";
         	}else if($zerocount == $samp_counter){
         		$review = "Non-responsive";
         	}else{
-        		$review = "Incomplete submission";
+        		$review = "Incomplete Submission";
         	}
 
-        	// array_push($tabledata, $tablebody, $overall_grade, $review);
-        
+        	array_push($tabledata, $part_counter,$participant->username,$batch);
 
+        	foreach ($tablebody as $key => $value) {
+        		
+        		array_push($tabledata, $value);
+        	}
+
+        	array_push($tabledata, $overall_grade,$review);
+
+        	array_push($table, $tabledata);
         }
 
-        array_push($heading, "Review Comment");
+        array_push($heading, 'Overall Grade', "Review Comment");
+
+        // echo "<pre>";print_r($table);echo "</pre>";die();
 
         $this->table->set_template($template);
         $this->table->set_heading($heading);
 
-        return $this->table->generate($tabledata);
+        return $this->table->generate($table);
 	}
 
 
