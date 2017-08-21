@@ -3,8 +3,8 @@
 class Users extends MY_Controller{
     function __construct(){
         parent::__construct();
-
-        $this->load->model('Participant/M_Participant');
+        $this->load->module('Participant');
+        // $this->load->model('m_participant');
     }
 
     function getUserTypes(){
