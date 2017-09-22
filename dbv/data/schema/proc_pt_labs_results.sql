@@ -5,13 +5,6 @@ CREATE DEFINER=`homestead`@`%` PROCEDURE `proc_pt_labs_results`(
 	IN `p_round_id` INT,
 	IN `p_result` VARCHAR(50)
 
-
-
-
-
-
-
-
 )
     SQL SECURITY INVOKER
 BEGIN		

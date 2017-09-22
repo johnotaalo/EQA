@@ -7,8 +7,9 @@ class PTRound extends MY_Controller {
         parent::__construct();
 
         $this->load->model('M_PPTRound');
-        $this->load->model('Participant/M_Readiness');
-        $this->load->model('Participant/M_PTRound');
+        $this->load->module('Participant');
+        $this->load->model('M_Readiness');
+        $this->load->model('M_PTRound');
         $this->load->library('Mailer');
         $this->load->library('table');
         $this->load->config('table');
@@ -28,10 +29,10 @@ class PTRound extends MY_Controller {
         $title = "Facility Participants";
 
         $user = $this->M_Readiness->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
-        //echo '<pre>';print_r($user);echo "</pre>";die();
+        // echo '<pre>';print_r($user);echo "</pre>";die();
 
         $data = [
-            'table_view'    =>  $this->createFacilityParticipantsTableView($user->facility_code)
+            'table_view'    =>  $this->createFacilityParticipantsTableView($user->facility_id)
         ];
 
        
@@ -252,20 +253,27 @@ class PTRound extends MY_Controller {
                 }
 
                 //echo "<pre>";print_r($getCheck);echo "</pre>";die();
+                
+
+                if($participant->lab_result){
+                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast dropdown-item"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
+
+                    $smart_status .= "&nbsp;<label class = 'tag tag-info tag-sm'>Lab Result</label>";
+                }else{
+                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
+                    ';
+                }
+
                 if($getCheck == 1){
                     $change_state .= '<a data-type="send" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-primary btn-sm showtoast dropdown-item" ><i class = "icon-note"></i>&nbsp;Send to NHRL</a>';
+
+                    $smart_status .= "&nbsp;<label class = 'tag tag-danger tag-sm'>Sent to NHRL</label>";
+
                 }else if($getCheck == 2){
                     $change_state = '';
                     
                 }else{
                     $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkSubmissions/$round_uuid/$round_id/$pid") . ' class = "btn btn-success btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;Send to NHRL</a>   
-                    ';
-                }
-
-                if($participant->lab_result){
-                    $change_state .= '<a data-type="lab" href = ' . base_url("QAReviewer/PTRound/Round/$round_uuid#") . ' class = "btn btn-success btn-sm showtoast dropdown-item"><i class = "icon-note"></i>  &nbsp;Lab Results</a>';
-                }else{
-                    $change_state .= '<a href = ' . base_url("QAReviewer/PTRound/MarkLabResult/$round_uuid/$round_id/$participant->participant_uuid") . ' class = "btn btn-danger btn-sm dropdown-item"><i class = "icon-note"></i>&nbsp;&nbsp;Mark as Lab Result</a> 
                     ';
                 }
 
@@ -571,7 +579,7 @@ class PTRound extends MY_Controller {
                 <div class='row'>
                     <table  style='text-align: center;' class='table table-bordered'>";
 
-            $reagents = $this->M_PTRound->getReagents($datas[0]->sample_id,$equipment->id);
+            $reagents = $this->M_PTRound->getReagents($datas[0]->equip_result_id,$equipment->id);
             // echo "<pre>";print_r($reagents);echo "</pre>";die();
 
             foreach ($reagents as $regkey => $reagent) {

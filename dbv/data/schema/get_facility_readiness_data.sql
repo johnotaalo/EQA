@@ -4,12 +4,6 @@ CREATE DEFINER=`homestead`@`%` PROCEDURE `get_facility_readiness_data`(
 	IN `v_limit` INT,
 	IN `v_offset` INT
 
-
-
-
-
-
-
 )
 BEGIN
 	SET @pt_round_uuid = pt_round_uuid;

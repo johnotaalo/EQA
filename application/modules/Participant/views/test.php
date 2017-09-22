@@ -1,100 +1,105 @@
 
-            <tr>
-                <th style="width: 30%;">Sample Tubes</th>
-                <td>
-                    <?php
-                        if($tracking->sample_tubes == 0){
-                            echo "Broken";
-                        }else if($tracking->sample_tubes == 1){
-                            echo "Leaking";
-                        }else if($tracking->sample_tubes == 2){
-                            echo "Cracked";
-                        }
-                    ?>
-                </td>
-            </tr>
+                    $responses_table .= "<td>{$response->question}</td>";
+                $response_status = "";
+                if($response->response != NULL && $response->extra_comments == NULL){
+                    if($response->response == 0) {
+                        $response_status = "No";
+                    }
+                    elseif($response->response == 1){
+                        $response_status = "Yes";
+                    }
+                }elseif($response->extra_comments != NULL){
+                    $response_status = $response->extra_comments;
+                }
+                $responses_table .= "<td>{$response_status}</td>";
+                $responses_table .= "</tr>";
+            }
+        }
 
-            <tr>
-                <th style="width: 30%;">Insufficient Volume</th>
-                <td>
-                    <?php
-                        if($tracking->insufficient_volume == 1){
-                            echo "Yes";
-                        }else if($tracking->insufficient_volume == 0){
-                            echo "No";
-                        }
-                    ?>
-                </td>
-            </tr>
+        return $responses_table;
+    }
 
-            <tr>
-                <th style="width: 30%;">Haemolysed sample</th>
-                <td>
-                    <?php
-                        if($tracking->haemolysed_sample == 1){
-                            echo "Yes";
-                        }else if($tracking->haemolysed_sample == 0){
-                            echo "No";
-                        }
-                    ?>
-                </td>
-            </tr>
+    function addReadinessAssessmentOutcome($readiness_id){
+        $readiness = $this->db->get_where('participant_readiness', ['readiness_id' => $readiness_id])->row();
+        if ($readiness) {
+            $participant = $this->db->get_where('participants', ['uuid' => $readiness->participant_id])->row();
+            $facility = $this->db->get_where('facility', ['id'  =>  $participant->participant_facility])->row();
+            $verdict = $this->input->post('verdict');
+            $status = ($this->input->post('status') == 'on') ? 1 : 0;
+            $comment = $this->input->post('readiness_comment');
 
-            <tr>
-                <th style="width: 30%;">Clotted sample</th>
-                <td>
-                    <?php
-                        if($tracking->clotted_sample == 1){
-                            echo "Yes";
-                        }else if($tracking->clotted_sample == 0){
-                            echo "No";
-                        }
-                    ?>
-                </td>
-            </tr>
+            $update_data = [
+                'verdict'   =>  $verdict,
+                'status'    =>  $status,
+                'comment'   =>  $comment
+            ];
 
-            <tr>
-                <th style="width: 30%;">Duplicate sample received</th>
-                <td>
-                    <?php
-                        if($tracking->duplicate_sample == 1){
-                            echo "Yes";
-                        }else if($tracking->duplicate_sample == 0){
-                            echo "No";
-                        }
-                    ?>
-                </td>
-            </tr>
+            $this->db->where('readiness_id', $readiness->readiness_id);
+            $result = $this->db->update('participant_readiness', $update_data);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Successfully updated assessment outcome');
+            }else{
+                $this->session->set_flashdata('error', 'There was an issue updating your assessment outcome');
+            }
+            redirect('PTRounds/facilityreadiness/' . $readiness->pt_round_no . '/' . $facility->facility_code);
+        }else{
+            $this->session->set_flashdata('error', 'There was an issue updating your assessment outcome');
+            redirect('Dashboard','refresh');
+        }
+    }
 
-            <tr>
-                <th style="width: 30%;">Missing sample</th>
-                <td>
-                    <?php
-                        if($tracking->missing_sample == 1){
-                            echo "Yes";
-                        }else if($tracking->missing_sample == 0){
-                            echo "No";
+    function sendemails($pt_round_uuid, $facility_code = NULL){
+        $pt_round = $this->db->get_where('pt_round', ['uuid'   =>  $pt_round_uuid])->row();
+        $this->load->library('Mailer');
+        if ($pt_round) {
+            $recepients = [];
+            if($facility_code == NULL){
+                $facilities = $this->M_PTRounds->searchFacilityReadiness($pt_round_uuid);
+                $recepients_array = [];
+                foreach ($facilities as $facility) {
+                    if($facility->smart_status == NULL || $facility->smart_status == "No Response"){
+                        $participants = $this->db->get_where('participants', ['participant_facility' =>  $facility->facility_id])->result();
+                        if($participants){
+                            foreach ($participants as $participant) {
+                               $recepients_array[$participant->participant_email]  =  $participant->participant_fname . ' ' . $participant->participant_lname;
+                            }
+                        }elseif ($facility->email != "NULL" && $facility->email != "(NULL)" && $facility->email != "") {
+                            // $recepients_array[$facility->email]  =  $facility->facility_name;
                         }
-                    ?>
-                </td>
-            </tr>
+                    }
+                }
 
-            <tr>
-                <th style="width: 30%;">Mismatch of information details on introductory letter and sample tube</th>
-                <td>
-                    <?php
-                        if($tracking->mismatch == 1){
-                            echo "Yes";
-                        }else if($tracking->mismatch == 0){
-                            echo "No";
-                        }
-                    ?>
-                </td>
-            </tr>
+                if ($recepients_array) {
+                    $recepients = $recepients_array;
+                }
+            }else{
+                $facility = $this->db->get_where('facility', ['facility_code'   =>  $facility_code])->row();
+                $participants = $this->db->get_where('participants', ['participant_facility' =>  $facility->id])->result();
+                if($participants){
+                    foreach ($participants as $participant) {
+                        $recepients[$participant->participant_email]  =  $participant->participant_fname . ' ' . $participant->participant_lname;
+                    }
+                }elseif ($facility->email != "NULL" && $facility->email != "(NULL)" && $facility->email != "") {
+                    // $recepients[$facility->email]  =  $facility->facility_name;
+                }
+            }
 
-            <tr>
-                <th style="width: 30%;">Participant Comment</th>
-                <td>
-                    <?= @$tracking->panel_condition_comment; ?>
-                </td>
-            </tr>
+            $data = [
+                'pt_round_no'   =>  $pt_round->pt_round_no,
+                'round_uuid'    =>  $pt_round->uuid,
+                'due_date'  => $pt_round->to
+            ];
+            $body = $this->load->view('Template/email/assessment_link_v', $data, TRUE);
+            $result = $this->mailer->sendMail('john.otaalo@strathmore.edu', 'PT Round Evaluation Link', $body, $recepients);
+            if($result == true){
+                $this->session->set_flashdata('success', 'Successfully sent the evaluation link(s)');
+            }else{
+                $this->session->set_flashdata('error', 'There was an error sending the evaluation link(s). Please contact the system administrator for further guidance');
+            }
+
+            redirect('PTRounds/create/facilities/' . $pt_round_uuid);
+        }else{
+            show_404();
+        }
+    }
+}

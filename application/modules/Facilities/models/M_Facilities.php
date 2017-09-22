@@ -23,4 +23,20 @@ class M_Facilities extends CI_Model{
 
         return $query->result();
     }
+
+    function get($id = NULL, $query_string = NULL){
+        if(isset($id)){
+            $this->db->where('id', $id);
+        }
+
+        if (isset($query_string)) {
+            $this->db->like('facility_name', $query_string);
+        }
+
+        $this->db->where('cd4', 1);
+        $query = $this->db->get('facility');
+
+        $result = (isset($id)) ? $query->row() : $query->result();
+        return $result;
+    }
 }

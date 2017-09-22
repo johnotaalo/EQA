@@ -3,10 +3,9 @@
 class Participants extends DashboardController{
     function __construct(){
         parent::__construct();
-        $this->load->model([
-            'Participant/M_Participant',
-            'API/M_Facilities'
-        ]);
+	$this->load->module(['API', 'Participant', 'Facilities']);
+        // $this->load->model('m_participant');
+        // $this->load->model('API/m_facilities');
     }
     function listing(){
         $this->assets
@@ -27,7 +26,7 @@ class Participants extends DashboardController{
         if($participant){
             $data = [
                 'participant'   =>  $participant,
-                'facility'      =>  $this->M_Facilities->get($participant->participant_facility)
+                'facility'      =>  $this->m_facilities->get($participant->participant_facility)
             ];
 
             $this->template

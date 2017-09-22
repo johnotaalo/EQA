@@ -2,6 +2,7 @@ CREATE TABLE `sample_conditions` (
   `id` int(11) NOT NULL,
   `participant_uuid` varchar(255) DEFAULT NULL,
   `pt_round_uuid` varchar(255) DEFAULT NULL,
+  `sample_name` varchar(255) NOT NULL,
   `acceptance` int(11) DEFAULT '0',
   `tubes_broken` int(11) DEFAULT '0',
   `tubes_leaking` int(11) DEFAULT '0',

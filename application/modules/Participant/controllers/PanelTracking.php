@@ -4,7 +4,8 @@ class PanelTracking extends DashboardController{
 	function __construct(){
 		parent::__construct();
 
-		$this->load->model('Participant/M_PTRound');
+		$this->load->module('Participant');
+		$this->load->model('M_PTRound');
 	}
 
 	function confirm($panel_tracking_uuid){

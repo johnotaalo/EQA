@@ -6,7 +6,7 @@ class Facilities extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('API/M_Facilities');
+		$this->load->model('M_Facilities');
 	}
 	public function get($id = NULL){
 		$query_string = NULL;

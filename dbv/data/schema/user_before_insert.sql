@@ -1,3 +1,4 @@
-CREATE DEFINER=`homestead`@`%` TRIGGER `user_before_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
+CREATE DEFINER=`homestead`@`%` TRIGGER `eqa`.`user_BEFORE_INSERT` BEFORE INSERT ON `user` FOR EACH ROW
+BEGIN
 	SET new.uuid := (SELECT UUID());
 END

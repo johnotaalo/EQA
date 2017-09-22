@@ -8,7 +8,9 @@ class Dashboard extends DashboardController {
 		$this->load->library('table');
         $this->load->config('table');
 		$this->load->model('dashboard_m');
-		$this->load->model('participant/m_ptround');
+		// $this->load->model('participant/m_ptround');
+		$this->load->module('Participant');
+		$this->load->model('M_PTRound');
 
 	}
 	
@@ -363,5 +365,5 @@ class Dashboard extends DashboardController {
 
 }
 
-/* End of file Home.php */
-/* Location: ./application/modules/Home/controllers/Home.php */
+/* End of file Dashboard.php */
+/* Location: ./application/modules/Home/controllers/Dashboard.php */

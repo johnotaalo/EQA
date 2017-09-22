@@ -66,7 +66,8 @@ class Template extends MX_Controller {
 		$data['page_css'] = $this->assets->css;
 		$data['page_js'] = $this->assets->js;
 
-		$this->load->model('Auth/auth_m');
+		// $this->load->model('Auth/auth_m');
+		$this->load->module('Auth');
 		$user_details = $this->auth_m->findUserByIdentifier('uuid', $this->session->userdata('uuid'));
 
 		
@@ -240,6 +241,12 @@ class Template extends MX_Controller {
 					]
 				],
 				'users' => ['admin']
+			],
+			'analysis'		=>	[
+				'icon'	=>	'icon-chart',
+				'text'	=>	'Analysis',
+				'link'	=>	'Analysis/',
+				'users'	=>	['admin']
 			],
 			'participantrounds'	=>	[
 				'icon'	=>	'icon-chemistry',
